@@ -9,6 +9,9 @@ import { ref, defineComponent, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router';
 
 import { GenericFunctions } from '@/services/GenericFunctions'
+import type { Option } from '@/models/Option'
+import type { PlansFields } from '@/models/Plans'
+import { PlansService } from '@/services/PlansService'
 
 import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
 import CheckboxOne from '@/components/Forms/Checkboxes/CheckboxOne.vue'
@@ -20,11 +23,7 @@ import ModalBase from '@/components/Alerts/ModalBase.vue'
 import SelectGroup from '@/components/Forms/SelectGroup.vue'
 import InputNumber from 'primevue/inputnumber';
 
-import type { Option } from '@/models/Option'
-import type { PlansFields } from '@/models/Plans'
 import type { ModalInfo } from '@/models/ModalInfo';
-
-import { PlansService } from '@/services/PlansService'
 import { ModalService } from '@/services/ModalService';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -35,9 +34,17 @@ library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
 
 export default defineComponent({
     components: {
-
+        ButtonDefault,
+        CheckboxOne,
+        LabelFields,
+        InputForms,
+        ButtonPresentation,
+        ScreenForms,
+        ModalBase,
+        SelectGroup,
+        InputNumber,
+        FontAwesomeIcon
     },
-
     data() {
         const plansField: PlansFields = reactive(PlansService.defaultFields());
         const modalInfo: ModalInfo = reactive(ModalService.getRegisterModalInfo(''));
@@ -178,7 +185,7 @@ export default defineComponent({
 
                         <div>
                             <LabelFields label="Preço Sugerido" for-html="price"></LabelFields>
-                            <InputNumber v-model="plans.price" inputId="minmaxfraction" :minFractionDigits="2" :maxFractionDigits="5" placeholder="Digite um valor" class="w-full" inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-2.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+                            <InputNumber v-model="plans.price" inputId="minmaxfraction" :minFractionDigits="2" :maxFractionDigits="2" placeholder="Digite um valor" class="w-full" inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
                         </div>
 
                         <div>

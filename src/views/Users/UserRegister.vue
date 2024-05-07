@@ -9,6 +9,8 @@ import { ref, defineComponent, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router';
 
 import { GenericFunctions } from '@/services/GenericFunctions'
+import type { UsersFields } from '@/models/Users'
+import { UserService } from '@/services/UsersService'
 
 import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
 import CheckboxOne from '@/components/Forms/Checkboxes/CheckboxOne.vue'
@@ -19,11 +21,8 @@ import ButtonApresentation from '@/components/Buttons/ButtonPresentation.vue'
 import ScreenForms from '@/layouts/ScreenForms.vue'
 import ModalBase from '@/components/Alerts/ModalBase.vue'
 
-import type { UsersFields } from '@/models/Users'
 import type { ModalInfo } from '@/models/ModalInfo';
-
 import { ModalService } from '@/services/ModalService';
-import { UserService } from '@/services/UsersService'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -33,7 +32,14 @@ library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
 
 export default defineComponent({
     components: {
-
+        ButtonDefault,
+        CheckboxOne,
+        LabelFields,
+        LabelInformation,
+        InputForms,
+        ButtonApresentation,
+        ScreenForms,
+        ModalBase
     },
 
     data() {
@@ -179,11 +185,10 @@ export default defineComponent({
                                 <InputForms id="password" :type="inputType" placeholder="Digite uma senha"
                                     v-model="users.password">
                                     <button @click.prevent="togglePasswordVisibility"
-                                        class="absolute right-3 mt-2.5 cursor-pointer">
+                                        class="absolute right-3 mt-4 cursor-pointer">
                                         <font-awesome-icon :icon="eyeIcon" size="lg" style="color: #bebebe;" />
                                     </button>
                                 </InputForms>
-
                             </div>
 
                             <div class="ml-2 mt-2">
