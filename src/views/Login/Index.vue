@@ -14,6 +14,8 @@ import PasswordField from '@/components/Forms/InputFields/ApresentationPassword.
 import ButtonApresentation from '@/components/Buttons/ButtonApresentation.vue';
 import LabelInformation from '@/components/Forms/Labels/LabelInformation.vue'
 import ModalBase from '@/components/Alerts/ModalBase.vue'
+import LabelFields from '@/components/Forms/Labels/LabelFields.vue'
+import InputForms from '@/components/Forms/InputFields/InputForms.vue'
 
 library.add(faEye, faEyeSlash, faUser)
 
@@ -26,11 +28,16 @@ export default {
         ApresentationLayout,
         ButtonApresentation,
         LabelInformation,
-        ModalBase
+        ModalBase,
+        LabelFields,
+        InputForms
     },
     data() {
         return {
             password: ref(''),
+
+            inputType: ref('password'),
+            eyeIcon: ref('eye'),
 
             modalSuccessActive: ref(false),
             modalErrorActive: ref(false),
@@ -53,8 +60,9 @@ export default {
             this.modalErrorActive = !this.modalErrorActive;
         },
 
-        getPassword(newPassword: string) {
-            this.password = newPassword;
+        togglePasswordVisibility() {
+            this.inputType = this.inputType === 'password' ? 'text' : 'password';
+            this.eyeIcon = this.inputType === 'password' ? 'eye' : 'eye-slash';
         },
 
         forgotPassword() {
@@ -92,24 +100,27 @@ input::-ms-clear {
     <ApresentationLayout card-title="LOGIN" :handle="login">
         <template v-slot:slot1>
             <div>
-                <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                 <div class="relative">
-                    <input type="email" v-model="email"
-                        class="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white" />
-
-                    <span class="absolute right-4 top-4">
-                        <font-awesome-icon :icon="['fas', 'user']" size="lg" style="color: #bebebe;" />
-                    </span>
+                    <LabelFields label="E-mail" for-html="email"></LabelFields>
+                    <InputForms id="email" type="text" placeholder="Digite seu email" v-model="email" />
                     <LabelInformation v-if="!emailValid" label="Email inválido!" color="text-red" />
                 </div>
             </div>
 
-            <PasswordField id="password" label="Senha" @passwordChanged="getPassword">
-                <div class="text-left bottom-4 text-sm font-medium text-gray-900 dark:text-white mt-4 relative">
-                    <a href="#" @click.prevent="forgotPassword" class="hover:text-blue-500">Esqueceu a
-                        senha?</a>
+            <div>
+                <div class="relative">
+                    <LabelFields label="Senha" for-html="password"></LabelFields>
+                    <InputForms id="password" :type="inputType" placeholder="Digite sua senha" v-model="password">
+                        <button @click.prevent="togglePasswordVisibility" class="absolute right-3 mt-4 cursor-pointer">
+                            <font-awesome-icon :icon="eyeIcon" size="lg" style="color: #bebebe;" />
+                        </button>
+
+                        <div class="text-left bottom-4 text-sm font-medium text-gray-900 dark:text-white mt-6 relative">
+                            <a href="#" @click.prevent="forgotPassword" class="hover:text-blue-500">Esqueceu a senha?</a>
+                        </div>
+                    </InputForms>
                 </div>
-            </PasswordField>
+            </div>
 
             <ButtonApresentation label="Login" />
         </template>

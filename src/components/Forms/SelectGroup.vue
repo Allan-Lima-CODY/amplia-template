@@ -39,7 +39,7 @@ export default {
 <template>
     <div class="relative z-20 bg-transparent dark:bg-form-input">
       <select :value="selectedOption"
-        class="relative z-20 w-full appearance-none rounded-lg border border-stroke bg-transparent p-2.5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+        class="relative z-20 w-full appearance-none rounded-lg border border-stroke bg-transparent p-3.5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
         :class="{ 'text-black dark:text-white': isOptionSelected }" @change="updateValue">
         <option value="" disabled selected>{{ unselectLabel }}</option>
         <option v-for="option in options" :key="option.key" :value="option.value">{{ option.value }}</option>

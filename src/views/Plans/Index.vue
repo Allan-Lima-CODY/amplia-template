@@ -7,30 +7,36 @@ import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 import { ref, defineComponent } from 'vue'
 
 import { GenericFunctions } from '@/services/GenericFunctions'
-
-import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
-import ModalBase from '@/components/Alerts/ModalBase.vue'
-
 import type { Option } from '@/models/Option'
 import type { Plans } from '@/models/Plans'
 import { PlansService } from '@/services/PlansService'
+
+import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
+import ModalBase from '@/components/Alerts/ModalBase.vue'
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import InputText from 'primevue/inputtext';
+import Dropdown from 'primevue/dropdown';
+import Calendar from 'primevue/calendar';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
 import { FilterMatchMode } from 'primevue/api';
-import InputText from 'primevue/inputtext';
-import Dropdown from 'primevue/dropdown';
-import Calendar from 'primevue/calendar';
+
 
 library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
 
 export default defineComponent({
   components: {
-
+    ButtonDefault,
+    ModalBase,
+    DataTable,
+    Column,
+    InputText,
+    Dropdown,
+    Calendar
   },
   data() {
     return {
@@ -49,6 +55,7 @@ export default defineComponent({
       toDelete: ref(0),
 
       plans: [] as Plans[],
+
       selectedPlans: null as any,
       loading: ref(true),
       filters: {
@@ -59,6 +66,7 @@ export default defineComponent({
         product: { value: null, matchMode: FilterMatchMode.EQUALS },
         price: { value: null, matchMode: FilterMatchMode.CONTAINS }
       },
+
       products: [{
         key: 1,
         value: 'WMS'
@@ -88,9 +96,6 @@ export default defineComponent({
     },
 
     onEditing(event: any) {
-      console.log(event.data.id)
-
-      // this.$router.push(`/users/register/${GenericFunctions.encryptIdentifier(event.data.id)}`);
       this.$router.push(`/plans/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
     },
 
@@ -117,6 +122,7 @@ export default defineComponent({
       }
       this.modalActive = !this.modalActive;
     },
+    
     toggleSuccessModal(id?: any) {
       if (id !== null) {
         this.messageModalSuccess = 'Funcionalidade excluida com sucesso!';
@@ -128,6 +134,7 @@ export default defineComponent({
     toggleErrorModal() {
       this.modalErrorActive = !this.modalErrorActive;
     },
+
     toggleWarningModal() {
       this.modalWarningActive = !this.modalWarningActive;
     },
