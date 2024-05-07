@@ -10,6 +10,7 @@ export default {
     components: {
         FontAwesomeIcon
     },
+    emits:['passwordChanged'],
     data() {
         return {
             inputType: ref('password'),
