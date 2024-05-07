@@ -51,7 +51,7 @@ export default defineComponent({
                         <DropDownMenu v-model="selectedProduct" id="product" :options="products"/>
                     </div>
                 </div>
-                <div class="flex justify-end mt-2">
+                <div class="flex justify-end">
                     <ButtonApresentation label="+ Adicionar"/>
                 </div>
             </div>

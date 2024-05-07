@@ -7,35 +7,30 @@ import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 import { ref, defineComponent } from 'vue'
 
 import { GenericFunctions } from '@/services/GenericFunctions'
+
+import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
+
 import type { Users } from '@/models/Users'
 import { UserService } from '@/services/UsersService'
 import type { Option } from '@/models/Option'
-
-import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import Tag from 'primevue/tag';
-import InputText from 'primevue/inputtext';
-import Dropdown from 'primevue/dropdown';
-import Calendar from 'primevue/calendar';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Tag from 'primevue/tag';
 import { FilterMatchMode } from 'primevue/api';
+import InputText from 'primevue/inputtext';
+import Dropdown from 'primevue/dropdown';
+import Calendar from 'primevue/calendar';
 
 library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
 
 export default defineComponent({
   components: {
-    ButtonDefault,
-    DataTable,
-    Column,
-    Tag,
-    InputText,
-    Dropdown,
-    Calendar
+
   },
   data() {
     return {
@@ -89,6 +84,9 @@ export default defineComponent({
     },
 
     onEditing(event: any) {
+      console.log(event.data.id)
+      
+      // this.$router.push(`/users/register/${GenericFunctions.encryptIdentifier(event.data.id)}`);
       this.$router.push(`/users/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
     }
   }
@@ -176,7 +174,7 @@ export default defineComponent({
             </template>
           </Column>
 
-          <Column header="Editar" :rowEditor="true" style="width: 5%; min-width: 8rem"></Column>
+          <Column header="Ações" :rowEditor="true" style="width: 5%; min-width: 8rem"></Column>
         </DataTable>
 
       </div>

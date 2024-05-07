@@ -9,8 +9,7 @@ import AlertSuccess from '@/components/Alerts/AlertSuccess.vue';
 import AlertError from '@/components/Alerts/AlertError.vue';
 import ButtonApresentation from '@/components/Buttons/ButtonPresentation.vue';
 import ApresentationLayout from '@/layouts/ApresentationLayout.vue';
-import LabelFields from '@/components/Forms/Labels/LabelFields.vue'
-import InputForms from '@/components/Forms/InputFields/InputForms.vue'
+import PasswordField from '@/components/Forms/InputFields/PresentationPassword.vue';
 
 library.add(faEye, faEyeSlash, faUser)
 
@@ -19,21 +18,18 @@ export default {
         FontAwesomeIcon,
         AlertSuccess,
         AlertError,
+        PasswordField,
         ButtonApresentation,
-        ApresentationLayout,
-        LabelFields,
-        InputForms
+        ApresentationLayout
     },
     data() {
         return {
-            password: ref(''),
-            confirmPassword: ref(''),
-
             inputPassword: ref('password'),
             inputConfirmPassword: ref('password'),
-
             eyeIconPassword: ref('eye'),
             eyeIconConfirmPassword: ref('eye'),
+            new_password: ref(''),
+            confirm_password: ref(''),
 
             modalSuccessActive: ref(false),
             modalErrorActive: ref(false),
@@ -60,9 +56,17 @@ export default {
             this.modalErrorActive = !this.modalErrorActive;
         },
 
+        updateNewPassword(newPassword: string) {
+            this.new_password = newPassword;
+        },
+
+        updateConfirmPassword(newPassword: string) {
+            this.confirm_password = newPassword;
+        },
+
         passwordReset() {
-            if (this.password !== '' && this.confirmPassword !== '') {
-                if (this.password === this.confirmPassword) {
+            if (this.new_password !== '' && this.confirm_password !== '') {
+                if (this.new_password === this.confirm_password) {
                     this.messageModalSuccess = 'Senha alterada com sucesso. Agora você já pode voltar para o login.';
                     this.toggleSuccessModal();
                 } else {
@@ -88,28 +92,8 @@ input::-ms-clear {
 <template>
     <ApresentationLayout card-title="Altere sua senha" :handle="passwordReset" >
         <template v-slot:slot1>
-
-            <div>
-                <div class="relative">
-                    <LabelFields label="Senha" for-html="password"></LabelFields>
-                    <InputForms id="password" :type="inputPassword" placeholder="Digite sua senha" v-model="password">
-                        <button @click.prevent="togglePasswordVisibility" class="absolute right-3 mt-4 cursor-pointer">
-                            <font-awesome-icon :icon="eyeIconPassword" size="lg" style="color: #bebebe;" />
-                        </button>
-                    </InputForms>
-                </div>
-            </div>
-
-            <div>
-                <div class="relative">
-                    <LabelFields label="Confirmar Senha" for-html="password"></LabelFields>
-                    <InputForms id="password" :type="inputConfirmPassword" placeholder="Confirme sua senha" v-model="confirmPassword">
-                        <button @click.prevent="togglePasswordVisibility" class="absolute right-3 mt-4 cursor-pointer">
-                            <font-awesome-icon :icon="eyeIconConfirmPassword" size="lg" style="color: #bebebe;" />
-                        </button>
-                    </InputForms>
-                </div>
-            </div>
+            <PasswordField id="password" label="Nova Senha" @passwordChanged="updateNewPassword" />
+            <PasswordField id="confirmPassword" label="Confirmar Senha" @passwordChanged="updateConfirmPassword" />
 
             <ButtonApresentation label="Alterar Senha" />
 

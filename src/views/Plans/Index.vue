@@ -7,32 +7,32 @@ import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 import { ref, defineComponent, reactive, toRefs } from 'vue'
 
 import { GenericFunctions } from '@/services/GenericFunctions'
+
+import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
+import ModalBase from '@/components/Alerts/ModalBase.vue'
+
 import type { Option } from '@/models/Option'
 import type { Plans } from '@/models/Plans'
 import { PlansService } from '@/services/PlansService'
 
-import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
-import ModalBase from '@/components/Alerts/ModalBase.vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faPlus, faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import { FilterMatchMode } from 'primevue/api';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import Calendar from 'primevue/calendar';
 import type { ModalInfo } from '@/models/ModalInfo'
 import { ModalService } from '@/services/ModalService'
 
-import { FilterMatchMode } from 'primevue/api';
-
+library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
 
 export default defineComponent({
   components: {
-    ButtonDefault,
-    ModalBase,
-    DataTable,
-    Column,
-    InputText,
-    Dropdown,
-    Calendar
+
   },
   data() {
     const modalInfo: ModalInfo = reactive(ModalService.getPlansModalInfo());
@@ -49,7 +49,6 @@ export default defineComponent({
       toDelete: ref(0),
 
       plans: [] as Plans[],
-
       selectedPlans: null as any,
       loading: ref(true),
       filters: {
@@ -60,7 +59,6 @@ export default defineComponent({
         product: { value: null, matchMode: FilterMatchMode.EQUALS },
         price: { value: null, matchMode: FilterMatchMode.CONTAINS }
       },
-
       products: [{
         key: 1,
         value: 'WMS'
@@ -90,6 +88,9 @@ export default defineComponent({
     },
 
     onEditing(event: any) {
+      console.log(event.data.id)
+
+      // this.$router.push(`/users/register/${GenericFunctions.encryptIdentifier(event.data.id)}`);
       this.$router.push(`/plans/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
     },
 
@@ -162,7 +163,7 @@ export default defineComponent({
           <template #empty> Nenhum plano foi encontrado. </template>
           <template #loading> Carregando planos... </template>
 
-          <Column field="id" header="Código" style="width: 8%" >
+          <Column field="id" header="Código" style="width: 10%" >
             <template #body="{ data }">
               {{ data.id }}
             </template>
@@ -173,7 +174,7 @@ export default defineComponent({
             </template>
           </Column>
 
-          <Column field="name" header="Plano" style="width: 15%">
+          <Column field="name" header="Plano" style="width: 15%, ">
             <template #body="{ data }">
               {{ data.name }}
             </template>
