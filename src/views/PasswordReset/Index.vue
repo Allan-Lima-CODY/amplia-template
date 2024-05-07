@@ -7,9 +7,9 @@ import { faEye, faEyeSlash, faUser } from '@fortawesome/free-solid-svg-icons'
 
 import AlertSuccess from '@/components/Alerts/AlertSuccess.vue';
 import AlertError from '@/components/Alerts/AlertError.vue';
-import ButtonApresentation from '@/components/Buttons/ButtonApresentation.vue';
+import ButtonApresentation from '@/components/Buttons/ButtonPresentation.vue';
 import ApresentationLayout from '@/layouts/ApresentationLayout.vue';
-import PasswordField from '@/components/Forms/InputFields/ApresentationPassword.vue';
+import PasswordField from '@/components/Forms/InputFields/PresentationPassword.vue';
 
 library.add(faEye, faEyeSlash, faUser)
 

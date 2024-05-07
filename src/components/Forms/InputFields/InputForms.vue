@@ -1,10 +1,8 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-
 export default {
     data() {
         return {
-            // value: ref('')
+            
         };
     },
     props: {

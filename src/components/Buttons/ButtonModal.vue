@@ -11,7 +11,12 @@ export default {
     },
     handleClick: Function
   },
-  emits: ['click-event']
+  emits: ['click-event'],
+  methods: {
+    setOpacity(event: any, opacity: number) {
+      event.target.style.opacity = opacity;
+    }
+  }
 };
 </script>
 
@@ -19,5 +24,8 @@ export default {
   <input type="button" 
          :value="label"
          @click="handleClick ? handleClick() : $emit('click-event')" 
-         :class="`cursor-pointer rounded-lg border-[${buttonColor}] bg-[${buttonColor}] p-4 font-medium text-white transition hover:bg-opacity-50`" />
+         :class="`cursor-pointer rounded-lg p-4 font-medium text-white`" 
+         :style="{borderColor: buttonColor, backgroundColor: buttonColor}"
+         @mouseover="setOpacity($event, 0.8)"
+         @mouseleave="setOpacity($event, 1)" />
 </template>
