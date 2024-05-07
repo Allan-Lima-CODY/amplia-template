@@ -31,7 +31,7 @@ export const ModalService =
             case 'emptyNameError':
             return {
                 title : 'Erro',
-                message : 'É necessário desvincular essa funcionalidade de um plano antes de apagá-la!',
+                message : 'Preencha o nome da funcionalidade!',
                 borderColor : '#F87171',
                 okTitle : 'Ok',
                 noTitle : undefined,
@@ -39,7 +39,7 @@ export const ModalService =
             case 'success':
                 return {
                     title:'Sucesso!',
-                    message : 'Funcionalidade registrada com sucesso!',
+                    message : 'Funcionalidade apagada com sucesso!',
                     borderColor : '#34D399',
                     okTitle : 'Ok',
                     noTitle : undefined
@@ -80,6 +80,42 @@ export const ModalService =
                     okTitle: 'Ok',
                     noTitle: undefined
                 }
+        }
+    },
+    getPlansModalInfo(modalType?: string) : ModalInfo{
+        switch(modalType){
+            case 'registered':
+                return {
+                title: 'Sucesso!',
+                message : 'Plano cadastrado com sucesso!',
+                borderColor : '#34D399',
+                okTitle : 'Ok',
+                noTitle : undefined
+                };
+            case 'warning':
+            return {  
+                title : 'Alerta',
+                message : 'Deseja apagar esse plano?',
+                borderColor : '#FFC800',
+                okTitle : 'Sim',
+                noTitle : 'Não',
+            }
+            case 'success':
+                return {
+                    title:'Sucesso!',
+                    message : 'Plano apagado com sucesso!',
+                    borderColor : '#34D399',
+                    okTitle : 'Ok',
+                    noTitle : undefined
+                }
+            default:
+              return {
+                title: '',
+                message : '',
+                borderColor : '#F87171',
+                okTitle : '',
+                noTitle : undefined
+              }
         }
     }
 }

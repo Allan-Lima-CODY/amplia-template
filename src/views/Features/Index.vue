@@ -27,7 +27,7 @@ import Calendar from 'primevue/calendar';
 export default defineComponent({
   components: {},
   data() {
-    const modalInfo: ModalInfo = reactive(ModalService.getFeatureModalInfo(''));
+    const modalInfo: ModalInfo = reactive(ModalService.getFeatureModalInfo());
     return {
       pageTitle: ref('Funcionalidades'),
       features: [] as Feature[],
