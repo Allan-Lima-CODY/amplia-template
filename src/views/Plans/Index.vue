@@ -176,7 +176,7 @@ export default defineComponent({
           <template #empty> Nenhum plano foi encontrado. </template>
           <template #loading> Carregando planos... </template>
 
-          <Column field="id" header="Código" style="width: 10%" >
+          <Column field="id" header="Código" style="width: 8%" >
             <template #body="{ data }">
               {{ data.id }}
             </template>
@@ -187,7 +187,7 @@ export default defineComponent({
             </template>
           </Column>
 
-          <Column field="name" header="Plano" style="width: 15%, ">
+          <Column field="name" header="Plano" style="width: 15%">
             <template #body="{ data }">
               {{ data.name }}
             </template>
