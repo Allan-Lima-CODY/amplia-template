@@ -117,5 +117,69 @@ export const ModalService =
                 noTitle : undefined
               }
         }
-    }
+    },
+    getLoginModalInfo(modalType?: string) : ModalInfo{
+        switch(modalType){
+            case 'loginError':
+                return{
+                    title: 'Erro',
+                    message: 'Email ou senha invalidos!',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
+                case 'EmailNotFound':
+                return{
+                    title: 'Erro',
+                    message: 'Email não encontrado!',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
+            default:
+                return{
+                    title: '',
+                    message: '',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                }
+        }
+    },
+    getPassResetModalInfo(modalType?: string) : ModalInfo{
+        switch(modalType){
+            case 'success':
+                return{
+                    title: 'Sucesso!',
+                    message: 'Senha alterada com sucesso!',
+                    borderColor: '#34D399',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
+            case 'mismatchPass':
+                return{
+                    title: 'Erro',
+                    message: 'As senhas não correspondem!',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
+                case 'emptyfieldsError':
+                return{
+                    title: 'Erro',
+                    message: 'É necessário preencher os campos!',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
+            default:
+                return{
+                    title: '',
+                    message: '',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                }
+        }
+    },
 }

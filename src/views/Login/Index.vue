@@ -1,14 +1,16 @@
 <script lang="ts">
-import { ref } from 'vue'
+import { ref, toRefs, reactive } from 'vue'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faEye, faEyeSlash, faUser } from '@fortawesome/free-solid-svg-icons'
 
 import { GenericFunctions } from '@/services/GenericFunctions'
+import { ModalService } from '@/services/ModalService'
+
+import type { ModalInfo } from '@/models/ModalInfo'
 
 import ApresentationLayout from '@/layouts/ApresentationLayout.vue';
-import PasswordField from '@/components/Forms/InputFields/PresentationPassword.vue';
 import ButtonApresentation from '@/components/Buttons/ButtonPresentation.vue';
 import LabelInformation from '@/components/Forms/Labels/LabelInformation.vue'
 import ModalBase from '@/components/Alerts/ModalBase.vue'
@@ -20,7 +22,6 @@ library.add(faEye, faEyeSlash, faUser)
 export default {
     components: {
         FontAwesomeIcon,
-        PasswordField,
         ApresentationLayout,
         ButtonApresentation,
         LabelInformation,
@@ -29,16 +30,17 @@ export default {
         InputForms
     },
     data() {
+        const modalInfo: ModalInfo = reactive(ModalService.getLoginModalInfo());
         return {
             password: ref(''),
 
             inputType: ref('password'),
             eyeIcon: ref('eye'),
 
-            modalSuccessActive: ref(false),
-            modalErrorActive: ref(false),
-            messageModalError: ref(''),
-            messageModalSuccess: ref(''),
+            modalInfo: {
+                ...toRefs(modalInfo)
+            },
+            modalActive:(false),
 
             email: ref(''),
             emailValid: ref(true),
@@ -48,12 +50,11 @@ export default {
         };
     },
     methods: {
-        toggleSuccessModal() {
-            this.modalSuccessActive = !this.modalSuccessActive;
-        },
 
-        toggleErrorModal() {
-            this.modalErrorActive = !this.modalErrorActive;
+        toggleModal(modalType?: string) {
+            if(modalType !== undefined)
+                this.modalInfo = ModalService.getLoginModalInfo(modalType);
+            this.modalActive = !this.modalActive;
         },
 
         togglePasswordVisibility() {
@@ -68,8 +69,8 @@ export default {
                 if (this.email === this.hardEmail) {
                     this.$router.push('/passwordreset');
                 } else {
-                    this.messageModalError = 'E-mail não encontrado!';
-                    this.toggleErrorModal();
+                    this.modalInfo = ModalService.getLoginModalInfo('EmailNotFound');
+                    this.toggleModal();
                 }
             }
         },
@@ -77,8 +78,8 @@ export default {
             if (this.email === this.hardEmail && this.password === this.hardPassword)
                 this.$router.push('/home');
             else {
-                this.messageModalError = 'E-mail ou senha inválidos!';
-                this.toggleErrorModal();
+                this.modalInfo = ModalService.getLoginModalInfo('loginError');
+                this.toggleModal();
             }
         }
     }
@@ -122,11 +123,8 @@ input::-ms-clear {
         </template>
 
         <template v-slot:slot2>
-            <ModalBase :message="messageModalSuccess" :modal-active="modalSuccessActive" title="Sucesso"
-                border-color="#34D399" background-color="#DDEFEB" @ok-click="toggleSuccessModal"/>
-
-            <ModalBase :message="messageModalError" :modal-active="modalErrorActive" title="Erro" border-color="#F87171"
-                background-color="#F2E1E5" @ok-click="toggleErrorModal"/>
+            <ModalBase :type="modalInfo.title" :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title"
+                :border-color="modalInfo.borderColor" @ok-click="toggleModal"/>
         </template>
     </ApresentationLayout>
 </template>

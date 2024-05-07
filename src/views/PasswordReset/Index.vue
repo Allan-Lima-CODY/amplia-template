@@ -1,12 +1,15 @@
 <script lang="ts">
-import { ref } from 'vue'
+import { ref, reactive, toRefs } from 'vue'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faEye, faEyeSlash, faUser } from '@fortawesome/free-solid-svg-icons'
 
-import AlertSuccess from '@/components/Alerts/AlertSuccess.vue';
-import AlertError from '@/components/Alerts/AlertError.vue';
+import type { ModalInfo } from '@/models/ModalInfo'
+
+import { ModalService } from '@/services/ModalService'
+
+import ModalBase from '@/components/Alerts/ModalBase.vue'
 import ButtonApresentation from '@/components/Buttons/ButtonPresentation.vue';
 import ApresentationLayout from '@/layouts/ApresentationLayout.vue';
 import LabelFields from '@/components/Forms/Labels/LabelFields.vue'
@@ -17,14 +20,14 @@ library.add(faEye, faEyeSlash, faUser)
 export default {
     components: {
         FontAwesomeIcon,
-        AlertSuccess,
-        AlertError,
+        ModalBase,
         ButtonApresentation,
         ApresentationLayout,
         LabelFields,
         InputForms
     },
     data() {
+        const modalInfo: ModalInfo = reactive(ModalService.getLoginModalInfo());
         return {
             password: ref(''),
             confirmPassword: ref(''),
@@ -35,10 +38,10 @@ export default {
             eyeIconPassword: ref('eye'),
             eyeIconConfirmPassword: ref('eye'),
 
-            modalSuccessActive: ref(false),
-            modalErrorActive: ref(false),
-            messageModalError: ref(''),
-            messageModalSuccess: ref(''),
+            modalActive: ref(false),
+            modalInfo: {
+                ...toRefs(modalInfo)
+            }
         };
     },
     methods: {
@@ -52,26 +55,24 @@ export default {
             this.eyeIconConfirmPassword = this.inputConfirmPassword === 'password' ? 'eye' : 'eye-slash';
         },
 
-        toggleSuccessModal() {
-            this.modalSuccessActive = !this.modalSuccessActive;
-        },
-
-        toggleErrorModal() {
-            this.modalErrorActive = !this.modalErrorActive;
+        toggleModal(modalType?: string) {
+            if(modalType !== undefined)
+                this.modalInfo = ModalService.getLoginModalInfo(modalType);
+            this.modalActive = !this.modalActive;
         },
 
         passwordReset() {
             if (this.password !== '' && this.confirmPassword !== '') {
                 if (this.password === this.confirmPassword) {
-                    this.messageModalSuccess = 'Senha alterada com sucesso. Agora você já pode voltar para o login.';
-                    this.toggleSuccessModal();
+                    this.modalInfo = ModalService.getPassResetModalInfo('success');
+                    this.toggleModal();
                 } else {
-                    this.messageModalError = 'As senhas não correspondem!';
-                    this.toggleErrorModal();
+                    this.modalInfo = ModalService.getPassResetModalInfo('mismatchPass');
+                    this.toggleModal();
                 }
             } else {
-                this.messageModalError = 'É necessário que os campos sejam preenchidos!';
-                this.toggleErrorModal();
+                this.modalInfo = ModalService.getPassResetModalInfo('emptyfieldsError');
+                this.toggleModal();
             }
         }
     }
@@ -122,19 +123,8 @@ input::-ms-clear {
         </template>
 
         <template v-slot:slot2>
-            <AlertSuccess :modal-active="modalSuccessActive" @close-modal="toggleSuccessModal"
-                :success-message="messageModalSuccess">
-                <p class="text-base leading-relaxed text-body">
-                    {{ messageModalSuccess }}
-                </p>
-            </AlertSuccess>
-
-            <AlertError :modal-active="modalErrorActive" @close-modal="toggleErrorModal"
-                :error-message="messageModalError">
-                <p class="text-base leading-relaxed text-body">
-                    {{ messageModalError }}
-                </p>
-            </AlertError>
+            <ModalBase :type="modalInfo.title" :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title"
+                :border-color="modalInfo.borderColor" @ok-click="toggleModal"/>
         </template>
     </ApresentationLayout>
 </template>
