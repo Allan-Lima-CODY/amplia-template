@@ -14,7 +14,7 @@ import type { Feature } from '@/models/Feature';
 import type { Option } from '@/models/Option';
 import type { ModalInfo } from '@/models/ModalInfo';
 
-import FeaturesRegister from '@/layouts/FeaturesRegister.vue';
+import FeaturesRegister from '@/components/Forms/FeaturesRegister.vue';
 import ModalBase from '@/components/Alerts/ModalBase.vue'
 
 import DataTable from 'primevue/datatable';
@@ -23,6 +23,7 @@ import InputText from 'primevue/inputtext';
 import { FilterMatchMode } from 'primevue/api';
 import Dropdown from 'primevue/dropdown';
 import Calendar from 'primevue/calendar';
+import DataTableMain from '@/components/Mains/DataTableMain.vue';
 
 export default defineComponent({
   components: {},
@@ -132,18 +133,11 @@ export default defineComponent({
 <template>
   <DefaultLayout>
 
-    <TitlePageDefault :pageTitle="pageTitle">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-        class="w-6 h-6 me-4 mt-1">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" />
-      </svg>
-    </TitlePageDefault>
+    <TitlePageDefault :pageTitle="pageTitle"/>
 
     <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
     <FeaturesRegister @register="saveFeat" :products="products" />
-    <div
-      class="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mt-6 max-w-full overflow-x-auto">
+    <DataTableMain>
       <DataTable v-model:editingRows="editingRows" v-model:filters="filters" :value="features" stripedRows paginator
         :rowsPerPageOptions="[5, 10, 20, 50]"
         paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
@@ -214,7 +208,7 @@ export default defineComponent({
           </template>
         </Column>
       </DataTable>
-    </div>
+    </DataTableMain>
 
 
     <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title" :border-color="modalInfo.borderColor"

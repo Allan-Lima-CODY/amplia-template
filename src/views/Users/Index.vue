@@ -24,6 +24,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 import { FilterMatchMode } from 'primevue/api';
+import DataTableMain from '@/components/Mains/DataTableMain.vue'
 
 library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
 
@@ -98,13 +99,7 @@ export default defineComponent({
 <template>
   <DefaultLayout>
 
-    <TitlePageDefault :pageTitle="pageTitle">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-        class="w-6 h-6 me-4 mt-1">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-      </svg>
-    </TitlePageDefault>
+    <TitlePageDefault :pageTitle="pageTitle"/>
 
     <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
 
@@ -117,11 +112,8 @@ export default defineComponent({
       </ButtonDefault>
     </div>
 
-    <div
-      class="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mt-6">
-      <div class="max-w-full rounded-lg overflow-x-auto">
-
-        <DataTable v-model:filters="filters" :value="users" stripedRows paginator @row-edit-init="onEditing"
+    <DataTableMain>
+      <DataTable v-model:filters="filters" :value="users" stripedRows paginator @row-edit-init="onEditing"
           :rowsPerPageOptions="[5, 10, 20, 50]"
           paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
           currentPageReportTemplate="{first} to {last} of {totalRecords}" :rows="10" filterDisplay="row"
@@ -177,9 +169,7 @@ export default defineComponent({
           </Column>
 
           <Column header="Editar" :rowEditor="true" style="width: 5%; min-width: 8rem"></Column>
-        </DataTable>
-
-      </div>
-    </div>
+      </DataTable>
+    </DataTableMain>
   </DefaultLayout>
 </template>
