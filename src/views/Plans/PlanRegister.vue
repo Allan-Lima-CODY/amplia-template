@@ -49,7 +49,6 @@ export default defineComponent({
         const plansField: PlansFields = reactive(PlansService.defaultFields());
         const modalInfo: ModalInfo = reactive(ModalService.getRegisterModalInfo(''));
 
-
         return {
             pageTitle: ref('Cadastro de Planos'),
 
@@ -130,7 +129,7 @@ export default defineComponent({
         },
 
         savePlans() {
-            if ((this.plans.name !== '' && this.plans.name !== null) && (this.plans.product.value !== '' && this.plans.product.value !== null) && (this.plans.price !== 0)) {
+            if ((this.plans.name !== '' && this.plans.name !== null) && (this.plans.product.value !== '' && this.plans.product.value !== null) && (this.plans.price !== 0 && this.plans.price !== null)) {
                 this.modalInfo = ModalService.getRegisterModalInfo('success');
                 this.toggleModal();
             } else {
@@ -144,7 +143,10 @@ export default defineComponent({
         },
 
         handleOkClickModal() {
-            this.backToQueryUser();
+            if(this.modalInfo.title == 'Sucesso!') {
+                this.backToQueryUser();
+            }
+
             this.toggleModal();
         }
     }

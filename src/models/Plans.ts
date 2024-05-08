@@ -18,7 +18,7 @@ export interface Plans {
 export interface PlansFields {
     name: string,
 
-    price: number,
+    price: number | null,
     product: any,
 
     pickingList: boolean, 

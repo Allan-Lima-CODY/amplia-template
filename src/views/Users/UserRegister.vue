@@ -134,7 +134,10 @@ export default defineComponent({
         },
 
         handleOkClickModal() {
-            this.backToQueryUser();
+            if(this.modalInfo.title == 'Sucesso!') {
+                this.backToQueryUser();
+            }
+            
             this.toggleModal();
         }
     }

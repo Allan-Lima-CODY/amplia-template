@@ -20,7 +20,7 @@ export const PlansService =
         return {
             name: '',
 
-            price: 0.00,
+            price: null,
             product: '',
         
             pickingList: false,

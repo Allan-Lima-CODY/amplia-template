@@ -14,7 +14,7 @@ export default {
 </script>
 
 <template>
-    <label class="block mb-1 text-sm font-small text-red dark:text-white" :class="color">
+    <label class="block mb-1 text-sm font-small text-red" :class="color">
         {{ label }}
     </label>
 </template>
