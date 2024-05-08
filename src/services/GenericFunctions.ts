@@ -20,6 +20,16 @@ export const GenericFunctions = {
         });
     },
 
+    formatDateTime(value: any){
+        return value.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric'
+        });
+    },
+
     encryptIdentifier(id: number): string {
         const idString = id.toString();
         const encryptedId = CryptoJS.AES.encrypt(idString, key).toString();
