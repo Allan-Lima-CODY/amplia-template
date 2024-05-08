@@ -123,7 +123,7 @@ input::-ms-clear {
         </template>
 
         <template v-slot:slot2>
-            <ModalBase :type="modalInfo.title" :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title"
+            <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title"
                 :border-color="modalInfo.borderColor" @ok-click="toggleModal"/>
         </template>
     </ApresentationLayout>
