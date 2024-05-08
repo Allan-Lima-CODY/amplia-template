@@ -221,7 +221,7 @@ export default defineComponent({
             </div>
         </ScreenForms>
 
-        <ModalBase :type="modalInfo.title" :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title"
+        <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title"
             :border-color="modalInfo.borderColor" @ok-click="handleOkClickModal" />
     </DefaultLayout>
 </template>
