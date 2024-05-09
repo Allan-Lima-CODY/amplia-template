@@ -5,7 +5,7 @@ export const LogService = {
             {
                 id: 1,
                 dateHour: new Date(),
-                user: 'Alan Lima',
+                user: 'Allan Lima',
                 customer: 'Granado',
                 action: 'Edição',
                 page: 'Clientes',

@@ -1,7 +1,7 @@
-import type { Users, UsersFields } from '../models/Users'
+import type { User, UsersFields } from '../models/User'
 export const UserService =
 {
-    getAllUsersData(): Users[] {
+    getAllUsersData(): User[] {
         return [
             { id: 1, name: 'Allan Lima', createdAt: '2024-04-24', status: 'Ativo', email: 'allan.santos@smart01.com.br', password: '1', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
             { id: 2, name: 'Luana Mandzirosche', createdAt: '2024-04-23', status: 'Ativo', email: 'luana@smart01.com.br', password: '12', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
@@ -16,7 +16,7 @@ export const UserService =
         ]
     },
 
-    getAllUsers(): Promise<Users[]> {
+    getAllUsers(): Promise<User[]> {
         return Promise.resolve(this.getAllUsersData())
     },
 

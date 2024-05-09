@@ -9,7 +9,7 @@ import { ref, defineComponent, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router';
 
 import { GenericFunctions } from '@/services/GenericFunctions'
-import type { UsersFields } from '@/models/Users'
+import type { UsersFields } from '@/models/User'
 import { UserService } from '@/services/UsersService'
 
 import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'

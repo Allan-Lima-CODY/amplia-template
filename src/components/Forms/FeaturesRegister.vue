@@ -38,7 +38,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <form @submit.prevent="register" class="rounded-lg border  border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full flex justify-start">
+    <form @submit.prevent="register" class="rounded-lg border mt-6 border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full flex justify-start">
         <DefaultCard class="w-full" disableHeader>
             <div class="p-6 grid grid-cols-2">
                 <div class="flex justify-start gap-10">

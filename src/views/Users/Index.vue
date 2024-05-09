@@ -7,7 +7,7 @@ import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 import { ref, defineComponent } from 'vue'
 
 import { GenericFunctions } from '@/services/GenericFunctions'
-import type { Users } from '@/models/Users'
+import type { User } from '@/models/User'
 import { UserService } from '@/services/UsersService'
 import type { Option } from '@/models/Option'
 
@@ -42,7 +42,7 @@ export default defineComponent({
     return {
       pageTitle: ref('Usuários'),
 
-      users: [] as Users[],
+      users: [] as User[],
       selectedUser: null as any,
       loading: ref(true),
       filters: {
@@ -64,7 +64,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    UserService.getAllUsers().then((data: Users[]) => {
+    UserService.getAllUsers().then((data: User[]) => {
       this.users = this.getUsers(data);
     })
 
