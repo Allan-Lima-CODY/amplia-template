@@ -18,7 +18,7 @@ import LabelFields from '@/components/Forms/Labels/LabelFields.vue'
 import LabelInformation from '@/components/Forms/Labels/LabelInformation.vue'
 import InputForms from '@/components/Forms/InputFields/InputForms.vue'
 import ButtonApresentation from '@/components/Buttons/ButtonPresentation.vue'
-import ScreenForms from '@/layouts/ScreenForms.vue'
+import ScreenForms from '@/components/Forms/ScreenForms.vue'
 import ModalBase from '@/components/Alerts/ModalBase.vue'
 
 import type { ModalInfo } from '@/models/ModalInfo';
