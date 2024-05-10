@@ -56,7 +56,6 @@ export default defineComponent({
 
       plans: [] as Plans[],
 
-      selectedPlans: null as any,
       loading: ref(true),
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },

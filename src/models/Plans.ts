@@ -1,7 +1,7 @@
 export interface Plans { 
     id: Number,
     name: string,
-    createdAt: string,
+    createdAt: Date,
 
     product: string,
     price: number,
