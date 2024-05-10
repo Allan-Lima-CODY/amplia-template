@@ -18,7 +18,7 @@ import CheckboxOne from '@/components/Forms/Checkboxes/CheckboxOne.vue'
 import LabelFields from '@/components/Forms/Labels/LabelFields.vue'
 import InputForms from '@/components/Forms/InputFields/InputForms.vue'
 import ButtonPresentation from '@/components/Buttons/ButtonPresentation.vue';
-import ScreenForms from '@/layouts/ScreenForms.vue'
+import ScreenForms from '@/components/Forms/ScreenForms.vue'
 import ModalBase from '@/components/Alerts/ModalBase.vue'
 import SelectGroup from '@/components/Forms/SelectGroup.vue'
 import InputNumber from 'primevue/inputnumber';

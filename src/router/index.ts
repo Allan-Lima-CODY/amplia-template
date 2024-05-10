@@ -11,6 +11,8 @@ import Tables from '@/views/Tables/Index.vue'
 import PasswordReset from '@/views/PasswordReset/Index.vue'
 import UserRegister from '@/views/Users/UserRegister.vue'
 import PlanRegister from '@/views/Plans/PlanRegister.vue'
+import Logs from '@/views/Logs/Index.vue'
+
 
 const routes = [
   {
@@ -84,6 +86,14 @@ const routes = [
     meta: {
       title: 'Planos'
     },
+  },
+  {
+    path: '/logs',
+    name: 'logs',
+    component: Logs,
+    meta:{
+      title: 'Logs de Alteração'
+    }
   },
   {
     path: '/forms',

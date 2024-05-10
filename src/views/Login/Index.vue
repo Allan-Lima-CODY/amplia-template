@@ -10,24 +10,26 @@ import { ModalService } from '@/services/ModalService'
 
 import type { ModalInfo } from '@/models/ModalInfo'
 
-import ApresentationLayout from '@/layouts/ApresentationLayout.vue';
+import PresentationLayout from '@/layouts/PresentationLayout.vue';
 import ButtonApresentation from '@/components/Buttons/ButtonPresentation.vue';
 import LabelInformation from '@/components/Forms/Labels/LabelInformation.vue'
 import ModalBase from '@/components/Alerts/ModalBase.vue'
 import LabelFields from '@/components/Forms/Labels/LabelFields.vue'
 import InputForms from '@/components/Forms/InputFields/InputForms.vue'
+import DarkModeSwitcher from '@/components/Header/DarkModeSwitcher.vue'
 
 library.add(faEye, faEyeSlash, faUser)
 
 export default {
     components: {
         FontAwesomeIcon,
-        ApresentationLayout,
+        PresentationLayout,
         ButtonApresentation,
         LabelInformation,
         ModalBase,
         LabelFields,
-        InputForms
+        InputForms,
+        DarkModeSwitcher
     },
     data() {
         const modalInfo: ModalInfo = reactive(ModalService.getLoginModalInfo());
@@ -94,7 +96,8 @@ input::-ms-clear {
 </style>
 
 <template>
-    <ApresentationLayout card-title="LOGIN" :handle="login">
+    <DarkModeSwitcher class="hidden" />
+    <PresentationLayout card-title="LOGIN" :handle="login">
         <template v-slot:slot1>
             <div>
                 <div class="relative">
@@ -126,5 +129,5 @@ input::-ms-clear {
             <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title"
                 :border-color="modalInfo.borderColor" @ok-click="toggleModal"/>
         </template>
-    </ApresentationLayout>
+    </PresentationLayout>
 </template>
