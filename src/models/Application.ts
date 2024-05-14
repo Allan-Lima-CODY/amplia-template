@@ -1,5 +1,4 @@
 import type { Plans, PlansFields } from "./Plans"
-import type { Clients, ClientsFields } from "./Client"
 
 export interface Application { 
     id: Number,

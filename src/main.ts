@@ -16,7 +16,7 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-app.use(VueApexCharts)
+app.use(VueApexCharts),
 app.use(PrimeVue, {
     locale: {
         //Filters
@@ -41,5 +41,4 @@ app.use(PrimeVue, {
         monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
     }
 });
-
 app.mount('#app')

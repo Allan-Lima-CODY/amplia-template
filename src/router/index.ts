@@ -2,12 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Login from '@/views/Login/Index.vue'
 import Home from '@/views/Home/Index.vue'
-import Clients from '@/views/Clients/Index.vue'
+import Customers from '@/views/Customers/Index.vue'
+import CustomerRegister from '@/views/Customers/CustomerRegister.vue'
+import CustomerGeneralInfo from '@/views/Customers/CustomerGeneralInfo.vue'
+import CustomerAppsRegister from '@/views/Customers/CustomerAppsRegister.vue'
 import Users from '@/views/Users/Index.vue'
 import Features from '@/views/Features/Index.vue'
 import Plans from '@/views/Plans/Index.vue'
 import Forms from '@/views/Forms/Index.vue'
-import Tables from '@/views/Tables/Index.vue'
 import PasswordReset from '@/views/PasswordReset/Index.vue'
 import UserRegister from '@/views/Users/UserRegister.vue'
 import PlanRegister from '@/views/Plans/PlanRegister.vue'
@@ -40,12 +42,28 @@ const routes = [
     },
   },
   {
-    path: '/clients',
-    name: 'client',
-    component: Clients,
+    path: '/customers',
+    name: 'customer',
+    component: Customers,
     meta: {
       title: 'Clientes'
     },
+  },
+  {
+    path: '/customers/register',
+    name: 'customerRegister',
+    component: CustomerRegister,
+    meta: {
+      title: 'Cadastro de Clientes'
+    },
+    children: [
+      {
+        path: 'generalInfo', component: CustomerGeneralInfo
+      },
+      {
+        path: 'apps', component: CustomerAppsRegister
+      }
+    ]
   },
   {
     path: '/users',
@@ -101,14 +119,6 @@ const routes = [
     component: Forms,
     meta: {
       title: 'Formulários'
-    },
-  },
-  {
-    path: '/tables',
-    name: 'tables',
-    component: Tables,
-    meta: {
-      title: 'Tabelas'
     },
   }
 ]

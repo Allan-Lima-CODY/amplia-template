@@ -19,7 +19,7 @@ import type { Action } from '@/models/Action';
 import type { Customer } from '@/models/Customer';
 import type { User } from '@/models/User';
 
-import { CustomerService } from '@/services/CustomerService';
+import { CustomersService } from '@/services/CustomersService';
 import { ActionsService } from '@/services/ActionsService';
 import { LogService } from '@/services/LogService'; 
 import { GenericFunctions } from '@/services/GenericFunctions';
@@ -52,7 +52,7 @@ export default defineComponent({
         LogService.getAllLogs().then((data : Log[]) => {
             this.logs = data
         });
-        CustomerService.getAllCustomers().then((data : Customer[]) => {
+        CustomersService.getAllClient().then((data : Customer[]) => {
             this.customers = data
         });
         UserService.getAllUsers().then((data : User[]) => {

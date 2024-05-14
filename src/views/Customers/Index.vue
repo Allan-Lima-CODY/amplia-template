@@ -8,8 +8,8 @@ import { ref, defineComponent, reactive, toRefs } from 'vue'
 
 import { GenericFunctions } from '@/services/GenericFunctions'
 import type { Option } from '@/models/Option'
-import type { Clients } from '@/models/Client'
-import { ClientsService } from '@/services/ClientsService'
+import type { Customer } from '@/models/Customer'
+import { CustomersService } from '@/services/CustomersService'
 import type { Application } from '@/models/Application'
 import { ApplicationService } from '@/services/ApplicationService'
 import type { ModalInfo } from '@/models/ModalInfo'
@@ -48,7 +48,7 @@ export default defineComponent({
       modalActive: ref(false),
       modalMessage: ref(''),
 
-      clients: [] as Clients[],
+      customers: [] as Customer[],
 
       loading: ref(true),
       filters: {
@@ -73,8 +73,8 @@ export default defineComponent({
     }
   },
   mounted() {
-    ClientsService.getAllClient().then((data: Clients[]) => {
-      this.clients = this.getClients(data);
+    CustomersService.getAllClient().then((data: Customer[]) => {
+      this.customers = this.getClients(data);
     })
 
     this.loading = false;
@@ -113,29 +113,22 @@ export default defineComponent({
 <template>
   <DefaultLayout>
 
-    <TitlePageDefault :pageTitle="pageTitle">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-        class="w-6 h-6 me-4 mt-1">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" />
-      </svg>
-    </TitlePageDefault>
+    <TitlePageDefault :pageTitle="pageTitle"/>
 
     <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
 
     <div class="flex justify-end mt-6">
-      <ButtonDefault class="flex bg-primary text-white rounded-lg" route="/plans/register">
+      <ButtonDefault label="Cadastrar novo cliente" class="flex bg-primary text-white rounded-lg" route="/customers/register/generalInfo">
         <div class="mr-2">
           <font-awesome-icon :icon="['fas', 'plus']" size="sm" style="color: #FFFFFF;" />
         </div>
-        Cadastrar Plano
       </ButtonDefault>
     </div>
 
     <div class="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mt-6">
       <div class="max-w-full rounded-lg overflow-x-auto">
 
-        <DataTable v-model:expandedRows="expandedRows" v-model:filters="filters" :value="clients" stripedRows paginator
+        <DataTable v-model:expandedRows="expandedRows" v-model:filters="filters" :value="customers" stripedRows paginator
           @row-edit-init="onEditing" :rowsPerPageOptions="[5, 10, 20, 50]"
           paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
           currentPageReportTemplate="{first} to {last} of {totalRecords}" :rows="10" filterDisplay="row"
@@ -145,7 +138,7 @@ export default defineComponent({
           <template #loading> Carregando planos... </template>
           <template #header>
             <div class="flex flex-wrap justify-content-end gap-2">
-              <Button text icon="pi pi-minus" label="Collapse All" @click="collapseAll" />
+              <button text icon="pi pi-minus" label="Collapse All" @click="collapseAll" />
             </div>
           </template>
 

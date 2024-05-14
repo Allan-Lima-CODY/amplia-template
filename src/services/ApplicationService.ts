@@ -1,8 +1,8 @@
 import type { Plans, PlansFields } from '@/models/Plans'
 import type { Application, ApplicationFields } from '../models/Application'
 import { PlansService } from './PlansService'
-import { ClientsService } from './ClientsService'
-import type { ClientsFields } from '@/models/Client'
+import { CustomersService } from './CustomersService'
+import type { CustomersFields } from '@/models/Customer'
 export const ApplicationService =
 {
     getAllApplicationData(): Application[] {

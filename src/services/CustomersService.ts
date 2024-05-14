@@ -1,11 +1,11 @@
 import type { ApplicationFields } from '@/models/Application'
 import type { AddressFields } from '../models/Address'
-import type { Clients, ClientsFields } from '../models/Client'
+import type { Customer, CustomersFields } from '../models/Customer'
 import { AddressService } from './AddressService'
 import { ApplicationService } from './ApplicationService'
-export const ClientsService =
+export const CustomersService =
 {
-    getAllClientData(): Clients[] {
+    getAllClientData(): Customer[] {
         return [
             { id: 1, name: 'Granado', createdAt: '2024-04-24', cnpj: '33500095000161', stateRegistration: '388108598261',  status: 'Ativo', contact: 'Allan Lima', telefone: '3224885485', email: 'allan@smart01.com.br', bilingEmail: 'allanbiling@smart01.com.br', address: AddressService.getAllAddressData()[0], application: [ApplicationService.getAllApplicationData()[0]] },
             { id: 2, name: 'FFE', createdAt: '2024-04-23', cnpj: '33500095000162', stateRegistration: '388108598262',  status: 'Inativo', contact: 'Luana Miranda', telefone: '3224885485', email: 'luana@smart01.com.br', bilingEmail: 'luanabiling@smart01.com.br', address: AddressService.getAllAddressData()[1], application: [ApplicationService.getAllApplicationData()[1]] },
@@ -16,11 +16,11 @@ export const ClientsService =
         ]
     },
 
-    getAllClient(): Promise<Clients[]> {
+    getAllClient(): Promise<Customer[]> {
         return Promise.resolve(this.getAllClientData())
     },
 
-    defaultFields(): ClientsFields {
+    defaultFields(): CustomersFields {
         return {
             name: '',
 
