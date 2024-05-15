@@ -7,7 +7,7 @@ export interface Customer {
     createdAt: string,
     cnpj: string,
     stateRegistration: string,
-    status: string
+    status: boolean,
 
     contact: string, 
     telefone: string,
@@ -16,7 +16,7 @@ export interface Customer {
 
     address: Address,
 
-    application: Application[]
+    applications: Application[]
 }
 
 export interface CustomersFields {
@@ -24,7 +24,7 @@ export interface CustomersFields {
 
     cnpj: string,
     stateRegistration: string,
-    status: string,
+    status: boolean,
 
     contact: string,
     telefone: string,
@@ -33,5 +33,5 @@ export interface CustomersFields {
 
     address: AddressFields,
 
-    application: ApplicationFields
+    applications: ApplicationFields[]
 }

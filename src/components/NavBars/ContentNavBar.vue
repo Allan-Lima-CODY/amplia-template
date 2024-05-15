@@ -36,8 +36,8 @@ export default defineComponent({
 });
 </script>
 <template>
-    <nav>
-        <NavBarItem class=" flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+    <nav class="flex gap-2">
+        <NavBarItem class="rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
          v-for="(item, index) in items" :item="item" :key="index" :active="isActive(item.route)" :label="item.label" :route="item.route" />
     </nav>
 </template>

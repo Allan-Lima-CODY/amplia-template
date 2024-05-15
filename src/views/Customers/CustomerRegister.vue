@@ -1,36 +1,24 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
-import type { Customer } from '@/models/Customer';
 
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
 import ContentNavBar from '@/components/NavBars/ContentNavBar.vue';
+import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue';
 
 export default defineComponent({
     components:{
         DefaultLayout,
         ContentNavBar,
-    },
-    methods:{
-        handleRegister(){
-
-        }
-    },
-    data(){
-        return {
-            customer: {} as Customer,
-            customerStatus: ref(false),
-            emailValid: ref(true),
-            cnpjValid: ref(true),
-        }
+        TitlePageDefault
     },
 });
 </script>
 <template>
     <DefaultLayout>
-    
-        <ContentNavBar />
+        <TitlePageDefault pageTitle="Cadastro de Clientes" />
+        <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
+        <ContentNavBar class="mt-6" />
         <RouterView />
-
     </DefaultLayout>
 </template>

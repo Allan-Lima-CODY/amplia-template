@@ -20,6 +20,7 @@ export interface Application {
 }
 
 export interface ApplicationFields {
+    product: string,
     plan: PlansFields,
     planPrice: Number | null,
     additionalPrice: Number | null,

@@ -6,6 +6,7 @@ import Customers from '@/views/Customers/Index.vue'
 import CustomerRegister from '@/views/Customers/CustomerRegister.vue'
 import CustomerGeneralInfo from '@/views/Customers/CustomerGeneralInfo.vue'
 import CustomerAppsRegister from '@/views/Customers/CustomerAppsRegister.vue'
+import CustomerApps from '@/views/Customers/CustomerApps.vue'
 import Users from '@/views/Users/Index.vue'
 import Features from '@/views/Features/Index.vue'
 import Plans from '@/views/Plans/Index.vue'
@@ -61,9 +62,17 @@ const routes = [
         path: 'generalInfo', component: CustomerGeneralInfo
       },
       {
-        path: 'apps', component: CustomerAppsRegister
+        path: 'apps', component: CustomerApps,
       }
     ]
+  },
+  {
+    path: '/customers/register/apps/register',
+    name: 'appsRegister',
+    component: CustomerAppsRegister,
+    meta: {
+      title: 'Registro de apps'
+    },
   },
   {
     path: '/users',
