@@ -22,6 +22,8 @@ import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import Calendar from 'primevue/calendar';
+import Button from 'primevue/button';
+import 'primeicons/primeicons.css'
 
 import { FilterMatchMode } from 'primevue/api';
 
@@ -48,18 +50,18 @@ export default defineComponent({
       modalActive: ref(false),
       modalMessage: ref(''),
 
-      customers: [] as Customer[],
+      customers: ref([] as Customer[]),
 
       loading: ref(true),
-      filters: {
+      filters: ref({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         id: { value: null, matchMode: FilterMatchMode.EQUALS },
         name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         product: { value: null, matchMode: FilterMatchMode.EQUALS },
         createdAt: { value: null, matchMode: FilterMatchMode.DATE_IS }
-      },
+      }),
 
-      products: [{
+      products: ref([{
         key: 1,
         value: 'WMS'
       },
@@ -67,9 +69,9 @@ export default defineComponent({
         key: 2,
         value: 'CRM'
       }
-      ] as Option[],
+      ] as Option[]),
 
-      expandedRows: {} as any
+      expandedRows: ref({} as any)
     }
   },
   mounted() {
@@ -103,8 +105,13 @@ export default defineComponent({
       this.expandedRows = null;
     },
 
+    viewApplication(clientId: any) {
+      console.log(clientId);
+      this.$router.push(`/clients/application/${encodeURIComponent(GenericFunctions.encryptIdentifier(clientId))}`);
+    },
+
     onEditing(event: any) {
-      this.$router.push(`/plans/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
+      this.$router.push(`/clients/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
     },
   }
 });
@@ -120,7 +127,10 @@ export default defineComponent({
     <div class="flex justify-end mt-6">
       <ButtonDefault label="Cadastrar novo cliente" class="flex bg-primary text-white rounded-lg" route="/customers/register/generalInfo">
         <div class="mr-2">
-          <font-awesome-icon :icon="['fas', 'plus']" size="sm" style="color: #FFFFFF;" />
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
         </div>
       </ButtonDefault>
     </div>
@@ -137,14 +147,18 @@ export default defineComponent({
           <template #empty> Nenhum plano foi encontrado. </template>
           <template #loading> Carregando planos... </template>
           <template #header>
-            <div class="flex flex-wrap justify-content-end gap-2">
-              <button text icon="pi pi-minus" label="Collapse All" @click="collapseAll" />
+            <div class="flex justify-end">
+              <div class="bg-transparent rounded-lg flex justify-end transition hover:bg-primary">
+                <Button text icon="pi pi-minus" label="Fechar Todos" @click="collapseAll" class="p-3" />
+              </div>
             </div>
           </template>
 
+          <Column expander style="width: 1%" />
+
           <Column field="id" header="Código" style="width: 8%">
-            <template #body="{ data }">
-              {{ data.id }}
+            <template #body="slotProps">
+              {{ slotProps.data.id }}
             </template>
 
             <template #filter="{ filterModel, filterCallback }">
@@ -154,8 +168,8 @@ export default defineComponent({
           </Column>
 
           <Column field="name" header="Cliente" style="width: 15%">
-            <template #body="{ data }">
-              {{ data.name }}
+            <template #body="slotProps">
+              {{ slotProps.data.name }}
             </template>
 
             <template #filter="{ filterModel, filterCallback }">
@@ -165,8 +179,8 @@ export default defineComponent({
           </Column>
 
           <Column field="createdAt" header="Data de Criação" filterField="createdAt" dataType="date" style="width: 15%">
-            <template #body="{ data }">
-              {{ GenericFunctions.formatDate(data.createdAt) }}
+            <template #body="slotProps">
+              {{ GenericFunctions.formatDate(slotProps.data.createdAt) }}
             </template>
             <template #filter="{ filterModel, filterCallback }">
               <Calendar v-model="filterModel.value" dateFormat="dd/mm/yy" :manual-input="false"
@@ -174,44 +188,53 @@ export default defineComponent({
             </template>
           </Column>
 
-          <template #expansion="slotProps">
-            <div class="p-3">
-              <DataTable :value="slotProps.data.application">
-                <Column field="effectiveDate" header="Data de Vigência" sortable>
-                  <template #body="data">
-                    {{ GenericFunctions.formatDate(data.data.effectiveDate) }}
-                  </template>
-                </Column>
-                <Column field="nextBillingDate" header="Data Próxima Cobrança" sortable>
-                  <template #body="data">
-                    {{ GenericFunctions.formatDate(data.data.nextBillingDate) }}
-                  </template>
-                </Column>
-                <Column field="planPrice" header="Valor de Cobrança" sortable>
-                  <template #body="data">
-                    {{ GenericFunctions.formatMoney(data.data.planPrice) }}
-                  </template>
-                </Column>
-                <Column field="contractedLicenses" header="Licenças Contratadas" sortable>
-                  <template #body="data">
-                    {{ data.data.contractedLicenses }}
-                  </template>
-                </Column>
-                <Column field="pricePerLicense" header="Valor por Licença" sortable>
-                  <template #body="data">
-                    {{ GenericFunctions.formatMoney(data.data.pricePerLicense) }}
-                  </template>
-                </Column>
-                <Column field="product" header="Produto" sortable>
-                  <template #body="data">
-                    {{ data.data.plan.product }}
-                  </template>
-                </Column>
-              </DataTable>
-            </div>
-          </template>
+          <Column header="Editar" :rowEditor="true" style="width: 1%;"></Column>
+          <Column style="width: 1%;" header="Aplicações">
+            <template #body="slotProps">
+              <button v-on:click="viewApplication(slotProps.data.id)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+              </button>
+            </template>
+          </Column>
 
-          <Column header="Editar" :rowEditor="true" style="width: 5%; min-width: 8rem"></Column>
+          <template #expansion="slotProps">
+            <DataTable :value="slotProps.data.application">
+              <Column field="effectiveDate" header="Data de Vigência" header-class="text-yellow-400">
+                <template #body="slotProps">
+                  {{ GenericFunctions.formatDate(slotProps.data.effectiveDate) }}
+                </template>
+              </Column>
+              <Column field="nextBillingDate" header="Data Próxima Cobrança" header-class="text-yellow-400">
+                <template #body="slotProps">
+                  {{ GenericFunctions.formatDate(slotProps.data.nextBillingDate) }}
+                </template>
+              </Column>
+              <Column field="planPrice" header="Valor de Cobrança" header-class="text-yellow-400">
+                <template #body="slotProps">
+                  {{ slotProps.data.planPrice }}
+                </template>
+              </Column>
+              <Column field="contractedLicenses" header="Licenças Contratadas" header-class="text-yellow-400">
+                <template #body="slotProps">
+                  {{ slotProps.data.contractedLicenses }}
+                </template>
+              </Column>
+              <Column field="pricePerLicense" header="Valor por Licença" header-class="text-yellow-400">
+                <template #body="slotProps">
+                  {{ slotProps.data.pricePerLicense }}
+                </template>
+              </Column>
+              <Column field="product" header="Produto" header-class="text-yellow-400">
+                <template #body="slotProps">
+                  {{ slotProps.data.plan.product }}
+                </template>
+              </Column>
+            </DataTable>
+          </template>
         </DataTable>
 
       </div>

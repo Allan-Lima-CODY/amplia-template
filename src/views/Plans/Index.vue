@@ -48,25 +48,25 @@ export default defineComponent({
       modalActive: ref(false),
       modalMessage: ref(''),
 
-      modalInfo:{
+      modalInfo: ref({
         ...toRefs(modalInfo)
-      },
+      }),
 
       toDelete: ref(0),
 
-      plans: [] as Plans[],
+      plans: ref([] as Plans[]),
 
       loading: ref(true),
-      filters: {
+      filters: ref({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         id: { value: null, matchMode: FilterMatchMode.EQUALS },
         name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         createdAt: { value: null, matchMode: FilterMatchMode.DATE_IS },
         product: { value: null, matchMode: FilterMatchMode.EQUALS },
         price: { value: null, matchMode: FilterMatchMode.CONTAINS }
-      },
+      }),
 
-      products: [{
+      products: ref([{
         key: 1,
         value: 'WMS'
       },
@@ -74,7 +74,7 @@ export default defineComponent({
         key: 2,
         value: 'CRM'
       }
-      ] as Option[],
+      ] as Option[]),
     }
   },
   mounted() {
@@ -102,32 +102,28 @@ export default defineComponent({
       this.plans = this.plans.filter(i => i.id != this.toDelete);
     },
 
-    toggleModal(modalType?: string, id?: any)
-    {
-      if(id !== undefined){
+    toggleModal(modalType?: string, id?: any) {
+      if (id !== undefined) {
         this.toDelete = id;
       }
-      if(modalType !== undefined)
+      if (modalType !== undefined)
         this.modalInfo = ModalService.getPlansModalInfo(modalType);
       this.modalActive = !this.modalActive;
     },
-    handleModalOk() 
-    {
-        if(this.modalInfo.title === 'Alerta')
-        {
-          this.modalActive = !this.modalActive;
-          this.deleteRow();
-          this.toDelete = 0;
-          this.toggleModal('success');
-        }
-        else{
-          this.toggleModal()
-        }
-    },
-    cancelDelete()
-    {
-        this.toDelete = 0
+    handleModalOk() {
+      if (this.modalInfo.title === 'Alerta') {
         this.modalActive = !this.modalActive;
+        this.deleteRow();
+        this.toDelete = 0;
+        this.toggleModal('success');
+      }
+      else {
+        this.toggleModal()
+      }
+    },
+    cancelDelete() {
+      this.toDelete = 0
+      this.modalActive = !this.modalActive;
     },
   }
 });
@@ -149,7 +145,10 @@ export default defineComponent({
     <div class="flex justify-end mt-6">
       <ButtonDefault class="flex bg-primary text-white rounded-lg" route="/plans/register">
         <div class="mr-2">
-          <font-awesome-icon :icon="['fas', 'plus']" size="sm" style="color: #FFFFFF;" />
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
         </div>
         Cadastrar Plano
       </ButtonDefault>
@@ -165,7 +164,7 @@ export default defineComponent({
         <template #empty> Nenhum plano foi encontrado. </template>
         <template #loading> Carregando planos... </template>
 
-        <Column field="id" header="Código" style="width: 8%" >
+        <Column field="id" header="Código" style="width: 8%">
           <template #body="{ data }">
             {{ data.id }}
           </template>
@@ -237,7 +236,8 @@ export default defineComponent({
       </DataTable>
     </DataTableMain>
 
-    <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title" :okTitle="modalInfo.okTitle" 
-    :noTitle="modalInfo.noTitle" :border-color="modalInfo.borderColor" @ok-click="handleModalOk" @no-click="cancelDelete"/>
+    <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title"
+      :okTitle="modalInfo.okTitle" :noTitle="modalInfo.noTitle" :border-color="modalInfo.borderColor"
+      @ok-click="handleModalOk" @no-click="cancelDelete" />
   </DefaultLayout>
 </template>

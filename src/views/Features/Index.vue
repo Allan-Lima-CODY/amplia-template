@@ -31,18 +31,18 @@ export default defineComponent({
     const modalInfo: ModalInfo = reactive(ModalService.getFeatureModalInfo());
     return {
       pageTitle: ref('Funcionalidades'),
-      features: [] as Feature[],
+      features: ref([] as Feature[]),
       loading: ref(true),
       
-      modalInfo:{
+      modalInfo: ref({
         ...toRefs(modalInfo)
-      },
+      }),
 
       modalActive: ref(false),
 
       toDelete: ref(0),
 
-      products: [{
+      products: ref([{
         key: 1,
         value: 'WMS'
       },
@@ -50,15 +50,15 @@ export default defineComponent({
         key: 2,
         value: 'CRM'
       }
-      ] as Option[],
-      editingRows: [],
-      filters: {
+      ] as Option[]),
+      editingRows: ref([]),
+      filters: ({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         id: { value: null, matchMode: FilterMatchMode.EQUALS },
         name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         createdAt: { value: null, matchMode: FilterMatchMode.DATE_IS },
         product: { value: null, matchMode: FilterMatchMode.EQUALS }
-      },
+      }),
     }
   },
   mounted() {
@@ -109,7 +109,7 @@ export default defineComponent({
             this.toDelete = 0;
             this.toggleModal('success');
           }
-          else //Simula erro de funcionalidade vinculada com plano ao excluir
+          else
           {
             this.toDelete = 0;
             this.modalActive = !this.modalActive;
@@ -193,7 +193,7 @@ export default defineComponent({
             {{ GenericFunctions.formatDate(data.createdAt) }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
-            <Calendar v-model="filterModel.value" @input="filterCallback()" dateFormat="dd/mm/yy"
+            <Calendar v-model="filterModel.value" @date-select="filterCallback()" dateFormat="dd/mm/yy" :manual-input="false"
               placeholder="dd/mm/yyyy" mask="99/99/9999" inputClass="p-2" />
           </template>
         </Column>

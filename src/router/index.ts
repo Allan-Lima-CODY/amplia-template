@@ -15,7 +15,8 @@ import PasswordReset from '@/views/PasswordReset/Index.vue'
 import UserRegister from '@/views/Users/UserRegister.vue'
 import PlanRegister from '@/views/Plans/PlanRegister.vue'
 import Logs from '@/views/Logs/Index.vue'
-
+import Application from '@/views/Clients/Application.vue'
+import ApplicationRegister from '@/views/Clients/ApplicationRegister.vue'
 
 const routes = [
   {
