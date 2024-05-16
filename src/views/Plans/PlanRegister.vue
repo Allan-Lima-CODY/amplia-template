@@ -61,21 +61,21 @@ export default defineComponent({
 
             modalActive: ref(false),
 
-            modalInfo:{
+            modalInfo: ref({
                 ...toRefs(modalInfo)
-            },
-            
-            plans: {
+            }),
+
+            plans: ref({
                 ...toRefs(plansField)
-            },
+            }),
 
-            defaultFields: PlansService.defaultFields(),
+            defaultFields: ref(PlansService.defaultFields()),
 
-            selectedPlan: null as any,
+            selectedPlan: ref(null as any),
 
-            editing: false,
+            editing: ref(false),
 
-            products: [{
+            products: ref([{
                 key: 1,
                 value: 'WMS'
             },
@@ -83,7 +83,7 @@ export default defineComponent({
                 key: 2,
                 value: 'CRM'
             }
-            ] as Option[],
+            ] as Option[]),
         }
     },
     async mounted() {
@@ -143,7 +143,7 @@ export default defineComponent({
         },
 
         handleOkClickModal() {
-            if(this.modalInfo.title == 'Sucesso!') {
+            if (this.modalInfo.title == 'Sucesso!') {
                 this.backToQueryUser();
             }
 
@@ -169,7 +169,10 @@ export default defineComponent({
         <div class="flex justify-start mt-6">
             <ButtonDefault class="flex bg-primary text-white rounded-lg" :handle-click="backToQueryUser">
                 <div class="mr-2">
-                    <font-awesome-icon :icon="['fas', 'arrow-left']" size="sm" style="color: #FFFFFF;" />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
                 </div>
                 Voltar
             </ButtonDefault>
@@ -182,17 +185,21 @@ export default defineComponent({
 
                         <div>
                             <LabelFields label="Plano" for-html="plano" />
-                            <InputForms id="name" type="text" placeholder="Digite o nome do plano" v-model="plans.name" />
+                            <InputForms id="name" type="text" placeholder="Digite o nome do plano"
+                                v-model="plans.name" />
                         </div>
 
                         <div>
                             <LabelFields label="Preço Sugerido" for-html="price"></LabelFields>
-                            <InputNumber v-model="plans.price" inputId="minmaxfraction" :minFractionDigits="2" :maxFractionDigits="2" placeholder="Digite um valor" class="w-full" inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+                            <InputNumber v-model="plans.price" inputId="minmaxfraction" :minFractionDigits="2"
+                                :maxFractionDigits="2" placeholder="Digite um valor" class="w-full"
+                                inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
                         </div>
 
                         <div>
                             <LabelFields label="Produto" for-html="product"></LabelFields>
-                            <SelectGroup :options="products" v-model="plans.product" unselect-label="Escolha um produto" />
+                            <SelectGroup :options="products" v-model="plans.product"
+                                unselect-label="Escolha um produto" />
                         </div>
                     </div>
                 </DefaultCard>
@@ -201,8 +208,8 @@ export default defineComponent({
             <div class="flex flex-col gap-9">
                 <DefaultCard cardTitle="Funcionalidades do Plano">
                     <div class="grid gap-5 p-6">
-                        <CheckboxOne :readonly="false" v-model="plans.pickingList" id="pickingList" label="Lista de Picking"
-                            class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="plans.pickingList" id="pickingList"
+                            label="Lista de Picking" class="ml-4" />
                         <CheckboxOne :readonly="false" v-model="plans.waveSeparation" id="waveSeparation"
                             label="Separação em Onda" class="ml-4" />
                         <CheckboxOne :readonly="false" v-model="plans.separationRoute" id="separationRoute"

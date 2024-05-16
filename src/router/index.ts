@@ -3,16 +3,17 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login/Index.vue'
 import Home from '@/views/Home/Index.vue'
 import Clients from '@/views/Clients/Index.vue'
+import ClientsRegister from '@/views/Clients/ClientsRegister.vue'
 import Users from '@/views/Users/Index.vue'
 import Features from '@/views/Features/Index.vue'
 import Plans from '@/views/Plans/Index.vue'
 import Forms from '@/views/Forms/Index.vue'
-import Tables from '@/views/Tables/Index.vue'
 import PasswordReset from '@/views/PasswordReset/Index.vue'
 import UserRegister from '@/views/Users/UserRegister.vue'
 import PlanRegister from '@/views/Plans/PlanRegister.vue'
 import Logs from '@/views/Logs/Index.vue'
-
+import Application from '@/views/Clients/Application.vue'
+import ApplicationRegister from '@/views/Clients/ApplicationRegister.vue'
 
 const routes = [
   {
@@ -45,6 +46,30 @@ const routes = [
     component: Clients,
     meta: {
       title: 'Clientes'
+    },
+  },
+  {
+    path: '/clients/register/:id?',
+    name: 'clientsregister',
+    component: ClientsRegister,
+    meta: {
+      title: 'Cadastro de Clientes'
+    },
+  },
+  {
+    path: '/clients/application/:clientId?',
+    name: 'application',
+    component: Application,
+    meta: {
+      title: 'Aplicações'
+    },
+  },
+  {
+    path: '/clients/application/:clientId?/regiter/:id?',
+    name: 'applicationregister',
+    component: ApplicationRegister,
+    meta: {
+      title: 'Cadastro de Aplicações'
     },
   },
   {
@@ -101,14 +126,6 @@ const routes = [
     component: Forms,
     meta: {
       title: 'Formulários'
-    },
-  },
-  {
-    path: '/tables',
-    name: 'tables',
-    component: Tables,
-    meta: {
-      title: 'Tabelas'
     },
   }
 ]
