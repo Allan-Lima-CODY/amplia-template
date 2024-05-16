@@ -22,8 +22,9 @@ import CheckboxOne from '@/components/Forms/Checkboxes/CheckboxOne.vue';
 import Calendar from 'primevue/calendar';
 import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue';
 import SelectGroup from '@/components/Forms/SelectGroup.vue';
-import InputNumber from 'primevue/inputnumber';
 import InputPrice from '@/components/Forms/InputFields/InputPrice.vue';
+import type { Plans } from '@/models/Plans';
+import { PlansService } from '@/services/PlansService';
 
 export default defineComponent({
     components:{
@@ -37,7 +38,6 @@ export default defineComponent({
         LabelFields,
         ButtonPresentation,
         CheckboxOne,
-        InputNumber,
         InputPrice,
         Calendar
     },
@@ -45,6 +45,7 @@ export default defineComponent({
         return{
             formData: useFormDataStore().formData as CustomersFields,
             application: {} as ApplicationFields,
+            plans: [] as Option[],
             products: [{
                 key: 1,
                 value: 'WMS'
@@ -73,6 +74,11 @@ export default defineComponent({
             deep: true,
         },
     },
+    mounted(){
+        PlansService.getAllPlans().then((data: Plans[]) => {
+            this.plans = data.map(({id, name}) => ({ key:id, value:name })) as Option[]
+        });
+    },
     beforeRouteLeave(to, from, next) {
       useFormDataService().resetFormDataOnRouteChange(to, from);
       next();
@@ -91,12 +97,12 @@ export default defineComponent({
                     <div class="flex flex-col w-full gap-5.5 p-6.5">
                         <div>
                             <LabelFields label="Produto" for-html="product" />
-                            <SelectGroup :options="products"  id="product" unselect-label="Selecione o produto" v-model="application.product" />
+                            <SelectGroup :options="products" v-model="application.product"  unselect-label="Selecione o produto" />
                         </div>
 
                         <div>
                             <LabelFields label="Plano" for-html="plan"></LabelFields>
-                            <SelectGroup :options="products"  id="plan" unselect-label="Selecione o plano" v-model="application.plan" />
+                            <SelectGroup :options="plans" v-model="application.plan" unselect-label="Selecione o plano"  />
                         </div>
 
                         <div>
@@ -125,7 +131,7 @@ export default defineComponent({
                             
                             <div>
                                 <LabelFields label="Data de vigência" for-html="effectiveDate"></LabelFields>
-                                <Calendar id="effectiveDate" type="text" placeholder="dd/mm/yyyy" v-model="application.effectiveDate" input-class="p-3.5 bg-white border-stroke dark:bg-[#1D2A39] border-[1.5px] dark:border-[#3D4D60]" />
+                                <Calendar id="effectiveDate" type="text" placeholder="dd/mm/yyyy" dateFormat="dd/mm/yy" v-model="application.effectiveDate" input-class="p-3.5 bg-white border-stroke dark:bg-[#1D2A39] border-[1.5px] dark:border-[#3D4D60]" />
                             </div>
                         </div>
                         <div class="grid gap-5">
@@ -136,13 +142,14 @@ export default defineComponent({
                             
                             <div>
                                 <LabelFields label="Data da próxima cobrança" for-html="nextBillingDate"></LabelFields>
-                                <Calendar id="nextBillingDate" type="text" placeholder="dd/mm/yyyy" v-model="application.nextBillingDate" input-class="p-3.5 bg-white border-stroke dark:bg-[#1D2A39] border-[1.5px] dark:border-[#3D4D60]" />
+                                <Calendar id="nextBillingDate" type="text" placeholder="dd/mm/yyyy" v-model="application.nextBillingDate" dateFormat="dd/mm/yy" input-class="p-3.5 bg-white border-stroke dark:bg-[#1D2A39] border-[1.5px] dark:border-[#3D4D60]" />
                             </div>
                         </div>
-
                     </div>
                 </DefaultCard>
-                <ButtonPresentation label="Adicionar" />
+                <div class="flex justify-end">
+                    <ButtonPresentation label="Adicionar" />
+                </div>
             </div>
     </ScreenForms>
     </DefaultLayout>
