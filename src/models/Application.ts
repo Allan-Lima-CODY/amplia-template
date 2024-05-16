@@ -20,12 +20,13 @@ export interface Application {
 }
 
 export interface ApplicationFields {
-    product: string,
+    
+    product: string | null,
     plan: PlansFields,
     planPrice: Number | null,
     additionalPrice: Number | null,
 
-    status: string,
+    status: boolean,
 
     contractedLicenses: Number | null,
     pricePerLicense: Number | null

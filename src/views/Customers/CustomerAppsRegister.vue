@@ -4,8 +4,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 
-import type { CustomersFields } from '@/models/Customer';
-import type { ApplicationFields } from '@/models/Application';
+import type { Application, ApplicationFields } from '@/models/Application';
 import type { Option } from '@/models/Option';
 
 import useFormDataService from '@/services/FormDataService';
@@ -25,6 +24,7 @@ import SelectGroup from '@/components/Forms/SelectGroup.vue';
 import InputPrice from '@/components/Forms/InputFields/InputPrice.vue';
 import type { Plans } from '@/models/Plans';
 import { PlansService } from '@/services/PlansService';
+import { ApplicationService } from '@/services/ApplicationService';
 
 export default defineComponent({
     components:{
@@ -43,7 +43,7 @@ export default defineComponent({
     },
     data(){
         return{
-            formData: useFormDataStore().formData as CustomersFields,
+            applications: useFormDataStore().arrayData as Application[],
             application: {} as ApplicationFields,
             plans: [] as Option[],
             products: [{
@@ -55,7 +55,6 @@ export default defineComponent({
                 value: 'CRM'
             }
             ] as Option[],
-            customerStatus: ref(false),
             emailValid: ref(true),
             cnpjValid: ref(true),
         }
@@ -63,7 +62,7 @@ export default defineComponent({
     methods:
     {
         handleAdd(){
-            this.formData.applications.concat(this.application);
+            this.applications.push(ApplicationService.fieldsToObj(this.application));
         },
     },
     watch: {

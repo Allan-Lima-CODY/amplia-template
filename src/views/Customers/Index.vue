@@ -4,30 +4,23 @@ import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 </script>
 
 <script lang="ts">
-import { ref, defineComponent, reactive, toRefs } from 'vue'
+import { ref, defineComponent } from 'vue'
 
 import { GenericFunctions } from '@/services/GenericFunctions'
 import type { Option } from '@/models/Option'
 import type { Customer } from '@/models/Customer'
 import { CustomersService } from '@/services/CustomersService'
-import type { Application } from '@/models/Application'
-import { ApplicationService } from '@/services/ApplicationService'
-import type { ModalInfo } from '@/models/ModalInfo'
-import { ModalService } from '@/services/ModalService'
 
 import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
-import ModalBase from '@/components/Alerts/ModalBase.vue'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
-import Dropdown from 'primevue/dropdown';
 import Calendar from 'primevue/calendar';
 import Button from 'primevue/button';
 import 'primeicons/primeicons.css'
 
 import { FilterMatchMode } from 'primevue/api';
 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
@@ -36,11 +29,9 @@ library.add(faPlus)
 export default defineComponent({
   components: {
     ButtonDefault,
-    ModalBase,
     DataTable,
     Column,
     InputText,
-    Dropdown,
     Calendar
   },
   data() {
@@ -75,18 +66,18 @@ export default defineComponent({
     }
   },
   mounted() {
-    CustomersService.getAllClient().then((data: Customer[]) => {
-      this.customers = this.getClients(data);
+    CustomersService.getAllCustomers().then((data: Customer[]) => {
+      this.customers = this.getCustomers(data);
     })
 
     this.loading = false;
   },
   methods: {
-    getClients(data: any) {
+    getCustomers(data: any) {
       return [...(data || [])].map((d) => {
         d.createdAt = new Date(d.createdAt);
 
-        d.application.map((a: any) => {
+        d.applications.map((a: any) => {
           a.createdAt = new Date(a.createdAt);
 
           a.planPrice = GenericFunctions.formatMoney(a.planPrice);
@@ -105,13 +96,8 @@ export default defineComponent({
       this.expandedRows = null;
     },
 
-    viewApplication(clientId: any) {
-      console.log(clientId);
-      this.$router.push(`/clients/application/${encodeURIComponent(GenericFunctions.encryptIdentifier(clientId))}`);
-    },
-
     onEditing(event: any) {
-      this.$router.push(`/clients/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
+      this.$router.push(`/customers/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
     },
   }
 });
@@ -189,20 +175,9 @@ export default defineComponent({
           </Column>
 
           <Column header="Editar" :rowEditor="true" style="width: 1%;"></Column>
-          <Column style="width: 1%;" header="Aplicações">
-            <template #body="slotProps">
-              <button v-on:click="viewApplication(slotProps.data.id)">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor" class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                </svg>
-              </button>
-            </template>
-          </Column>
 
           <template #expansion="slotProps">
-            <DataTable :value="slotProps.data.application">
+            <DataTable :value="slotProps.data.applications">
               <Column field="effectiveDate" header="Data de Vigência" header-class="text-yellow-400">
                 <template #body="slotProps">
                   {{ GenericFunctions.formatDate(slotProps.data.effectiveDate) }}

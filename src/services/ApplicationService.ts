@@ -1,8 +1,6 @@
-import type { Plans, PlansFields } from '@/models/Plans'
+import type { PlansFields } from '@/models/Plans'
 import type { Application, ApplicationFields } from '../models/Application'
 import { PlansService } from './PlansService'
-import { CustomersService } from './CustomersService'
-import type { CustomersFields } from '@/models/Customer'
 export const ApplicationService =
 {
     getAllApplicationData(): Application[] {
@@ -22,11 +20,12 @@ export const ApplicationService =
 
     defaultFields(): ApplicationFields {
         return {
+            product: null,
             plan: PlansService.defaultFields() as PlansFields,
             planPrice: null,
             additionalPrice: null,
 
-            status: 'Ativo',
+            status: true,
 
             contractedLicenses: null,
             pricePerLicense: null,
@@ -36,5 +35,20 @@ export const ApplicationService =
 
             totalPrice: 0
         }
+    },
+    fieldsToObj(form : ApplicationFields): Application 
+    {
+        return {
+            createdAt: new Date(),
+            plan: form.plan,
+            planPrice: form.planPrice,
+            additionalPrice: form.additionalPrice,
+            status: form.status ? "Ativo" : "Inativo",
+            contractedLicenses: form.contractedLicenses,
+            pricePerLicense: form.pricePerLicense,
+            effectiveDate: form.effectiveDate,
+            nextBillingDate: form.nextBillingDate,
+            totalPrice: form.totalPrice
+        } as Application;
     }
 }

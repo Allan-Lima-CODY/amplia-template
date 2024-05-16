@@ -1,5 +1,5 @@
 import type { Address, AddressFields } from "./Address"
-import type { Application, ApplicationFields } from "./Application"
+import type { Application } from "./Application"
 
 export interface Customer { 
     id: Number,
@@ -7,7 +7,7 @@ export interface Customer {
     createdAt: string,
     cnpj: string,
     stateRegistration: string,
-    status: boolean,
+    status: string,
 
     contact: string, 
     telefone: string,
@@ -31,7 +31,5 @@ export interface CustomersFields {
     email: string,
     bilingEmail: string,
 
-    address: AddressFields,
-
-    applications: ApplicationFields[]
+    address: AddressFields
 }

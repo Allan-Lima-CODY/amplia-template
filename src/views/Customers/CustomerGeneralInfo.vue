@@ -38,7 +38,6 @@ export default defineComponent({
             formData: useFormDataStore().formData as CustomersFields,
             emailValid: ref(true),
             cnpjValid: ref(true),
-            status: ref(false)
         }
     },
     created(){
