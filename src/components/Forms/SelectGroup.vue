@@ -21,10 +21,11 @@ export default {
     unselectLabel: String
   },
   methods: {
-    updateValue() {
+    updateValue(event?: any) {
       if(this.selectedOption !== '')
-        this.isOptionSelected = true
+        this.isOptionSelected = true;
 
+      this.selectedOption = event.target.value
       this.$emit("update:modelValue", this.selectedOption);
     }
   },

@@ -108,13 +108,10 @@ export default defineComponent(
             },
         
             onEditing(event: any) {
-                this.$router.push(`/clients/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
+                this.$router.push(`/customers/register/apps/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
             },
         }
     });
-
-
-
 
 </script>
 <template>

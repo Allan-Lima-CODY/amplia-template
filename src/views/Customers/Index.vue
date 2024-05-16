@@ -97,7 +97,7 @@ export default defineComponent({
     },
 
     onEditing(event: any) {
-      this.$router.push(`/customers/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
+      this.$router.push(`/customers/register/generalInfo/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
     },
   }
 });

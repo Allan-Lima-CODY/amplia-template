@@ -2,7 +2,7 @@
 </script>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, reactive, ref, toRefs } from 'vue'
 
 import type { Application, ApplicationFields } from '@/models/Application';
 import type { Option } from '@/models/Option';
@@ -42,9 +42,12 @@ export default defineComponent({
         Calendar
     },
     data(){
+        const applicationFields: ApplicationFields = reactive(ApplicationService.defaultFields());
         return{
-            applications: useFormDataStore().arrayData as Application[],
-            application: {} as ApplicationFields,
+            applications: useFormDataStore().arrayData as ApplicationFields[],
+            application: {
+                ...toRefs(applicationFields)
+            },
             plans: [] as Option[],
             products: [{
                 key: 1,
@@ -62,7 +65,10 @@ export default defineComponent({
     methods:
     {
         handleAdd(){
-            this.applications.push(ApplicationService.fieldsToObj(this.application));
+            console.log(this.application)
+            // const lastId = this.applications[this.applications.length - 1].id;
+            // this.application.id = lastId === null ? 1 : lastId + 1;
+            // this.applications.push(this.application);
         },
     },
     watch: {
@@ -73,7 +79,7 @@ export default defineComponent({
             deep: true,
         },
     },
-    mounted(){
+    created(){
         PlansService.getAllPlans().then((data: Plans[]) => {
             this.plans = data.map(({id, name}) => ({ key:id, value:name })) as Option[]
         });
@@ -96,7 +102,7 @@ export default defineComponent({
                     <div class="flex flex-col w-full gap-5.5 p-6.5">
                         <div>
                             <LabelFields label="Produto" for-html="product" />
-                            <SelectGroup :options="products" v-model="application.product"  unselect-label="Selecione o produto" />
+                            <SelectGroup :options="products" v-model="application.product" unselect-label="Selecione o produto" />
                         </div>
 
                         <div>
@@ -112,9 +118,9 @@ export default defineComponent({
                             <LabelFields label="Valor adicional" for-html="additionalPrice" />
                             <InputPrice id="additionalPrice" type="text" placeholder="Insira o valor adicional" v-model="application.additionalPrice" />
                         </div>
-                        <div class="flex flex-col gap-2">
-                            <LabelFields label="Status da  aplicação" for-html="appStatus"></LabelFields>
+                        <div class="flex gap-1">
                             <CheckboxOne :readonly="false" v-model="application.status" id="appStatus" label="" class="ml-4" />
+                            <LabelFields label="Status da  aplicação" for-html="appStatus"></LabelFields>
                         </div>
                     </div>
                 </DefaultCard>
@@ -136,7 +142,7 @@ export default defineComponent({
                         <div class="grid gap-5">
                             <div>
                                 <LabelFields label="Valor por licença" for-html="perLicensePrice" />
-                                <InputForms id="perLicensePrice" type="text" placeholder="Digite número de telefone" v-model="application.pricePerLicense" />
+                                <InputPrice id="perLicensePrice" type="text" placeholder="Digite número de telefone" v-model="application.pricePerLicense" />
                             </div>
                             
                             <div>

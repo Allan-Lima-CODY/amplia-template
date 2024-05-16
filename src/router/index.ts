@@ -50,7 +50,7 @@ const routes = [
     },
   },
   {
-    path: '/customers/register/:id?',
+    path: '/customers/register',
     name: 'customerRegister',
     component: CustomerRegister,
     meta: {
@@ -58,10 +58,10 @@ const routes = [
     },
     children: [
       {
-        path: 'generalInfo', component: CustomerGeneralInfo
+        path: 'generalInfo/:id?', component: CustomerGeneralInfo
       },
       {
-        path: 'apps', component: CustomerApps,
+        path: 'apps/:id?', component: CustomerApps,
       }
     ]
   },

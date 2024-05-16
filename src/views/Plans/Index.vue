@@ -23,12 +23,8 @@ import { ModalService } from '@/services/ModalService'
 
 import { FilterMatchMode } from 'primevue/api';
 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import DataTableMain from '@/components/Mains/DataTableMain.vue'
 
-library.add(faPlus)
 
 export default defineComponent({
   components: {

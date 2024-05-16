@@ -1,4 +1,4 @@
-import type { Plans, PlansFields } from "./Plans"
+import type { Plans } from "./Plans"
 
 export interface Application { 
     id: Number
@@ -20,9 +20,10 @@ export interface Application {
 }
 
 export interface ApplicationFields {
+    id: number | null,
     
     product: string | null,
-    plan: PlansFields,
+    plan: string | null,
     planPrice: Number | null,
     additionalPrice: Number | null,
 
@@ -31,8 +32,8 @@ export interface ApplicationFields {
     contractedLicenses: Number | null,
     pricePerLicense: Number | null
 
-    effectiveDate: Date,
-    nextBillingDate: Date
+    effectiveDate: Date | null,
+    nextBillingDate: Date | null,
 
     totalPrice: Number | null
 }
