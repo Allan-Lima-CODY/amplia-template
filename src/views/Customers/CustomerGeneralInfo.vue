@@ -42,7 +42,7 @@ export default defineComponent({
     },
     created(){
         if(this.formData.address === undefined){
-            this.formData.status = false;
+            this.formData.status = true;
             this.formData.address = AddressService.defaultFields();
         }
     },
