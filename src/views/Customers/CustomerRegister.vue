@@ -37,6 +37,11 @@ export default defineComponent({
                 item.route = `${item.route}/${encodeURIComponent(customerId)}`
             })
         }
+    },
+    methods: {
+        goBack() {
+            this.$router.push('/customers');
+        },
     }
 });
 </script>
@@ -47,7 +52,7 @@ export default defineComponent({
         <div class="flex justify-between mt-6">
             <div clas="flex justify-start">
                 <ButtonDefault label="Voltar" class="flex bg-primary text-white rounded-lg"
-                    :handle-click="backToQueryClient">
+                    :handle-click="goBack">
                     <div class="mr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-4 h-4">

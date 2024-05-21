@@ -85,26 +85,6 @@ export default defineComponent({
             useFormDataStore().resetFormData()
         }
     },
-    async mounted(){
-        const customerId: any = this.$route.params.id;
-        if (customerId && typeof customerId === 'string' && customerId.trim() !== '') {
-
-            const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(customerId));
-            try
-            {
-                if(this.formData.address.number === null){
-                    const customer = (await CustomersService.getAllCustomers()).find(c => c.id === decryptedId);
-                    this.formData = CustomersService.toFields(customer as Customer);
-                }
-            }
-            catch{
-                console.error("Ocorreu um erro ao buscar o cliente")
-            }
-        }
-        else{
-            useFormDataStore().resetFormData()
-        }
-    },
     watch: {
         formData: {
             handler(newFormData) {

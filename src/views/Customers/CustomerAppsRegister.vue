@@ -12,7 +12,6 @@ import { useFormDataStore } from '@/stores/formData';
 
 import ButtonDefault from '@/components/Buttons/ButtonDefault.vue';
 import DefaultCard from '@/components/Forms/DefaultCard.vue';
-import InputForms from '@/components/Forms/InputFields/InputForms.vue';
 import LabelFields from '@/components/Forms/Labels/LabelFields.vue';
 import ScreenForms from '@/components/Forms/ScreenForms.vue';
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
@@ -36,7 +35,6 @@ export default defineComponent({
         ScreenForms,
         SelectGroup,
         DefaultCard,
-        InputForms,
         LabelFields,
         ButtonPresentation,
         CheckboxOne,
