@@ -33,6 +33,7 @@ export default defineComponent(
         },
         data() {
         return {
+            GenericFunctions,
             pageTitle: ref('Aplicações'),
             
             modalActive: ref(false),
