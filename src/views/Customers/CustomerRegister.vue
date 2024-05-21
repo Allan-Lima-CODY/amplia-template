@@ -1,11 +1,12 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-
+import { defineComponent, ref } from 'vue';
 
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
 import ContentNavBar from '@/components/NavBars/ContentNavBar.vue';
 import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue';
 import ButtonDefault from '@/components/Buttons/ButtonDefault.vue';
+
+import type { NavItem } from '@/models/NavItem';
 
 export default defineComponent({
     components: {
@@ -14,10 +15,31 @@ export default defineComponent({
         TitlePageDefault,
         ButtonDefault
     },
+    data(){
+        return {
+            items: ref([
+                {
+                    label:'Informações gerais',
+                    route:'/customers/register/generalInfo',
+                },
+                {
+                    label:'Aplicações',
+                    route:'/customers/register/apps',
+                }
+            ] as NavItem[])
+        }
+    },
+    async mounted(){
+        const customerId : any = this.$route.params.id;
+        
+        if(customerId && typeof customerId === 'string' && customerId.trim() !== ''){
+            this.items.forEach((item) => {
+                item.route = `${item.route}/${encodeURIComponent(customerId)}`
+            })
+        }
+    },
     methods: {
-        backToQueryClient() {
-            // this.resetFields();
-
+        goBack() {
             this.$router.push('/customers');
         },
     }
@@ -30,7 +52,7 @@ export default defineComponent({
         <div class="flex justify-between mt-6">
             <div clas="flex justify-start">
                 <ButtonDefault label="Voltar" class="flex bg-primary text-white rounded-lg"
-                    :handle-click="backToQueryClient">
+                    :handle-click="goBack">
                     <div class="mr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-4 h-4">
@@ -42,7 +64,7 @@ export default defineComponent({
             </div>
 
             <div class="flex justify-end">
-                <ContentNavBar class="flex justify-end" />
+                <ContentNavBar :items="items" class="flex justify-end" />
             </div>
         </div>
         <RouterView />

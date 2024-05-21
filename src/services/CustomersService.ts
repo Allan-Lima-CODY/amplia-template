@@ -34,5 +34,19 @@ export const CustomersService =
         
             address: AddressService.defaultFields() as AddressFields,
         }
+    },
+
+    toFields(customer : Customer) : CustomersFields{
+        return{
+            name: customer.name,
+            cnpj: customer.cnpj,
+            stateRegistration: customer.stateRegistration,
+            status: customer.status === "Ativo",
+            contact: customer.contact,
+            telefone: customer.telefone,
+            email: customer.email,
+            bilingEmail: customer.bilingEmail,
+            address: customer.address
+        }
     }
 }

@@ -17,6 +17,10 @@ export const PlansService =
         return Promise.resolve(this.getAllPlansData())
     },
 
+    getPlanByName(name : string): Promise<Plans | undefined> {
+        return Promise.resolve(this.getAllPlansData().find(plan => plan.name === name));
+    },
+
     defaultFields(): PlansFields {
         return {
             name: '',

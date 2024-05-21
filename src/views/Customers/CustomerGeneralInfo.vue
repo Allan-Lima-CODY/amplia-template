@@ -1,7 +1,7 @@
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 
-import type { CustomersFields } from '@/models/Customer';
+import type { Customer, CustomersFields } from '@/models/Customer';
 import type { Option } from '@/models/Option';
 
 import { StateService } from '@/services/StatesService';
@@ -17,10 +17,13 @@ import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import SelectGroup from '@/components/Forms/SelectGroup.vue';
 
+
 import useFormDataService from '@/services/FormDataService';
+import { GenericFunctions } from '@/services/GenericFunctions';
 import { useFormDataStore } from '@/stores/formData';
 import { AddressService } from '@/services/AddressService';
 import type { State } from '@/models/States';
+import { CustomersService } from '@/services/CustomersService';
 
 export default defineComponent({
     components: {
@@ -61,6 +64,26 @@ export default defineComponent({
         StateService.getAllStates().then((data: State[]) => {
             this.states = data.map(({ id, name }) => ({ key: id, value: name })) as Option[]
         });
+    },
+    async mounted(){
+        const customerId: any = this.$route.params.id;
+        if (customerId && typeof customerId === 'string' && customerId.trim() !== '') {
+
+            const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(customerId));
+            try
+            {
+                if(this.formData.address.number === null){
+                    const customer = (await CustomersService.getAllCustomers()).find(c => c.id === decryptedId);
+                    this.formData = CustomersService.toFields(customer as Customer);
+                }
+            }
+            catch{
+                console.error("Ocorreu um erro ao buscar o cliente")
+            }
+        }
+        else{
+            useFormDataStore().resetFormData()
+        }
     },
     watch: {
         formData: {

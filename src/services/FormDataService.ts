@@ -7,7 +7,8 @@ export default function FormDataService() {
     const baseFrom = from.fullPath.split('/')[2];
     const baseTo = to.fullPath.split('/')[2];
     if (baseFrom !== baseTo) {
-      useFormDataStore().reset();
+      useFormDataStore().resetFormData();
+      useFormDataStore().resetArray();
     }
   };
 

@@ -24,12 +24,6 @@ import ModalBase from '@/components/Alerts/ModalBase.vue'
 import type { ModalInfo } from '@/models/ModalInfo';
 import { ModalService } from '@/services/ModalService';
 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlus, faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-
-library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
-
 export default defineComponent({
     components: {
         ButtonDefault,
@@ -74,7 +68,6 @@ export default defineComponent({
     },
     async mounted() {
         const userId: any = this.$route.params.id;
-
         if (userId && typeof userId === 'string' && userId.trim() !== '') {
             this.pageTitle = 'Atualizar Dados';
 
