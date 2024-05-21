@@ -52,7 +52,7 @@ export default defineComponent({
         LogService.getAllLogs().then((data : Log[]) => {
             this.logs = data
         });
-        CustomersService.getAllClient().then((data : Customer[]) => {
+        CustomersService.getAllCustomers().then((data : Customer[]) => {
             this.customers = data
         });
         UserService.getAllUsers().then((data : User[]) => {

@@ -111,7 +111,7 @@ export default defineComponent({
     <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
 
     <div class="flex justify-end mt-6">
-      <ButtonDefault label="Cadastrar novo cliente" class="flex bg-primary text-white rounded-lg" route="/customers/register/generalInfo">
+      <ButtonDefault label="Cadastrar Cliente" class="flex bg-primary text-white rounded-lg" route="/customers/register/generalInfo">
         <div class="mr-2">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-4 h-4">

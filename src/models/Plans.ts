@@ -1,18 +1,14 @@
+import type { Feature } from "./Feature"
+
 export interface Plans { 
     id: Number,
     name: string,
     createdAt: Date,
 
     product: string,
-    price: number,
-
-    pickingList: boolean, 
-    waveSeparation: boolean, 
-    separationRoute: boolean, 
-    orderConference: boolean, 
-    volumeControl: boolean, 
-    labelPrinting: boolean, 
-    labelReprint: boolean
+    price: number
+    
+    features: Feature[]
 }
 
 export interface PlansFields {
@@ -21,11 +17,5 @@ export interface PlansFields {
     price: number | null,
     product: any,
 
-    pickingList: boolean, 
-    waveSeparation: boolean, 
-    separationRoute: boolean, 
-    orderConference: boolean, 
-    volumeControl: boolean, 
-    labelPrinting: boolean, 
-    labelReprint: boolean
+    features: Feature[]
 }
