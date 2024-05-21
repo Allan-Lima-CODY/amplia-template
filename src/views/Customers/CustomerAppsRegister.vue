@@ -22,12 +22,14 @@ import Calendar from 'primevue/calendar';
 import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue';
 import SelectGroup from '@/components/Forms/SelectGroup.vue';
 import InputPrice from '@/components/Forms/InputFields/InputPrice.vue';
+import InputNumber from 'primevue/inputnumber';
+
 import type { Plans } from '@/models/Plans';
 import { PlansService } from '@/services/PlansService';
 import { ApplicationService } from '@/services/ApplicationService';
 
 export default defineComponent({
-    components:{
+    components: {
         TitlePageDefault,
         DefaultLayout,
         ButtonDefault,
@@ -39,9 +41,10 @@ export default defineComponent({
         ButtonPresentation,
         CheckboxOne,
         InputPrice,
-        Calendar
+        Calendar,
+        InputNumber
     },
-    data(){
+    data() {
         const applicationFields: ApplicationFields = reactive(ApplicationService.defaultFields());
         return{
             application: {
@@ -78,14 +81,14 @@ export default defineComponent({
             this.$router.go(-1);
         }
     },
-    created(){
+    created() {
         PlansService.getAllPlans().then((data: Plans[]) => {
-            this.plans = data.map(({id, name}) => ({ key:id, value:name })) as Option[]
+            this.plans = data.map(({ id, name }) => ({ key: id, value: name })) as Option[]
         });
     },
     beforeRouteLeave(to, from, next) {
-      useFormDataService().resetFormDataOnRouteChange(to, from);
-      next();
+        useFormDataService().resetFormDataOnRouteChange(to, from);
+        next();
     }
 });
 </script>
@@ -94,67 +97,89 @@ export default defineComponent({
     <DefaultLayout>
         <TitlePageDefault pageTitle="Cadastro de Aplicação" />
         <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
-        <ButtonDefault label="Voltar" :handle-click="goBack" class="flex mt-5 bg-primary text-white rounded-lg" />
+        <ButtonDefault label="Voltar" :handle-click="goBack" class="flex mt-5 bg-primary text-white rounded-lg"
+            >
+            <div class="mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </div>
+        </ButtonDefault>
         <ScreenForms :handle="handleAdd">
             <div class="grid gap-9">
                 <DefaultCard cardTitle="Dados da aplicação">
                     <div class="flex flex-col w-full gap-5.5 p-6.5">
                         <div>
                             <LabelFields label="Produto" for-html="product" />
-                            <SelectGroup :options="products" v-model="application.product" unselect-label="Selecione o produto" />
+                            <SelectGroup :options="products" v-model="application.product"
+                                unselect-label="Selecione o produto" />
                         </div>
 
                         <div>
                             <LabelFields label="Plano" for-html="plan"></LabelFields>
-                            <SelectGroup :options="plans" v-model="application.plan" unselect-label="Selecione o plano"  />
+                            <SelectGroup :options="plans" v-model="application.plan"
+                                unselect-label="Selecione o plano" />
                         </div>
 
                         <div>
                             <LabelFields label="Valor do plano" for-html="planPrice" />
-                            <InputPrice id="planPrice" type="text" placeholder="Insira o valor do plano" v-model="application.planPrice" />
+                            <InputPrice id="planPrice" type="text" placeholder="Insira o valor do plano"
+                                v-model="application.planPrice" />
                         </div>
                         <div>
                             <LabelFields label="Valor adicional" for-html="additionalPrice" />
-                            <InputPrice id="additionalPrice" type="text" placeholder="Insira o valor adicional" v-model="application.additionalPrice" />
+                            <InputPrice id="additionalPrice" type="text" placeholder="Insira o valor adicional"
+                                v-model="application.additionalPrice" />
                         </div>
                         <div class="flex gap-1">
-                            <CheckboxOne :readonly="false" v-model="application.status" id="appStatus" label="" class="ml-4" />
-                            <LabelFields label="Status da  aplicação" for-html="appStatus"></LabelFields>
+                            <CheckboxOne :readonly="false" v-model="application.status" id="appStatus" label="Ativo"
+                                class="ml-4" />
                         </div>
                     </div>
                 </DefaultCard>
             </div>
             <div class="grid h-fit gap-9">
                 <DefaultCard cardTitle="Dados Contratuais">
-                    <div class="flex flex-row gap-5.5 p-6.5">
-                        <div class=" grid gap-5">
-                            <div>
+                    <div class="flex flex-col gap-5.5 p-6.5">
+                        <div class="flex gap-5">
+                            <div class="w-full">
                                 <LabelFields label="Licenças contratadas" for-html="usedLicenses" />
-                                <InputForms id="usedLicenses" type="text" placeholder="Digite o nome da pessoa de contato" v-model="application.contractedLicenses" />
+                                <InputNumber v-model="application.contractedLicenses" inputId="contractedLicenses"
+                                    :useGrouping="false" placeholder="Digite a quantidade de licenças" class="w-full"
+                                    inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
+                                </InputNumber>
                             </div>
-                            
-                            <div>
-                                <LabelFields label="Data de vigência" for-html="effectiveDate"></LabelFields>
-                                <Calendar id="effectiveDate" type="text" placeholder="dd/mm/yyyy" dateFormat="dd/mm/yy" v-model="application.effectiveDate" input-class="p-3.5 bg-white border-stroke dark:bg-[#1D2A39] border-[1.5px] dark:border-[#3D4D60]" />
-                            </div>
-                        </div>
-                        <div class="grid gap-5">
-                            <div>
+
+                            <div class="w-full">
                                 <LabelFields label="Valor por licença" for-html="perLicensePrice" />
-                                <InputPrice id="perLicensePrice" type="text" placeholder="Digite número de telefone" v-model="application.pricePerLicense" />
-                            </div>
-                            
-                            <div>
-                                <LabelFields label="Data da próxima cobrança" for-html="nextBillingDate"></LabelFields>
-                                <Calendar id="nextBillingDate" type="text" placeholder="dd/mm/yyyy" v-model="application.nextBillingDate" dateFormat="dd/mm/yy" input-class="p-3.5 bg-white border-stroke dark:bg-[#1D2A39] border-[1.5px] dark:border-[#3D4D60]" />
+                                <InputPrice id="perLicensePrice" type="text" placeholder="Digite o valor por licença"
+                                    v-model="application.pricePerLicense" />
                             </div>
                         </div>
+
+                        <div class="flex gap-5">
+                            <div class="w-full">
+                                <LabelFields label="Data de vigência" for-html="effectiveDate"></LabelFields>
+                                <Calendar id="effectiveDate" type="text" placeholder="dd/mm/yyyy" dateFormat="dd/mm/yy"
+                                    v-model="application.effectiveDate" class="w-full"
+                                    input-class="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+                            </div>
+
+                            <div class="w-full">
+                                <LabelFields label="Data da próxima cobrança" for-html="nextBillingDate"></LabelFields>
+                                <Calendar id="nextBillingDate" type="text" placeholder="dd/mm/yyyy"
+                                    v-model="application.nextBillingDate" dateFormat="dd/mm/yy" class="w-full"
+                                    input-class="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+                            </div>
+                        </div>
+
                     </div>
                 </DefaultCard>
                 <div class="flex justify-end">
                     <ButtonPresentation label="Adicionar" />
                 </div>
             </div>
-    </ScreenForms>
+        </ScreenForms>
     </DefaultLayout>
 </template>

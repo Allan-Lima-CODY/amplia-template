@@ -201,20 +201,10 @@ export default defineComponent({
             <div class="flex flex-col gap-9">
                 <DefaultCard cardTitle="Funcionalidades do Plano">
                     <div class="grid gap-5 p-6">
-                        <CheckboxOne :readonly="false" v-model="plans.pickingList" id="pickingList"
-                            label="Lista de Picking" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="plans.waveSeparation" id="waveSeparation"
-                            label="Separação em Onda" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="plans.separationRoute" id="separationRoute"
-                            label="Rota de Separação" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="plans.orderConference" id="orderConference"
-                            label="Conferência  de Pedido" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="plans.volumeControl" id="volumeControl"
-                            label="Controle de volumes" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="plans.labelPrinting" id="labelPrinting"
-                            label="Impressão de Etiquetas (rastreamento interno)" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="plans.labelReprint" id="labelReprint"
-                            label="Reimpressão de Etiqueta" class="ml-4" />
+                        <div v-for="(feature, index) in plans.features" :key="index">
+                            <CheckboxOne :readonly="false" v-model="plans.features" :id="plans.features[index].name.toLowerCase().trim()"
+                                :label="plans.features[index].name" class="ml-4" />
+                        </div>
                     </div>
                 </DefaultCard>
                 <div class="flex justify-end">
