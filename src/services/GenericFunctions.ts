@@ -44,8 +44,12 @@ export const GenericFunctions = {
     },
 
     formatMoney(amount: any) {
-        const formattedAmount = 'R$' + amount.toFixed(2).replace('.', ',');
-        return formattedAmount;
+        if(typeof amount === "number"){
+            const formattedAmount = 'R$' + amount.toFixed(2).replace('.', ',');
+            return formattedAmount;
+        }else{
+            return "R$0,00"
+        }
     },
 
     formatMoneyField(amount: any) {

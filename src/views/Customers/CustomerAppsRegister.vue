@@ -4,7 +4,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 
-import type { Application, ApplicationFields } from '@/models/Application';
+import type { ApplicationFields } from '@/models/Application';
 import type { Option } from '@/models/Option';
 
 import useFormDataService from '@/services/FormDataService';
@@ -44,7 +44,6 @@ export default defineComponent({
     data(){
         const applicationFields: ApplicationFields = reactive(ApplicationService.defaultFields());
         return{
-            applications: useFormDataStore().arrayData as ApplicationFields[],
             application: {
                 ...toRefs(applicationFields)
             },
@@ -64,20 +63,20 @@ export default defineComponent({
     },
     methods:
     {
-        handleAdd(){
-            console.log(this.application)
-            // const lastId = this.applications[this.applications.length - 1].id;
-            // this.application.id = lastId === null ? 1 : lastId + 1;
-            // this.applications.push(this.application);
+        async handleAdd(){
+            const formDataStore = useFormDataStore();
+
+            const arrayData = formDataStore.arrayData;
+            const lastId = arrayData[arrayData.length - 1]?.id;
+            this.application.id = lastId === undefined ? 1 : lastId as number + 1;
+
+            formDataStore.addToArrayData(await ApplicationService.toApp(this.application));
+            
+            this.$router.go(-1);
         },
-    },
-    watch: {
-        formData: {
-            handler(newFormData) {
-                useFormDataStore().updateFormData(newFormData);
-            },
-            deep: true,
-        },
+        goBack(){
+            this.$router.go(-1);
+        }
     },
     created(){
         PlansService.getAllPlans().then((data: Plans[]) => {
@@ -95,7 +94,7 @@ export default defineComponent({
     <DefaultLayout>
         <TitlePageDefault pageTitle="Cadastro de Aplicação" />
         <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
-        <ButtonDefault label="Voltar" class="flex mt-5 bg-primary text-white rounded-lg" route="/customers/register/apps"/>
+        <ButtonDefault label="Voltar" :handle-click="goBack" class="flex mt-5 bg-primary text-white rounded-lg" />
         <ScreenForms :handle="handleAdd">
             <div class="grid gap-9">
                 <DefaultCard cardTitle="Dados da aplicação">

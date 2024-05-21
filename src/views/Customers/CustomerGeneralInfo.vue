@@ -1,7 +1,7 @@
 <script lang="ts">
-import { defineComponent, reactive, ref  } from 'vue';
+import { defineComponent, ref  } from 'vue';
 
-import type { CustomersFields } from '@/models/Customer';
+import type { Customer, CustomersFields } from '@/models/Customer';
 
 import ScreenForms from '@/components/Forms/ScreenForms.vue';
 import DefaultCard from '@/components/Forms/DefaultCard.vue';
@@ -11,9 +11,12 @@ import LabelInformation from '@/components/Forms/Labels/LabelInformation.vue';
 import ButtonPresentation from '@/components/Buttons/ButtonPresentation.vue';
 import CheckboxOne from '@/components/Forms/Checkboxes/CheckboxOne.vue';
 
+
 import useFormDataService from '@/services/FormDataService';
+import { GenericFunctions } from '@/services/GenericFunctions';
 import { useFormDataStore } from '@/stores/formData';
 import { AddressService } from '@/services/AddressService';
+import { CustomersService } from '@/services/CustomersService';
 
 export default defineComponent({
     components:{
@@ -28,9 +31,6 @@ export default defineComponent({
     methods:{
         handleSubmit(){
             useFormDataService().handleSubmit();
-        },
-        updateFormData(){
-            useFormDataStore().updateFormData(this.formData)
         }
     },
     data(){
@@ -44,6 +44,26 @@ export default defineComponent({
         if(this.formData.address === undefined){
             this.formData.status = true;
             this.formData.address = AddressService.defaultFields();
+        }
+    },
+    async mounted(){
+        const customerId: any = this.$route.params.id;
+        if (customerId && typeof customerId === 'string' && customerId.trim() !== '') {
+
+            const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(customerId));
+            try
+            {
+                if(this.formData.address.number === null){
+                    const customer = (await CustomersService.getAllCustomers()).find(c => c.id === decryptedId);
+                    this.formData = CustomersService.toFields(customer as Customer);
+                }
+            }
+            catch{
+                console.error("Ocorreu um erro ao buscar o cliente")
+            }
+        }
+        else{
+            useFormDataStore().resetFormData()
         }
     },
     watch: {

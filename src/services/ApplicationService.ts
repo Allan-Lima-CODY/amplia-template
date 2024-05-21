@@ -1,3 +1,4 @@
+import type { Plans } from '@/models/Plans'
 import type { Application, ApplicationFields } from '../models/Application'
 import { PlansService } from './PlansService'
 export const ApplicationService =
@@ -36,5 +37,22 @@ export const ApplicationService =
 
             totalPrice: 0
         }
+    },
+
+    async toApp(fields : ApplicationFields): Promise<Application> {
+            const plan = await PlansService.getPlanByName(fields.plan as string);
+            return{
+                id: fields.id as number,
+                createdAt: new Date(),
+                plan: plan as Plans,
+                additionalPrice: fields.additionalPrice as number,
+                planPrice: fields.planPrice as number,
+                status: fields.status ? "Ativo" : "Inativo",
+                contractedLicenses: fields.contractedLicenses as number,
+                pricePerLicense: fields.pricePerLicense as number,
+                effectiveDate: fields.effectiveDate as Date,
+                nextBillingDate: fields.nextBillingDate as Date,
+                totalPrice: 0
+            }
     }
 }

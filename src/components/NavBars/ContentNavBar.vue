@@ -2,9 +2,13 @@
 import { defineComponent } from 'vue';
 import NavBarItem from './NavBarItem.vue';
 import { useRoute } from 'vue-router';
+import type { NavItem } from '@/models/NavItem';
 
 
 export default defineComponent({
+    props:{
+        items: Array<NavItem>
+    },
     components:{
         NavBarItem
     },
@@ -12,27 +16,13 @@ export default defineComponent({
     const route = useRoute();
 
     const isActive = (routePath : string) => {
-      return route.path === routePath;
+        return route.path.includes(routePath);
     };
 
     return {
       isActive,
     };
-  },
-    data(){
-        return{
-            items: [
-                {
-                    label:'Informações gerais',
-                    route:'/customers/register/generalInfo',
-                },
-                {
-                    label:'Aplicações',
-                    route:'/customers/register/apps',
-                }
-            ]
-        }
-    }
+  }
 });
 </script>
 <template>

@@ -4,11 +4,11 @@ import DataTableMain from '@/components/Mains/DataTableMain.vue';
 import { defineComponent, ref } from 'vue';
 
 import type { Option } from '@/models/Option'
-import type { Customer } from '@/models/Customer'
 import type { Application } from '@/models/Application'
 
 import { CustomersService } from '@/services/CustomersService'
 import { GenericFunctions } from '@/services/GenericFunctions';
+import useFormDataService from '@/services/FormDataService';
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -19,6 +19,7 @@ import Calendar from 'primevue/calendar';
 import 'primeicons/primeicons.css'
 
 import { FilterMatchMode } from 'primevue/api';
+import { useFormDataStore } from '@/stores/formData';
 
 export default defineComponent(
     {
@@ -39,8 +40,10 @@ export default defineComponent(
             modalActive: ref(false),
             modalMessage: ref(''),
 
-            customer: ref({} as Customer),
-            applications: ref([] as Application[]),
+            applications: ref([] as any[]),
+            dataTableApps: useFormDataStore().arrayData as Application[],
+
+
 
             loading: ref(true),
             filters: ref({
@@ -78,16 +81,27 @@ export default defineComponent(
             }
         },
         async mounted() {
-            const clientId: any = this.$route.params.clientId;
-        
-            if (clientId && typeof clientId === 'string' && clientId.trim() !== '') {
-                const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(clientId));
-            
-                await CustomersService.getAllCustomers().then((data: Customer[]) => { this.customer = data.filter((u: any) => u.id === decryptedId)[0] })
+            const customerId: any = this.$route.params.id;
+            const formDataStore = useFormDataStore();
+            if (customerId && typeof customerId === 'string' && customerId.trim() !== '') {
+                const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(customerId));
+                if(formDataStore.arrayData.length === 0 || formDataStore.lastId !== decryptedId)
+                {
+                    const customer = (await CustomersService.getAllCustomers()).find(c => c.id === decryptedId);
+                    if(customer?.applications !== undefined){
+                        formDataStore.resetArray();
+                        formDataStore.updateArrayData(customer?.applications);
+                        formDataStore.updateLastId(decryptedId);
+                    }
+                }
+            }else{
+                if(formDataStore.lastId !== 0)
+                    formDataStore.resetArray();
+                formDataStore.updateLastId(0);
             }
-        
-            this.applications = this.getApplications(this.customer.applications);
-        
+
+            this.applications = this.getApplications(formDataStore.arrayData);
+
             this.loading = false;
         },
         methods: {
@@ -95,10 +109,10 @@ export default defineComponent(
                 return [...(data || [])].map((a) => {
                     a.createdAt = new Date(a.createdAt);
                 
-                    a.totalPrice = GenericFunctions.formatMoney(a.planPrice + a.additionalPrice + (a.contractedLicenses * a.pricePerLicense));
+                    a.totalPrice = GenericFunctions.formatMoney((a.planPrice + a.additionalPrice + (a.contractedLicenses * a.pricePerLicense)) ?? 0);
                 
-                    a.planPrice = GenericFunctions.formatMoney(a.planPrice);
-                    a.additionalPrice = GenericFunctions.formatMoney(a.additionalPrice);
+                    a.planPrice = GenericFunctions.formatMoney(a.planPrice ?? 0);
+                    a.additionalPrice = GenericFunctions.formatMoney(a.additionalPrice ?? 0);
                     a.pricePerLicense = GenericFunctions.formatMoney(a.pricePerLicense);
                 
                     a.effectiveDate = new Date(a.effectiveDate);
@@ -111,6 +125,10 @@ export default defineComponent(
             onEditing(event: any) {
                 this.$router.push(`/customers/register/apps/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
             },
+        },
+        beforeRouteLeave(to, from, next) {
+          useFormDataService().resetFormDataOnRouteChange(to, from);
+          next();
         }
     });
 
@@ -118,14 +136,13 @@ export default defineComponent(
 <template>
 
     <div class="flex justify-end mt-5">
-        <ButtonDefault class="flex bg-primary text-white rounded-lg" route="/customers/register/apps/register">
+        <ButtonDefault label="Cadastrar Aplicação" class="flex bg-primary text-white rounded-lg" route="/customers/register/apps/register">
                 <div class="mr-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
                 </div>
-                Cadastrar Aplicação
         </ButtonDefault>
     </div>
     

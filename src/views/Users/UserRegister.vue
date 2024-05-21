@@ -24,12 +24,6 @@ import ModalBase from '@/components/Alerts/ModalBase.vue'
 import type { ModalInfo } from '@/models/ModalInfo';
 import { ModalService } from '@/services/ModalService';
 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlus, faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-
-library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
-
 export default defineComponent({
     components: {
         ButtonDefault,
@@ -74,7 +68,6 @@ export default defineComponent({
     },
     async mounted() {
         const userId: any = this.$route.params.id;
-
         if (userId && typeof userId === 'string' && userId.trim() !== '') {
             this.pageTitle = 'Atualizar Dados';
 
@@ -159,14 +152,13 @@ export default defineComponent({
         <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
 
         <div class="flex justify-start mt-6">
-            <ButtonDefault class="flex bg-primary text-white rounded-lg" :handle-click="backToQueryUser">
+            <ButtonDefault label="Voltar"  class="flex bg-primary text-white rounded-lg" :handle-click="backToQueryUser">
                 <div class="mr-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                     </svg>
                 </div>
-                Voltar
             </ButtonDefault>
         </div>
 

@@ -19,14 +19,8 @@ import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import Calendar from 'primevue/calendar';
 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlus, faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-
 import { FilterMatchMode } from 'primevue/api';
 import DataTableMain from '@/components/Mains/DataTableMain.vue'
-
-library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
 
 export default defineComponent({
   components: {
@@ -107,14 +101,13 @@ export default defineComponent({
     <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
 
     <div class="flex justify-end mt-6">
-      <ButtonDefault class="flex bg-primary text-white rounded-lg" route="/users/register">
+      <ButtonDefault label="Cadastrar Usuário" class="flex bg-primary text-white rounded-lg" route="/users/register">
         <div class="mr-2">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-4 h-4">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
         </div>
-        Cadastrar Usuário
       </ButtonDefault>
     </div>
 
