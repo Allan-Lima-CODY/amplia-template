@@ -143,10 +143,8 @@ export default defineComponent({
                         <div class="flex gap-5">
                             <div class="w-full">
                                 <LabelFields label="Licenças contratadas" for-html="usedLicenses" />
-                                <InputNumber v-model="application.contractedLicenses" inputId="contractedLicenses"
-                                    :useGrouping="false" placeholder="Digite a quantidade de licenças" class="w-full"
-                                    inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
-                                </InputNumber>
+                                <InputNumber v-model="application.contractedLicenses" placeholder="Digite a quantidade de licenças" class="w-full"
+                                    inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
                             </div>
 
                             <div class="w-full">

@@ -197,7 +197,7 @@ export default defineComponent({
                     <div>
                         <LabelFields label="Endereço" for-html="street"></LabelFields>
                         <InputForms id="street" type="text" placeholder="Insira o nome da rua"
-                            v-model="formData.address.district" />
+                            v-model="formData.address.address" />
                     </div>
 
 

@@ -1,39 +1,39 @@
 import type { Plans } from "./Plans"
 
 export interface Application { 
-    id: Number
+    id: number
     createdAt: Date
 
     plan: Plans
-    planPrice: Number
-    additionalPrice: Number
+    planPrice: number
+    additionalPrice: number
 
     status: string
 
-    contractedLicenses: Number
-    pricePerLicense: Number
+    contractedLicenses: number
+    pricePerLicense: number
 
     effectiveDate: Date
     nextBillingDate: Date
 
-    totalPrice: Number
+    totalPrice: number
 }
 
 export interface ApplicationFields {
     id: number | null,
     
-    product: string | null,
-    plan: string | null,
-    planPrice: Number | null,
-    additionalPrice: Number | null,
+    product: any,
+    plan: any,
+    planPrice: number | null,
+    additionalPrice: number | null,
 
     status: boolean,
 
-    contractedLicenses: Number | null,
-    pricePerLicense: Number | null
+    contractedLicenses: number | null,
+    pricePerLicense: number | null
 
     effectiveDate: Date | null,
     nextBillingDate: Date | null,
 
-    totalPrice: Number | null
+    totalPrice: number | null
 }
