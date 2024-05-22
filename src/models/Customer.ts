@@ -6,7 +6,7 @@ export interface Customer {
     name: string,
     createdAt: string,
     cnpj: string,
-    stateRegistration: string,
+    stateRegistration: number,
     status: string,
 
     contact: string, 
@@ -23,7 +23,7 @@ export interface CustomersFields {
     name: string,
 
     cnpj: string,
-    stateRegistration: string,
+    stateRegistration: number | null,
     status: boolean,
 
     contact: string,

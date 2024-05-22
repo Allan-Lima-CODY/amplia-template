@@ -18,7 +18,7 @@ export interface AddressFields {
     city: string,
     district: string, 
     address: string,
-    number: Number | null,
+    number: number | null,
 
     additionalInfo: string
 }

@@ -109,10 +109,10 @@ export default defineComponent(
                 return [...(data || [])].map((a) => {
                     a.createdAt = new Date(a.createdAt);
                 
-                    a.totalPrice = GenericFunctions.formatMoney((a.planPrice + a.additionalPrice + (a.contractedLicenses * a.pricePerLicense)) ?? 0);
+                    a.totalPrice = GenericFunctions.formatMoney(a.planPrice + a.additionalPrice + (a.contractedLicenses * a.pricePerLicense));
                 
-                    a.planPrice = GenericFunctions.formatMoney(a.planPrice ?? 0);
-                    a.additionalPrice = GenericFunctions.formatMoney(a.additionalPrice ?? 0);
+                    a.planPrice = GenericFunctions.formatMoney(a.planPrice);
+                    a.additionalPrice = GenericFunctions.formatMoney(a.additionalPrice);
                     a.pricePerLicense = GenericFunctions.formatMoney(a.pricePerLicense);
                 
                     a.effectiveDate = new Date(a.effectiveDate);
