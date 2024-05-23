@@ -1,21 +1,19 @@
-import type { Feature } from "./Feature"
-
 export interface Plans { 
-    id: Number,
+    id: number,
     name: string,
     createdAt: Date,
-
     product: string,
     price: number
-    
-    features: Feature[]
 }
 
 export interface PlansFields {
     name: string,
-
     price: number | null,
-    product: any,
+    product: any
+}
 
-    features: Feature[]
+export interface PlansFeature {
+    id: number,
+    idPlans: number,
+    idFeatures: number
 }

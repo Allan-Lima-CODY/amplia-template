@@ -53,7 +53,7 @@ export default defineComponent({
             <div clas="flex justify-start">
                 <ButtonDefault label="Voltar" class="flex bg-primary text-white rounded-lg"
                     :handle-click="goBack">
-                    <div class="mr-2">
+                    <div class="mr-2 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-4 h-4">
                             <path stroke-linecap="round" stroke-linejoin="round"
