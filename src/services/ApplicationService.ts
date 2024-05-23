@@ -22,8 +22,8 @@ export const ApplicationService =
         return {
             id: null,
 
-            product: null,
-            plan: null,
+            product: '',
+            plan: '',
             planPrice: null,
             additionalPrice: null,
 
@@ -54,5 +54,22 @@ export const ApplicationService =
                 nextBillingDate: fields.nextBillingDate as Date,
                 totalPrice: 0
             }
+    },
+
+    async toFields(app : Application) : Promise<ApplicationFields>{
+        const plan = await PlansService.getPlanByName(app.plan.name);
+        return{
+            id: app.id,
+            product: plan?.product,
+            plan: app.plan.name,
+            additionalPrice: app.additionalPrice,
+            planPrice: app.planPrice,
+            status: app.status === "Ativo",
+            contractedLicenses: app.contractedLicenses,
+            pricePerLicense: app.pricePerLicense,
+            effectiveDate: app.effectiveDate,
+            nextBillingDate: app.nextBillingDate,
+            totalPrice: app.totalPrice
+        }
     }
 }

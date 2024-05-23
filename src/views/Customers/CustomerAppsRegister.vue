@@ -4,7 +4,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 
-import type { ApplicationFields } from '@/models/Application';
+import type { ApplicationFields, Application } from '@/models/Application';
 import type { Option } from '@/models/Option';
 
 import useFormDataService from '@/services/FormDataService';
@@ -26,6 +26,7 @@ import InputNumber from 'primevue/inputnumber';
 import type { Plans } from '@/models/Plans';
 import { PlansService } from '@/services/PlansService';
 import { ApplicationService } from '@/services/ApplicationService';
+import { GenericFunctions } from '@/services/GenericFunctions';
 
 export default defineComponent({
     components: {
@@ -83,6 +84,21 @@ export default defineComponent({
         PlansService.getAllPlans().then((data: Plans[]) => {
             this.plans = data.map(({ id, name }) => ({ key: id, value: name })) as Option[]
         });
+    },
+    async mounted(){
+        const customerId: any = this.$route.params.id;
+        if (customerId && typeof customerId === 'string' && customerId.trim() !== '') {
+
+            const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(customerId));
+            try
+            {
+                const application = (await ApplicationService.getAllApplication()).find(c => c.id === decryptedId);
+                this.application = await ApplicationService.toFields(application as Application);
+            }
+            catch{
+                console.error("Ocorreu um erro ao buscar o cliente")
+            }
+        }
     },
     beforeRouteLeave(to, from, next) {
         useFormDataService().resetFormDataOnRouteChange(to, from);

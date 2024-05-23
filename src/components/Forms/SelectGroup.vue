@@ -22,9 +22,6 @@ export default {
   },
   methods: {
     updateValue(event?: any) {
-      if(this.selectedOption !== '')
-        this.isOptionSelected = true;
-
       this.selectedOption = event.target.value
       this.$emit("update:modelValue", this.selectedOption);
     }
@@ -32,6 +29,8 @@ export default {
   watch: {
     modelValue(newValue) {
       this.selectedOption = newValue;
+      if(this.selectedOption !== '')
+        this.isOptionSelected = true;
     },
   }
 };
