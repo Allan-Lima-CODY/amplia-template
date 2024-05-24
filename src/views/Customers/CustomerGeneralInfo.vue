@@ -68,6 +68,7 @@ export default defineComponent({
                 }
                 else{
                     this.modalInfo = ModalService.getRegisterModal('error');
+                    this.toggleModal();
                 }
             }
             catch{
@@ -82,7 +83,8 @@ export default defineComponent({
         },
         handleOkClickModal(){
             this.toggleModal()
-            this.$router.push("/customers")
+            if(this.modalInfo.title === 'Sucesso!')
+            this.$router.push("/customers");
         }
     },
     setup() {
