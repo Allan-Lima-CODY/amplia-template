@@ -1,8 +1,8 @@
-<script setup lang="ts">
-</script>
-
 <script lang="ts">
 import { defineComponent, reactive, ref, toRefs } from 'vue'
+
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 
 import type { ApplicationFields, Application } from '@/models/Application';
 import type { Option } from '@/models/Option';
@@ -22,11 +22,15 @@ import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue';
 import SelectGroup from '@/components/Forms/SelectGroup.vue';
 import InputPrice from '@/components/Forms/InputFields/InputPrice.vue';
 import InputNumber from 'primevue/inputnumber';
+import LabelInformation from '@/components/Forms/Labels/LabelInformation.vue';
+import ModalBase from '@/components/Alerts/ModalBase.vue';
 
 import type { Plans } from '@/models/Plans';
 import { PlansService } from '@/services/PlansService';
 import { ApplicationService } from '@/services/ApplicationService';
 import { GenericFunctions } from '@/services/GenericFunctions';
+import type { ModalInfo } from '@/models/ModalInfo';
+import { ModalService } from '@/services/ModalService';
 
 export default defineComponent({
     components: {
@@ -41,14 +45,22 @@ export default defineComponent({
         CheckboxOne,
         InputPrice,
         Calendar,
-        InputNumber
+        InputNumber,
+        LabelInformation,
+        ModalBase
     },
     data() {
         const applicationFields: ApplicationFields = reactive(ApplicationService.defaultFields());
+        const modalInfo: ModalInfo = reactive(ModalService.getAppsModal());
         return{
+            modalActive: false,
+            modalInfo:{
+                ...toRefs(modalInfo)
+            },
             application: {
                 ...toRefs(applicationFields)
             },
+            buttonLabel: 'Adicionar',
             plans: [] as Option[],
             products: [{
                 key: 1,
@@ -66,18 +78,63 @@ export default defineComponent({
     methods:
     {
         async handleAdd(){
-            const formDataStore = useFormDataStore();
-
-            const arrayData = formDataStore.arrayData;
-            const lastId = arrayData[arrayData.length - 1]?.id;
-            this.application.id = lastId === undefined ? 1 : lastId as number + 1;
-
-            formDataStore.addToArrayData(await ApplicationService.toApp(this.application));
-            
-            this.$router.go(-1);
+            this.v$.$touch()
+            if (!this.v$.$invalid)
+            {
+                const formDataStore = useFormDataStore();
+                
+                const application = await ApplicationService.toApp(this.application);
+                
+                const customerId: any = this.$route.params.id;
+                if (customerId && typeof customerId === 'string' && customerId.trim() !== '')
+                {
+                    formDataStore.patchArray(application);
+                    this.modalInfo = ModalService.getAppsModal('updated')
+                }
+                else
+                {
+                    const arrayData = formDataStore.arrayData as Application[];
+                    const lastId = arrayData[arrayData.length - 1]?.id;
+                    this.application.id = lastId === undefined ? 1 : lastId as number + 1;
+                    
+                    formDataStore.addToArrayData(application);
+                    this.modalInfo = ModalService.getAppsModal('registered')
+                }
+                this.toggleModal();
+            }
+            else{
+                this.modalInfo = ModalService.getAppsModal('fieldsError'),
+                this.toggleModal();
+            }
+        },
+        toggleModal(){
+            this.modalActive = !this.modalActive;
         },
         goBack(){
             this.$router.go(-1);
+        },
+        handleOk(){
+            this.toggleModal();
+            if(this.modalInfo.title === "Sucesso!")
+                this.goBack();
+        }
+    },
+    setup() {
+        const v$ = useVuelidate()
+        return { v$ }
+    },
+    validations(){
+        return {
+            application: {
+                plan: { required },
+                product: { required },
+                planPrice: { required },
+                additionalPrice: { required },
+                contractedLicenses: { required },
+                pricePerLicense: {required },
+                effectiveDate: { required },
+                nextBillingDate: { required },
+            }
         }
     },
     created() {
@@ -88,7 +145,7 @@ export default defineComponent({
     async mounted(){
         const customerId: any = this.$route.params.id;
         if (customerId && typeof customerId === 'string' && customerId.trim() !== '') {
-
+            this.buttonLabel = 'Salvar';
             const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(customerId));
             try
             {
@@ -111,8 +168,7 @@ export default defineComponent({
     <DefaultLayout>
         <TitlePageDefault pageTitle="Cadastro de Aplicação" />
         <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
-        <ButtonDefault label="Voltar" :handle-click="goBack" class="flex mt-5 bg-primary text-white rounded-lg"
-            >
+        <ButtonDefault label="Voltar" :handle-click="goBack" class="flex mt-5 bg-primary text-white rounded-lg">
             <div class="mr-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-4 h-4">
@@ -127,24 +183,28 @@ export default defineComponent({
                         <div>
                             <LabelFields label="Produto" for-html="product" />
                             <SelectGroup :options="products" v-model="application.product"
-                                unselect-label="Selecione o produto" />
+                                unselect-label="Selecione o produto" @blur="v$.application.product.$touch()" />
+                            <LabelInformation v-if="v$.application.product.$error" label="Campo obrigatório!" color="text-red" />
                         </div>
 
                         <div>
                             <LabelFields label="Plano" for-html="plan"></LabelFields>
                             <SelectGroup :options="plans" v-model="application.plan"
-                                unselect-label="Selecione o plano" />
+                                @blur="v$.application.product.$touch()" unselect-label="Selecione o plano" />
+                            <LabelInformation v-if="v$.application.plan.$error" label="Campo obrigatório!" color="text-red" />
                         </div>
 
                         <div>
                             <LabelFields label="Valor do plano" for-html="planPrice" />
                             <InputPrice id="planPrice" type="text" placeholder="Insira o valor do plano"
-                                v-model="application.planPrice" />
+                                v-model="application.planPrice" @blur="v$.application.planPrice.$touch()" />
+                            <LabelInformation v-if="v$.application.product.$error" label="Campo obrigatório!" color="text-red" />
                         </div>
                         <div>
                             <LabelFields label="Valor adicional" for-html="additionalPrice" />
                             <InputPrice id="additionalPrice" type="text" placeholder="Insira o valor adicional"
-                                v-model="application.additionalPrice" />
+                                v-model="application.additionalPrice" @blur="v$.application.additionalPrice.$touch()" />
+                            <LabelInformation v-if="v$.application.additionalPrice.$error" label="Campo obrigatório!" color="text-red" />
                         </div>
                         <div class="flex gap-1">
                             <CheckboxOne :readonly="false" v-model="application.status" id="appStatus" label="Ativo"
@@ -158,15 +218,17 @@ export default defineComponent({
                     <div class="flex flex-col gap-5.5 p-6.5">
                         <div class="flex gap-5">
                             <div class="w-full">
-                                <LabelFields label="Licenças contratadas" for-html="usedLicenses" />
+                                <LabelFields label="Licenças contratadas" for-html="contractedLicenses" />
                                 <InputNumber v-model="application.contractedLicenses" placeholder="Digite a quantidade de licenças" class="w-full"
-                                    inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+                                    @blur="v$.application.contractedLicenses.$touch()" inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+                                <LabelInformation v-if="v$.application.contractedLicenses.$error" label="Campo obrigatório!" color="text-red" />
                             </div>
 
                             <div class="w-full">
                                 <LabelFields label="Valor por licença" for-html="perLicensePrice" />
                                 <InputPrice id="perLicensePrice" type="text" placeholder="Digite o valor por licença"
-                                    v-model="application.pricePerLicense" />
+                                @blur="v$.application.pricePerLicense.$touch()" v-model="application.pricePerLicense" />
+                                <LabelInformation v-if="v$.application.pricePerLicense.$error" label="Campo obrigatório!" color="text-red" />
                             </div>
                         </div>
 
@@ -175,23 +237,26 @@ export default defineComponent({
                                 <LabelFields label="Data de vigência" for-html="effectiveDate"></LabelFields>
                                 <Calendar id="effectiveDate" type="text" placeholder="dd/mm/yyyy" dateFormat="dd/mm/yy"
                                     v-model="application.effectiveDate" class="w-full"
-                                    input-class="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+                                    @blur="v$.application.effectiveDate.$touch()" input-class="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+                                <LabelInformation v-if="v$.application.effectiveDate.$error" label="Campo obrigatório!" color="text-red" />
                             </div>
 
                             <div class="w-full">
                                 <LabelFields label="Data da próxima cobrança" for-html="nextBillingDate"></LabelFields>
                                 <Calendar id="nextBillingDate" type="text" placeholder="dd/mm/yyyy"
-                                    v-model="application.nextBillingDate" dateFormat="dd/mm/yy" class="w-full"
+                                    @blur="v$.application.nextBillingDate.$touch()" v-model="application.nextBillingDate" dateFormat="dd/mm/yy" class="w-full"
                                     input-class="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+                                <LabelInformation v-if="v$.application.nextBillingDate.$error" label="Campo obrigatório!" color="text-red" />
                             </div>
                         </div>
-
                     </div>
                 </DefaultCard>
                 <div class="flex justify-end">
-                    <ButtonPresentation label="Adicionar" />
+                    <ButtonPresentation :label="buttonLabel" />
                 </div>
             </div>
         </ScreenForms>
     </DefaultLayout>
+    <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title"
+            :border-color="modalInfo.borderColor" @ok-click="handleOk" />
 </template>

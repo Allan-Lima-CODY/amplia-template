@@ -1,7 +1,7 @@
 import type { ModalInfo } from '@/models/ModalInfo';
 export const ModalService = 
 {
-    getFeatureModalInfo(modalType?: string) : ModalInfo
+    getFeatureModal(modalType?: string) : ModalInfo
     {
         switch(modalType){
             case 'registered':
@@ -54,7 +54,7 @@ export const ModalService =
               }
           }
     },
-    getRegisterModalInfo(modalType?: string) : ModalInfo{
+    getRegisterModal(modalType?: string) : ModalInfo{
         switch(modalType){
             case 'success':
                 return{
@@ -82,7 +82,7 @@ export const ModalService =
                 }
         }
     },
-    getPlansModalInfo(modalType?: string) : ModalInfo{
+    getPlansModal(modalType?: string) : ModalInfo{
         switch(modalType){
             case 'registered':
                 return {
@@ -118,7 +118,7 @@ export const ModalService =
               }
         }
     },
-    getLoginModalInfo(modalType?: string) : ModalInfo{
+    getLoginModal(modalType?: string) : ModalInfo{
         switch(modalType){
             case 'loginError':
                 return{
@@ -146,7 +146,7 @@ export const ModalService =
                 }
         }
     },
-    getPassResetModalInfo(modalType?: string) : ModalInfo{
+    getPassResetModal(modalType?: string) : ModalInfo{
         switch(modalType){
             case 'success':
                 return{
@@ -182,4 +182,56 @@ export const ModalService =
                 }
         }
     },
+    getAppsModal(modalType?: string) : ModalInfo{
+        switch(modalType){
+            case 'success':
+                return{
+                    title: 'Sucesso!',
+                    message: 'Aplicação excluída com sucesso!',
+                    borderColor: '#34D399',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
+                case 'registered':
+                return{
+                    title: 'Sucesso!',
+                    message: 'Aplicação registrada com sucesso!',
+                    borderColor: '#34D399',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
+                case 'updated':
+                return{
+                    title: 'Sucesso!',
+                    message: 'Aplicação atualizada com sucesso!',
+                    borderColor: '#34D399',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
+                case 'fieldsError':
+                return{
+                    title: 'Erro',
+                    message: 'É necessário preencher todos os campos obrigatórios!',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
+                case 'warning':
+                return{
+                    title: 'Alerta',
+                    message: 'Deseja excluir essa aplicação?',
+                    borderColor: '#FFC800',
+                    okTitle: 'Sim',
+                    noTitle: 'Não'
+                };
+            default:
+                return{
+                    title: '',
+                    message: '',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                }
+        }
+    }
 }

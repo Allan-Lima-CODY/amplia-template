@@ -32,7 +32,7 @@ export default {
         DarkModeSwitcher
     },
     data() {
-        const modalInfo: ModalInfo = reactive(ModalService.getLoginModalInfo());
+        const modalInfo: ModalInfo = reactive(ModalService.getLoginModal());
         return {
             password: ref(''),
 
@@ -55,7 +55,7 @@ export default {
 
         toggleModal(modalType?: string) {
             if (modalType !== undefined)
-                this.modalInfo = ModalService.getLoginModalInfo(modalType);
+                this.modalInfo = ModalService.getLoginModal(modalType);
             this.modalActive = !this.modalActive;
         },
 
@@ -72,7 +72,7 @@ export default {
                 if (this.email === this.hardEmail) {
                     this.$router.push('/passwordreset');
                 } else {
-                    this.modalInfo = ModalService.getLoginModalInfo('EmailNotFound');
+                    this.modalInfo = ModalService.getLoginModal('EmailNotFound');
                     this.toggleModal();
                 }
             }
@@ -81,7 +81,7 @@ export default {
             if (this.email === this.hardEmail && this.password === this.hardPassword)
                 this.$router.push('/home');
             else {
-                this.modalInfo = ModalService.getLoginModalInfo('loginError');
+                this.modalInfo = ModalService.getLoginModal('loginError');
                 this.toggleModal();
             }
         }

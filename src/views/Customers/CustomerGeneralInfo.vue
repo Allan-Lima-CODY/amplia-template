@@ -43,7 +43,7 @@ export default defineComponent({
         SelectGroup
     },
     data() {
-        const modalInfo : ModalInfo = reactive(ModalService.getRegisterModalInfo());
+        const modalInfo : ModalInfo = reactive(ModalService.getRegisterModal());
         return {
             formData: useFormDataStore().formData as CustomersFields,
             emailValid: ref(true),
@@ -63,11 +63,11 @@ export default defineComponent({
                 this.v$.$touch()
                 if (!this.v$.$invalid){
                     useFormDataService().handleSubmit();
-                    this.modalInfo = ModalService.getRegisterModalInfo('success');
+                    this.modalInfo = ModalService.getRegisterModal('success');
                     this.toggleModal();
                 }
                 else{
-                    this.modalInfo = ModalService.getRegisterModalInfo('error');
+                    this.modalInfo = ModalService.getRegisterModal('error');
                 }
             }
             catch{
@@ -171,7 +171,7 @@ export default defineComponent({
                         <div class="w-full">
                             <LabelFields label="CNPJ" for-html="cnpj"></LabelFields>
                             <InputMask id="cnpj" v-model="formData.cnpj" mask="99.999.999/9999-99" placeholder="00.000.000/0000-00"
-                                class="w-full rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" @blur="v$.formData.cnpj.$touch()" />
+                                class="w-full rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
                             <LabelInformation v-if="v$.formData.cnpj.$error" label="Campo obrigatório!" color="text-red" />
                         </div>
                         <div class="w-full">
