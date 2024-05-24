@@ -62,6 +62,7 @@ export default defineComponent({
             },
             buttonLabel: 'Adicionar',
             plans: [] as Option[],
+            allPlans: [] as Plans[],
             products: [{
                 key: 1,
                 value: 'WMS'
@@ -117,6 +118,9 @@ export default defineComponent({
             this.toggleModal();
             if(this.modalInfo.title === "Sucesso!")
                 this.goBack();
+        },
+        async updateOptions(){
+            this.plans = this.allPlans.filter(p => p.product === this.application.product).map(({ id, name }) => ({ key: id, value: name })) as Option[];
         }
     },
     setup() {
@@ -139,8 +143,9 @@ export default defineComponent({
     },
     created() {
         PlansService.getAllPlans().then((data: Plans[]) => {
-            this.plans = data.map(({ id, name }) => ({ key: id, value: name })) as Option[]
+            this.allPlans = data
         });
+        this.updateOptions();
     },
     async mounted(){
         const customerId: any = this.$route.params.id;
@@ -182,7 +187,7 @@ export default defineComponent({
                     <div class="flex flex-col w-full gap-5.5 p-6.5">
                         <div>
                             <LabelFields label="Produto" for-html="product" />
-                            <SelectGroup :options="products" v-model="application.product"
+                            <SelectGroup :options="products" v-model="application.product" @change="updateOptions"
                                 unselect-label="Selecione o produto" @blur="v$.application.product.$touch()" />
                             <LabelInformation v-if="v$.application.product.$error" label="Campo obrigatório!" color="text-red" />
                         </div>
