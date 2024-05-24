@@ -12,6 +12,10 @@ export interface User {
     editClients: boolean, 
     deleteClients: boolean, 
 
+    includeApplication: boolean, 
+    editApplication: boolean, 
+    deleteApplication: boolean, 
+
     includeUsers: boolean, 
     editUsers: boolean, 
     deleteUsers: boolean, 
@@ -47,6 +51,10 @@ export interface UsersFields {
     includeClients: boolean,
     editClients: boolean,
     deleteClients: boolean,
+
+    includeApplication: boolean, 
+    editApplication: boolean, 
+    deleteApplication: boolean, 
 
     includeUsers: boolean,
     editUsers: boolean,

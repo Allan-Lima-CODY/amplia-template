@@ -63,7 +63,9 @@ export default defineComponent({
 
             selectedUser: ref(null as any),
 
-            editing: ref(false)
+            editing: ref(false),
+
+            checkAll: ref(false)
         }
     },
     async mounted() {
@@ -133,9 +135,63 @@ export default defineComponent({
             }
 
             this.toggleModal();
+        },
+
+        toggleAllPermissions() {
+            const isChecked = this.checkAll;
+            this.users.includeClients = isChecked;
+            this.users.editClients = isChecked;
+            this.users.deleteClients = isChecked;
+            this.users.includeApplication = isChecked;
+            this.users.editApplication = isChecked;
+            this.users.deleteApplication = isChecked;
+            this.users.includeUsers = isChecked;
+            this.users.editUsers = isChecked;
+            this.users.deleteUsers = isChecked;
+            this.users.includeLicenses = isChecked;
+            this.users.editLicenses = isChecked;
+            this.users.deleteLicenses = isChecked;
+            this.users.includeFunctionalities = isChecked;
+            this.users.editFunctionalities = isChecked;
+            this.users.deleteFunctionalities = isChecked;
+            this.users.includePlans = isChecked;
+            this.users.editPlans = isChecked;
+            this.users.deletePlans = isChecked;
+            this.users.includeLogs = isChecked;
+            this.users.editLogs = isChecked;
+            this.users.deleteLogs = isChecked;
+        }
+    },
+    watch: {
+        users: {
+            handler() {
+                this.checkAll = this.users.includeClients &&
+                    this.users.editClients &&
+                    this.users.deleteClients &&
+                    this.users.includeApplication &&
+                    this.users.editApplication &&
+                    this.users.deleteApplication &&
+                    this.users.includeUsers &&
+                    this.users.editUsers &&
+                    this.users.deleteUsers &&
+                    this.users.includeLicenses &&
+                    this.users.editLicenses &&
+                    this.users.deleteLicenses &&
+                    this.users.includeFunctionalities &&
+                    this.users.editFunctionalities &&
+                    this.users.deleteFunctionalities &&
+                    this.users.includePlans &&
+                    this.users.editPlans &&
+                    this.users.deletePlans &&
+                    this.users.includeLogs &&
+                    this.users.editLogs &&
+                    this.users.deleteLogs
+            },
+            deep: true
         }
     }
-});
+})
+
 </script>
 
 <template>
@@ -219,6 +275,7 @@ export default defineComponent({
 
             <div class="flex flex-col gap-9">
                 <DefaultCard cardTitle="Permissões de Usuário">
+                    <CheckboxOne :readonly="false" v-model="checkAll" id="select-all" label="Selecionar Todas" class="mt-4 ml-4" @change="toggleAllPermissions" />
                     <div class="gap-5 p-6 grid grid-cols-4 ">
                         <label />
                         <LabelFields label="Inclusão" for-html="include" />
@@ -231,6 +288,14 @@ export default defineComponent({
                         <CheckboxOne :readonly="false" v-model="users.editClients" id="editClients" label=""
                             class="ml-4" />
                         <CheckboxOne :readonly="true" v-model="users.deleteClients" id="deleteClients" label=""
+                            class="ml-4" />
+
+                        <LabelFields label="Aplicações" for-html="applications" />
+                        <CheckboxOne :readonly="false" v-model="users.includeApplication" id="includeApplication"
+                            label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.editApplication" id="editApplication" label=""
+                            class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.deleteApplication" id="deleteApplication" label=""
                             class="ml-4" />
 
                         <LabelFields label="Usuários" for-html="users"></LabelFields>
