@@ -96,8 +96,7 @@ export default defineComponent({
                 {
                     const arrayData = formDataStore.arrayData as Application[];
                     const lastId = arrayData[arrayData.length - 1]?.id;
-                    this.application.id = lastId === undefined ? 1 : lastId as number + 1;
-                    
+                    application.id = lastId === undefined ? 1 : lastId as number + 1;
                     formDataStore.addToArrayData(application);
                     this.modalInfo = ModalService.getAppsModal('registered')
                 }
@@ -119,8 +118,11 @@ export default defineComponent({
             if(this.modalInfo.title === "Sucesso!")
                 this.goBack();
         },
-        async updateOptions(){
-            this.plans = this.allPlans.filter(p => p.product === this.application.product).map(({ id, name }) => ({ key: id, value: name })) as Option[];
+        async updateOptions(product?: string){
+            let prd = product;
+            if(product === null || product === undefined)
+                prd = this.application.product;
+            this.plans = this.allPlans.filter(p => p.product === prd).map(({ id, name }) => ({ key: id, value: name })) as Option[]
         }
     },
     setup() {
@@ -145,7 +147,6 @@ export default defineComponent({
         PlansService.getAllPlans().then((data: Plans[]) => {
             this.allPlans = data
         });
-        this.updateOptions();
     },
     async mounted(){
         const customerId: any = this.$route.params.id;
@@ -155,6 +156,7 @@ export default defineComponent({
             try
             {
                 const application = (await ApplicationService.getAllApplication()).find(c => c.id === decryptedId);
+                this.updateOptions(application?.plan.product);
                 this.application = await ApplicationService.toFields(application as Application);
             }
             catch{
@@ -187,7 +189,7 @@ export default defineComponent({
                     <div class="flex flex-col w-full gap-5.5 p-6.5">
                         <div>
                             <LabelFields label="Produto" for-html="product" />
-                            <SelectGroup :options="products" v-model="application.product" @change="updateOptions"
+                            <SelectGroup :options="products" v-model="application.product" @change="updateOptions()"
                                 unselect-label="Selecione o produto" @blur="v$.application.product.$touch()" />
                             <LabelInformation v-if="v$.application.product.$error" label="Campo obrigatório!" color="text-red" />
                         </div>

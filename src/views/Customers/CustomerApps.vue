@@ -48,8 +48,8 @@ export default defineComponent(
             },
             modalActive: ref(false),
 
-            applications: ref([] as any[]),
-            dataTableApps: useFormDataStore().arrayData as Application[],
+            applications: [] as any[],
+            storeApps: useFormDataStore().arrayData as Application[],
 
             toDelete: 0,
 
@@ -99,6 +99,7 @@ export default defineComponent(
                     if(customer?.applications !== undefined){
                         formDataStore.resetArray();
                         formDataStore.updateArrayData(customer?.applications);
+                        console.log(formDataStore.arrayData)
                         formDataStore.updateLastId(decryptedId);
                     }
                 }
@@ -107,32 +108,28 @@ export default defineComponent(
                     formDataStore.resetArray();
                 formDataStore.updateLastId(0);
             }
-
             this.applications = this.getApplications(formDataStore.arrayData);
-
+            console.log(formDataStore.arrayData)
             this.loading = false;
         },
         methods: {
             toggleModal(){
                 this.modalActive = !this.modalActive;
             },
-            getApplications(data: any) {
-                return [...(data || [])].map((a) => {
-                    a.createdAt = new Date(a.createdAt);
-                
-                    a.totalPrice = GenericFunctions.formatMoney(a.planPrice + a.additionalPrice + (a.contractedLicenses * a.pricePerLicense));
-                
-                    a.planPrice = GenericFunctions.formatMoney(a.planPrice);
-                    a.additionalPrice = GenericFunctions.formatMoney(a.additionalPrice);
-                    a.pricePerLicense = GenericFunctions.formatMoney(a.pricePerLicense);
-                
-                    a.effectiveDate = new Date(a.effectiveDate);
-                    a.nextBillingDate = new Date(a.nextBillingDate);
-                
-                    return a;
+            getApplications(data: Application[]) {
+                return (data || []).map((a : any) => {
+                    return {
+                        ...a,
+                        createdAt: new Date(a.createdAt),
+                        totalPrice: GenericFunctions.formatMoney(a.planPrice + a.additionalPrice + (a.contractedLicenses * a.pricePerLicense)),
+                        planPrice: GenericFunctions.formatMoney(a.planPrice),
+                        additionalPrice: GenericFunctions.formatMoney(a.additionalPrice),
+                        pricePerLicense: GenericFunctions.formatMoney(a.pricePerLicense),
+                        effectiveDate: new Date(a.effectiveDate),
+                        nextBillingDate: new Date(a.nextBillingDate)
+                    };
                 });
             },
-        
             onEditing(event: any) {
                 this.$router.push(`/customers/register/apps/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
             },
@@ -142,9 +139,15 @@ export default defineComponent(
                 this.toggleModal();
             },
             handleOk(){
-                this.applications = this.applications.filter(a => a.id !== this.toDelete);
-                useFormDataStore().updateArrayData(this.applications);
-                this.toggleModal();
+                if(this.modalInfo.title === 'Alerta'){
+                    this.toggleModal();
+                    this.applications = this.applications.filter(a => a.id !== this.toDelete);
+                    useFormDataStore().updateArrayData(this.applications);
+                    this.modalInfo = ModalService.getAppsModal('success');
+                    this.toggleModal();
+                }else{
+                    this.toggleModal();
+                }
             },
         },
         beforeRouteLeave(to, from, next) {
@@ -322,6 +325,6 @@ export default defineComponent(
                     </Column>
                 </DataTable>
     </DataTableMain>
-    <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title"
+    <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title" :okTitle="modalInfo.okTitle" :noTitle="modalInfo.noTitle"
             :border-color="modalInfo.borderColor" @ok-click="handleOk" @no-click="toggleModal" />
 </template>
