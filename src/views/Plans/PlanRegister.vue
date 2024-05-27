@@ -250,7 +250,7 @@ export default defineComponent({
                             color="text-white" />
                         <CheckboxOne v-if="plans.product !== '' && plans.product !== null" :readonly="false"
                             v-model="globalFeatureSelect" id="select-all" label="Selecionar Todas" />
-                        <div v-if="plans.product !== '' && plans.product !== null" v-for="(feature, index) in features"
+                            <div v-for="(feature, index) in features"
                             :key="index">
                             <CheckboxOne :readonly="false" v-model="selectedFeatures[feature.id]"
                                 :id="features[index].name.toLowerCase().trim()" :label="features[index].name"
