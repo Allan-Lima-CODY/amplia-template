@@ -150,12 +150,13 @@ export default defineComponent({
     },
     async mounted(){
         const customerId: any = this.$route.params.id;
+        const formDataStore = useFormDataStore();
         if (customerId && typeof customerId === 'string' && customerId.trim() !== '') {
             this.buttonLabel = 'Salvar';
             const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(customerId));
             try
             {
-                const application = (await ApplicationService.getAllApplication()).find(c => c.id === decryptedId);
+                const application = formDataStore.arrayData.find(c => c.id === decryptedId) as Application;
                 this.updateOptions(application?.plan.product);
                 this.application = await ApplicationService.toFields(application as Application);
             }
