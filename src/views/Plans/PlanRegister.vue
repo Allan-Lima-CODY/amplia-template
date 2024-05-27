@@ -25,6 +25,9 @@ import InputNumber from 'primevue/inputnumber';
 
 import type { ModalInfo } from '@/models/ModalInfo';
 import { ModalService } from '@/services/ModalService';
+import type { Feature } from '@/models/Feature';
+import { FeatureService } from '@/services/FeaturesService';
+import LabelInformation from '@/components/Forms/Labels/LabelInformation.vue';
 
 export default defineComponent({
     components: {
@@ -53,7 +56,6 @@ export default defineComponent({
             emailValid: ref(true),
 
             modalActive: ref(false),
-
             modalInfo: ref({
                 ...toRefs(modalInfo)
             }),
@@ -63,7 +65,6 @@ export default defineComponent({
             }),
 
             defaultFields: ref(PlansService.defaultFields()),
-
             selectedPlan: ref(null as any),
 
             editing: ref(false),
@@ -77,6 +78,10 @@ export default defineComponent({
                 value: 'CRM'
             }
             ] as Option[]),
+            features: [] as Feature[],
+            selectedFeatures: reactive({} as Record<number, boolean>),
+
+            globalFeatureSelect: ref(false)
         }
     },
     async mounted() {
@@ -88,12 +93,17 @@ export default defineComponent({
             const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(planId));
 
             const plans = await PlansService.getAllPlans();
+            const allPlanFeatures = await PlansService.getAllPlansFeature();
 
             this.selectedPlan = plans.filter((u) => u.id === decryptedId)[0];
-            if (this.selectedPlan.product === 'WMS') {
-                this.selectedPlan.product = this.products[0].value
+            if (this.selectedPlan.product !== null && this.selectedPlan.product !== '') {
+                await this.loadFeatures(this.selectedPlan.product);
+
+                allPlanFeatures.filter(pf => pf.idPlans === decryptedId).forEach(pf => {
+                    this.selectedFeatures[pf.idFeatures] = true;
+                });
             } else {
-                this.selectedPlan.product = this.products[1].value
+                this.features = []
             }
 
             this.fillFields();
@@ -122,14 +132,14 @@ export default defineComponent({
         },
 
         savePlans() {
-            console.log(this.plans);
-            if ((this.plans.name !== '' && this.plans.name !== null) && (this.plans.product.value !== '' && this.plans.product.value !== null) && (this.plans.price !== 0 && this.plans.price !== null)) {
-                this.modalInfo = ModalService.getRegisterModal('success');
-                this.toggleModal();
-            } else {
-                this.modalInfo = ModalService.getRegisterModal('error');
-                this.toggleModal()
-            }
+            if (this.editing)
+                if ((this.plans.name !== '' && this.plans.name !== null) && (this.plans.product !== '' && this.plans.product !== null) && (this.plans.price !== 0 && this.plans.price !== null)) {
+                    this.modalInfo = ModalService.getRegisterModal('success');
+                    this.toggleModal();
+                } else {
+                    this.modalInfo = ModalService.getRegisterModal('error');
+                    this.toggleModal()
+                }
         },
 
         fillFields() {
@@ -142,6 +152,39 @@ export default defineComponent({
             }
 
             this.toggleModal();
+        },
+
+        async loadFeatures(product: string) {
+            if (product !== null && product !== '') {
+                const allFeatures = await FeatureService.getAllFeatures();
+                this.features = allFeatures.filter((feature: Feature) => feature.product === product);
+            } else {
+                this.features = [];
+            }
+        },
+
+        // checkAllSelected() {
+        //     const allSelected = this.features.every(feature => this.selectedFeatures[feature.id]);
+        //     this.globalFeatureSelect = allSelected;
+        // }
+    },
+    watch: {
+        'plans.product': {
+            handler(newProduct) {
+                if (!this.editing) {
+                    this.globalFeatureSelect = false;
+                    Object.keys(this.selectedFeatures).forEach((key: any) => {
+                        this.selectedFeatures[key] = false;
+                    });
+                }
+                this.loadFeatures(newProduct);
+            },
+            immediate: true
+        },
+        globalFeatureSelect(newVal) {
+            this.features.forEach(feature => {
+                this.selectedFeatures[feature.id] = newVal;
+            });
         }
     }
 });
@@ -189,7 +232,7 @@ export default defineComponent({
                                 inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
                         </div>
 
-                        <div>
+                        <div v-if="!editing">
                             <LabelFields label="Produto" for-html="product"></LabelFields>
                             <SelectGroup :options="products" v-model="plans.product"
                                 unselect-label="Escolha um produto" />
@@ -200,12 +243,21 @@ export default defineComponent({
 
             <div class="flex flex-col gap-9">
                 <DefaultCard cardTitle="Funcionalidades do Plano">
+
                     <div class="grid gap-5 p-6">
-                        <div v-for="(feature, index) in plans.features" :key="index">
-                            <CheckboxOne :readonly="false" v-model="plans.features" :id="plans.features[index].name.toLowerCase().trim()"
-                                :label="plans.features[index].name" class="ml-4" />
+                        <LabelInformation v-if="plans.product === '' || plans.product === null"
+                            label="Selecione um produto para escolher as funcionalidades para o plano!"
+                            color="text-white" />
+                        <CheckboxOne v-if="plans.product !== '' && plans.product !== null" :readonly="false"
+                            v-model="globalFeatureSelect" id="select-all" label="Selecionar Todas" />
+                        <div v-if="plans.product !== '' && plans.product !== null" v-for="(feature, index) in features"
+                            :key="index">
+                            <CheckboxOne :readonly="false" v-model="selectedFeatures[feature.id]"
+                                :id="features[index].name.toLowerCase().trim()" :label="features[index].name"
+                                :value="feature.id" class="ml-4" />
                         </div>
                     </div>
+
                 </DefaultCard>
                 <div class="flex justify-end">
                     <ButtonPresentation label="Salvar" />

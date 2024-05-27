@@ -18,7 +18,7 @@ export default defineComponent({
 });
 </script>
 <template>
-        <RouterLink :to="route" :class="['text-white', active ? 'bg-primary' : 'bg-slate-500']" class="mt-2">
+        <RouterLink :to="route" :class="['text-white', active ? 'bg-primary' : 'bg-slate-500']">
             {{ label }}
         </RouterLink>
 </template>
