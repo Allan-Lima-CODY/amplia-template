@@ -43,7 +43,7 @@ export default defineComponent({
     },
     data() {
         const plansField: PlansFields = reactive(PlansService.defaultFields());
-        const modalInfo: ModalInfo = reactive(ModalService.getRegisterModalInfo(''));
+        const modalInfo: ModalInfo = reactive(ModalService.getRegisterModal(''));
 
         return {
             pageTitle: ref('Cadastro de Planos'),
@@ -134,10 +134,10 @@ export default defineComponent({
         savePlans() {
             if (this.editing)
                 if ((this.plans.name !== '' && this.plans.name !== null) && (this.plans.product !== '' && this.plans.product !== null) && (this.plans.price !== 0 && this.plans.price !== null)) {
-                    this.modalInfo = ModalService.getRegisterModalInfo('success');
+                    this.modalInfo = ModalService.getRegisterModal('success');
                     this.toggleModal();
                 } else {
-                    this.modalInfo = ModalService.getRegisterModalInfo('error');
+                    this.modalInfo = ModalService.getRegisterModal('error');
                     this.toggleModal()
                 }
         },
@@ -250,7 +250,7 @@ export default defineComponent({
                             color="text-white" />
                         <CheckboxOne v-if="plans.product !== '' && plans.product !== null" :readonly="false"
                             v-model="globalFeatureSelect" id="select-all" label="Selecionar Todas" />
-                        <div v-if="plans.product !== '' && plans.product !== null" v-for="(feature, index) in features"
+                            <div v-for="(feature, index) in features"
                             :key="index">
                             <CheckboxOne :readonly="false" v-model="selectedFeatures[feature.id]"
                                 :id="features[index].name.toLowerCase().trim()" :label="features[index].name"

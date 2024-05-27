@@ -28,7 +28,7 @@ import DataTableMain from '@/components/Mains/DataTableMain.vue';
 export default defineComponent({
   components: {},
   data() {
-    const modalInfo: ModalInfo = reactive(ModalService.getFeatureModalInfo());
+    const modalInfo: ModalInfo = reactive(ModalService.getFeatureModal());
     return {
       pageTitle: ref('Funcionalidades'),
       features: ref([] as Feature[]),
@@ -95,7 +95,7 @@ export default defineComponent({
         this.toDelete = id;
       }
       if(modalType !== undefined)
-        this.modalInfo = ModalService.getFeatureModalInfo(modalType);
+        this.modalInfo = ModalService.getFeatureModal(modalType);
       this.modalActive = !this.modalActive;
     },
     handleModalOk() 

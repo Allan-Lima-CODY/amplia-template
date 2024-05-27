@@ -29,7 +29,7 @@ export default {
         InputForms
     },
     data() {
-        const modalInfo: ModalInfo = reactive(ModalService.getLoginModalInfo());
+        const modalInfo: ModalInfo = reactive(ModalService.getLoginModal());
         return {
             password: ref(''),
             confirmPassword: ref(''),
@@ -61,21 +61,21 @@ export default {
 
         toggleModal(modalType?: string) {
             if (modalType !== undefined)
-                this.modalInfo = ModalService.getLoginModalInfo(modalType);
+                this.modalInfo = ModalService.getLoginModal(modalType);
             this.modalActive = !this.modalActive;
         },
 
         passwordReset() {
             if (this.password !== '' && this.confirmPassword !== '') {
                 if (this.password === this.confirmPassword) {
-                    this.modalInfo = ModalService.getPassResetModalInfo('success');
+                    this.modalInfo = ModalService.getPassResetModal('success');
                     this.toggleModal();
                 } else {
-                    this.modalInfo = ModalService.getPassResetModalInfo('mismatchPass');
+                    this.modalInfo = ModalService.getPassResetModal('mismatchPass');
                     this.toggleModal();
                 }
             } else {
-                this.modalInfo = ModalService.getPassResetModalInfo('emptyfieldsError');
+                this.modalInfo = ModalService.getPassResetModal('emptyfieldsError');
                 this.toggleModal();
             }
         }
