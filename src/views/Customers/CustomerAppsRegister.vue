@@ -118,7 +118,7 @@ export default defineComponent({
             if(this.modalInfo.title === "Sucesso!")
                 this.goBack();
         },
-        async updateOptions(product?: string){
+        updateOptions(product?: string){
             let prd = product;
             if(product === null || product === undefined)
                 prd = this.application.product;
@@ -137,16 +137,11 @@ export default defineComponent({
                 planPrice: { required },
                 additionalPrice: { required },
                 contractedLicenses: { required },
-                pricePerLicense: {required },
+                pricePerLicense: { required },
                 effectiveDate: { required },
                 nextBillingDate: { required },
             }
         }
-    },
-    created() {
-        PlansService.getAllPlans().then((data: Plans[]) => {
-            this.allPlans = data
-        });
     },
     async mounted(){
         const customerId: any = this.$route.params.id;
@@ -157,7 +152,10 @@ export default defineComponent({
             try
             {
                 const application = formDataStore.arrayData.find(c => c.id === decryptedId) as Application;
-                this.updateOptions(application?.plan.product);
+                PlansService.getAllPlans().then((data: Plans[]) => {
+                    this.allPlans = data
+                    this.updateOptions(application?.plan.product);
+                });
                 this.application = await ApplicationService.toFields(application as Application);
             }
             catch{

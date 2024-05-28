@@ -9,6 +9,7 @@ export default function FormDataService() {
     if (baseFrom !== baseTo) {
       useFormDataStore().resetFormData();
       useFormDataStore().resetArray();
+      useFormDataStore().updateLastId(0);
     }
   };
 

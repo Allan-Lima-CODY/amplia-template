@@ -93,13 +93,12 @@ export default defineComponent(
             const formDataStore = useFormDataStore();
             if (customerId && typeof customerId === 'string' && customerId.trim() !== '') {
                 const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(customerId));
-                if(formDataStore.arrayData.length === 0 || formDataStore.lastId !== decryptedId)
+                if(formDataStore.lastId !== decryptedId)
                 {
                     const customer = (await CustomersService.getAllCustomers()).find(c => c.id === decryptedId);
                     if(customer?.applications !== undefined){
                         formDataStore.resetArray();
                         formDataStore.updateArrayData(customer?.applications);
-                        console.log(formDataStore.arrayData)
                         formDataStore.updateLastId(decryptedId);
                     }
                 }
@@ -109,7 +108,6 @@ export default defineComponent(
                 formDataStore.updateLastId(0);
             }
             this.applications = this.getApplications(formDataStore.arrayData);
-            console.log(formDataStore.arrayData)
             this.loading = false;
         },
         methods: {
@@ -139,10 +137,11 @@ export default defineComponent(
                 this.toggleModal();
             },
             handleOk(){
+                const formDataStore = useFormDataStore();
                 if(this.modalInfo.title === 'Alerta'){
                     this.toggleModal();
-                    this.applications = this.applications.filter(a => a.id !== this.toDelete);
-                    useFormDataStore().updateArrayData(this.applications);
+                    formDataStore.deleteArrayId(this.toDelete);
+                    this.applications = this.getApplications(formDataStore.arrayData)
                     this.modalInfo = ModalService.getAppsModal('success');
                     this.toggleModal();
                 }else{

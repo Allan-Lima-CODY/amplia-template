@@ -60,10 +60,14 @@ export default defineComponent({
     methods: {
         handleSubmit() {
             try{
+                const customerId: any = this.$route.params.id;
                 this.v$.$touch()
                 if (!this.v$.$invalid){
                     useFormDataService().handleSubmit();
-                    this.modalInfo = ModalService.getRegisterModal('success');
+                    if (customerId && typeof customerId === 'string' && customerId.trim() !== '')
+                        this.modalInfo = ModalService.getRegisterModal('updated');
+                    else
+                        this.modalInfo = ModalService.getRegisterModal('success');
                     this.toggleModal();
                 }
                 else{
@@ -72,7 +76,7 @@ export default defineComponent({
                 }
             }
             catch{
-                console.log("Ocorreu um erro ao salvar os dados!")
+                console.error("Ocorreu um erro ao salvar os dados!")
             }
         },
         updateFormData() {

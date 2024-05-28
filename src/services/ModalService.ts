@@ -64,6 +64,14 @@ export const ModalService =
                     okTitle: 'Ok',
                     noTitle: undefined
                 };
+            case 'updated':
+                return{
+                    title: 'Sucesso!',
+                    message: 'Cadastro atualizado com sucesso!',
+                    borderColor: '#34D399',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
             case 'error':
                 return{
                     title: 'Erro',
