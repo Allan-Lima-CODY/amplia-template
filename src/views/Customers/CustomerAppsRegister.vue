@@ -163,8 +163,13 @@ export default defineComponent({
         }
     },
     async mounted(){
+        PlansService.getAllPlans().then((data: Plans[]) => {
+                    this.allPlans = data
+                });
+        
         const customerId: any = this.$route.params.id;
         const formDataStore = useFormDataStore();
+        
         if (customerId && typeof customerId === 'string' && customerId.trim() !== '') {
             this.buttonLabel = 'Salvar';
             const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(customerId));
