@@ -16,8 +16,15 @@ export const useFormDataStore = defineStore('formData', {
       updateArrayData(newData : any[]) {
         this.arrayData = [ ...this.arrayData, ...newData ];
       },
+      deleteArrayId(index: number) {
+        this.arrayData = this.arrayData.filter(d => d.id !== index);
+      },
       addToArrayData(newData : any){
         this.arrayData.push(newData);
+      },
+      patchArray(newData : any){
+        const index = this.arrayData.findIndex(d => d.id == newData.id);
+        this.arrayData[index] = newData;
       },
       resetArray(){
         this.arrayData = [];

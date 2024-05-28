@@ -37,7 +37,7 @@ export default defineComponent({
     Calendar
   },
   data() {
-    const modalInfo: ModalInfo = reactive(ModalService.getPlansModalInfo());
+    const modalInfo: ModalInfo = reactive(ModalService.getPlansModal());
     return {
       pageTitle: ref('Planos'),
 
@@ -103,7 +103,7 @@ export default defineComponent({
         this.toDelete = id;
       }
       if (modalType !== undefined)
-        this.modalInfo = ModalService.getPlansModalInfo(modalType);
+        this.modalInfo = ModalService.getPlansModal(modalType);
       this.modalActive = !this.modalActive;
     },
     handleModalOk() {

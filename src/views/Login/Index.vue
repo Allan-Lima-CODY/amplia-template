@@ -35,8 +35,8 @@ export default {
         DarkModeSwitcher
     },
     data() {
-        const modalInfo: ModalInfo = reactive(ModalService.getLoginModalInfo());
         const loginFields: Login = reactive(UserService.LoginDefaultFields());
+        const modalInfo: ModalInfo = reactive(ModalService.getLoginModal());
         return {
             inputType: ref('password'),
             eyeIconVisible: ref(true),
@@ -72,7 +72,7 @@ export default {
     methods: {
         toggleModal(modalType?: string) {
             if (modalType !== undefined)
-                this.modalInfo = ModalService.getLoginModalInfo(modalType);
+                this.modalInfo = ModalService.getLoginModal(modalType);
             this.modalActive = !this.modalActive;
         },
 
@@ -89,7 +89,7 @@ export default {
                 if (user) {
                     this.$router.push('/passwordreset');
                 } else {
-                    this.modalInfo = ModalService.getLoginModalInfo('EmailNotFound');
+                    this.modalInfo = ModalService.getLoginModal('EmailNotFound');
                     this.toggleModal();
                 }
             }
@@ -105,7 +105,7 @@ export default {
                 localStorage.setItem('loggedInUser', JSON.stringify({ id: user.id, email: user.email, token, expiryTime }));
                 this.$router.push('/home');
             } else {
-                this.modalInfo = ModalService.getLoginModalInfo('loginError');
+                this.modalInfo = ModalService.getLoginModal('loginError');
                 this.toggleModal();
             }
         }

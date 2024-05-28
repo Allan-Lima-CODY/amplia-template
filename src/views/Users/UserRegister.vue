@@ -38,7 +38,7 @@ export default defineComponent({
 
     data() {
         const usersField: UsersFields = reactive(UserService.defaultFields());
-        const modalInfo: ModalInfo = reactive(ModalService.getRegisterModalInfo());
+        const modalInfo: ModalInfo = reactive(ModalService.getRegisterModal());
 
         return {
             pageTitle: ref('Cadastro de Usuários'),
@@ -116,10 +116,10 @@ export default defineComponent({
             if (this.emailValid) {
                 if ((this.users.name !== '' && this.users.name !== null) &&
                     (this.users.password !== '' && this.users.password !== null)) {
-                    this.modalInfo = ModalService.getRegisterModalInfo('success');
+                    this.modalInfo = ModalService.getRegisterModal('success');
                     this.toggleModal();
                 } else {
-                    this.modalInfo = ModalService.getRegisterModalInfo('error');
+                    this.modalInfo = ModalService.getRegisterModal('error');
                     this.toggleModal();
                 }
             }
