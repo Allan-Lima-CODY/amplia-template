@@ -232,9 +232,9 @@ export default defineComponent({
                                 inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
                         </div>
 
-                        <div v-if="!editing">
+                        <div>
                             <LabelFields label="Produto" for-html="product"></LabelFields>
-                            <SelectGroup :options="products" v-model="plans.product"
+                            <SelectGroup :readonly="editing" :options="products" v-model="plans.product"
                                 unselect-label="Escolha um produto" />
                         </div>
                     </div>

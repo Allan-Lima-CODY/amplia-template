@@ -62,6 +62,25 @@ export default defineComponent({
             cnpjValid: ref(true),
         }
     },
+    computed: {
+        totalPrice(): number {
+            const planPrice = this.application.planPrice || 0;
+            const additionalPrice = this.application.additionalPrice || 0;
+            const pricePerLicense = this.application.pricePerLicense || 0;
+            const contractedLicenses = this.application.contractedLicenses || 0;
+
+            return planPrice + additionalPrice + (pricePerLicense * contractedLicenses);
+        }
+    },
+    watch: {
+        totalPrice(newValue) {
+            this.application.totalPrice = newValue.toFixed(2);
+        },
+        'application.planPrice': 'updateTotalPrice',
+        'application.additionalPrice': 'updateTotalPrice',
+        'application.pricePerLicense': 'updateTotalPrice',
+        'application.contractedLicenses': 'updateTotalPrice',
+    },
     methods:
     {
         async handleAdd(){
@@ -130,6 +149,11 @@ export default defineComponent({
                             <InputPrice id="additionalPrice" type="text" placeholder="Insira o valor adicional"
                                 v-model="application.additionalPrice" />
                         </div>
+                        <div>
+                            <LabelFields label="Valor de Cobrança" for-html="totalPrice" />
+                            <InputPrice :readonly="true" id="totalPrice" type="text" placeholder="Confira o valor a ser cobrado"
+                                v-model="application.totalPrice" />
+                        </div>
                         <div class="flex gap-1">
                             <CheckboxOne :readonly="false" v-model="application.status" id="appStatus" label="Ativo"
                                 class="ml-4" />
@@ -157,14 +181,14 @@ export default defineComponent({
                         <div class="flex gap-5">
                             <div class="w-full">
                                 <LabelFields label="Data de vigência" for-html="effectiveDate"></LabelFields>
-                                <Calendar id="effectiveDate" type="text" placeholder="dd/mm/yyyy" dateFormat="dd/mm/yy"
+                                <Calendar id="effectiveDate" type="text" placeholder="dd/mm/yyyy" dateFormat="dd/mm/yy" :manual-input="false"
                                     v-model="application.effectiveDate" class="w-full"
                                     input-class="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
                             </div>
 
                             <div class="w-full">
                                 <LabelFields label="Data da próxima cobrança" for-html="nextBillingDate"></LabelFields>
-                                <Calendar id="nextBillingDate" type="text" placeholder="dd/mm/yyyy"
+                                <Calendar id="nextBillingDate" type="text" placeholder="dd/mm/yyyy" :manual-input="false"
                                     v-model="application.nextBillingDate" dateFormat="dd/mm/yy" class="w-full"
                                     input-class="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
                             </div>

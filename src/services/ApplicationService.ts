@@ -24,13 +24,13 @@ export const ApplicationService =
 
             product: null,
             plan: null,
-            planPrice: null,
-            additionalPrice: null,
+            planPrice: 0,
+            additionalPrice: 0,
 
             status: true,
 
-            contractedLicenses: null,
-            pricePerLicense: null,
+            contractedLicenses: 0,
+            pricePerLicense: 0,
         
             effectiveDate: null,
             nextBillingDate: null,

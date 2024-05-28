@@ -24,16 +24,16 @@ export interface ApplicationFields {
     
     product: any,
     plan: any,
-    planPrice: number | null,
-    additionalPrice: number | null,
+    planPrice: number,
+    additionalPrice: number,
 
     status: boolean,
 
-    contractedLicenses: number | null,
-    pricePerLicense: number | null
+    contractedLicenses: number,
+    pricePerLicense: number
 
     effectiveDate: Date | null,
     nextBillingDate: Date | null,
 
-    totalPrice: number | null
+    totalPrice: number
 }

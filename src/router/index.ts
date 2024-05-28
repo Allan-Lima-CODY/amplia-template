@@ -15,6 +15,7 @@ import PasswordReset from '@/views/PasswordReset/Index.vue'
 import UserRegister from '@/views/Users/UserRegister.vue'
 import PlanRegister from '@/views/Plans/PlanRegister.vue'
 import Logs from '@/views/Logs/Index.vue'
+import { UserService } from '@/services/UsersService'
 
 const routes = [
   {
@@ -22,7 +23,8 @@ const routes = [
     name: 'login',
     component: Login,
     meta: {
-      title: 'Login'
+      title: 'Login',
+      requiresAuth: false,
     },
   },
   {
@@ -30,7 +32,8 @@ const routes = [
     name: 'passwordreset',
     component: PasswordReset,
     meta: {
-      title: 'Redefinir Senha'
+      title: 'Redefinir Senha',
+      requiresAuth: false,
     },
   },
   {
@@ -38,7 +41,8 @@ const routes = [
     name: 'home',
     component: Home,
     meta: {
-      title: 'Home'
+      title: 'Home',
+      requiresAuth: true,
     },
   },
   {
@@ -46,7 +50,8 @@ const routes = [
     name: 'customer',
     component: Customers,
     meta: {
-      title: 'Clientes'
+      title: 'Clientes',
+      requiresAuth: true,
     },
   },
   {
@@ -54,7 +59,8 @@ const routes = [
     name: 'customerRegister',
     component: CustomerRegister,
     meta: {
-      title: 'Cadastro de Clientes'
+      title: 'Cadastro de Clientes',
+      requiresAuth: true,
     },
     children: [
       {
@@ -70,7 +76,8 @@ const routes = [
     name: 'appsRegister',
     component: CustomerAppsRegister,
     meta: {
-      title: 'Registro de apps'
+      title: 'Registro de apps',
+      requiresAuth: true,
     },
   },
   {
@@ -78,7 +85,8 @@ const routes = [
     name: 'users',
     component: Users,
     meta: {
-      title: 'Usuários'
+      title: 'Usuários',
+      requiresAuth: true,
     },
   },
   {
@@ -86,7 +94,8 @@ const routes = [
     name: 'usersregister',
     component: UserRegister,
     meta: {
-      title: 'Cadastro de Usuários'
+      title: 'Cadastro de Usuários',
+      requiresAuth: true,
     },
   },
   {
@@ -94,7 +103,8 @@ const routes = [
     name: 'features',
     component: Features,
     meta: {
-      title: 'Funcionalidades'
+      title: 'Funcionalidades',
+      requiresAuth: true,
     },
   },
   {
@@ -102,7 +112,8 @@ const routes = [
     name: 'plans',
     component: Plans,
     meta: {
-      title: 'Planos'
+      title: 'Planos',
+      requiresAuth: true,
     },
   },
   {
@@ -110,7 +121,8 @@ const routes = [
     name: 'plansregister',
     component: PlanRegister,
     meta: {
-      title: 'Planos'
+      title: 'Planos',
+      requiresAuth: true,
     },
   },
   {
@@ -118,7 +130,8 @@ const routes = [
     name: 'logs',
     component: Logs,
     meta:{
-      title: 'Logs de Alteração'
+      title: 'Logs de Alteração',
+      requiresAuth: true,
     }
   },
   {
@@ -126,7 +139,8 @@ const routes = [
     name: 'forms',
     component: Forms,
     meta: {
-      title: 'Formulários'
+      title: 'Formulários',
+      requiresAuth: true,
     },
   }
 ]
@@ -141,27 +155,19 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = `Template | ${to.meta.title} | SmartOne`
-  next()
+
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!UserService.isAuthenticated()) {
+      next({ name: 'login' });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 })
 
 export default router
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // const routes = [
 //   {

@@ -78,3 +78,8 @@ export interface UsersFields {
 
     confidentialInformation: boolean
 }
+
+export interface Login {
+    email: string,
+    password: string
+}

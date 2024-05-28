@@ -26,7 +26,8 @@ export default {
         ButtonApresentation,
         ApresentationLayout,
         LabelFields,
-        InputForms
+        InputForms,
+        DarkModeSwitcher
     },
     data() {
         const modalInfo: ModalInfo = reactive(ModalService.getLoginModalInfo());
@@ -91,6 +92,7 @@ input::-ms-clear {
 </style>
 
 <template>
+    <DarkModeSwitcher class="hidden" />
     <ApresentationLayout card-title="Altere sua senha" :handle="passwordReset">
         <template v-slot:slot1>
 

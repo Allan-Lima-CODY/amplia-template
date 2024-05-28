@@ -1,4 +1,4 @@
-import type { User, UsersFields } from '../models/User'
+import type { Login, User, UsersFields } from '../models/User'
 export const UserService =
 {
     getAllUsersData(): User[] {
@@ -13,6 +13,7 @@ export const UserService =
             { id: 8, name: 'Matheus', createdAt: new Date('2024-04-17'), status: 'Inativo', email: 'Matheus@smart01.com.br', password: '12345678', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeApplication: true, editApplication: true, deleteApplication: true, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
             { id: 9, name: 'Luiz', createdAt: new Date('2024-04-16'), status: 'Ativo', email: 'Luiz@smart01.com.br', password: '123456789', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeApplication: true, editApplication: true, deleteApplication: true, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
             { id: 10, name: 'Miguel', createdAt: new Date('2024-04-15'), status: 'Ativo', email: 'Miguel@smart01.com.br', password: '10', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeApplication: true, editApplication: true, deleteApplication: true, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
+            { id: 11, name: 'testeGeneral', createdAt: new Date('2024-04-14'), status: 'Ativo', email: 'teste@smart01.com.br', password: '123456', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeApplication: true, editApplication: true, deleteApplication: true, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
         ]
     },
 
@@ -60,5 +61,17 @@ export const UserService =
 
             confidentialInformation: false
         }
+    },
+
+    LoginDefaultFields(): Login {
+        return {
+            email: '',
+            password: ''
+        }
+    },
+
+    isAuthenticated(): boolean {
+        const user = sessionStorage.getItem('loggedInUser')
+        return !!user
     }
 }

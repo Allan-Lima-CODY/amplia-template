@@ -234,10 +234,10 @@ export default defineComponent({
                             <LabelInformation v-if="!emailValid" label="Email inválido!" color="text-red" />
                         </div>
 
-                        <div v-if="!editing">
+                        <div>
                             <LabelFields label="Senha" for-html="password"></LabelFields>
                             <div class="relative">
-                                <InputForms id="password" :type="inputType" placeholder="Digite uma senha"
+                                <InputForms id="password" :type="inputType" placeholder="Digite uma senha" :readonly="editing"
                                     v-model="users.password">
                                     <button @click.prevent="togglePasswordVisibility"
                                         class="absolute right-3 mt-4 cursor-pointer">
@@ -260,7 +260,7 @@ export default defineComponent({
                                 </InputForms>
                             </div>
 
-                            <div class="ml-2 mt-2">
+                            <div v-if="!editing" class="ml-2 mt-2">
                                 <CheckboxOne :readonly="false" v-model="users.temporaryPassword" id="temporaryPassword"
                                     label="Redefinir senha no próximo acesso" />
                             </div>

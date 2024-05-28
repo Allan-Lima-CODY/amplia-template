@@ -18,7 +18,8 @@ export default {
       type: String,
       required: true
     },
-    unselectLabel: String
+    unselectLabel: String,
+    readonly: Boolean
   },
   methods: {
     updateValue(event?: any) {
@@ -39,7 +40,7 @@ export default {
 
 <template>
     <div class="relative z-20 bg-transparent dark:bg-form-input">
-      <select :value="selectedOption"
+      <select :value="selectedOption" :disabled="readonly"
         class="relative z-20 w-full appearance-none rounded-lg border border-stroke bg-transparent p-3.5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
         :class="{ 'text-black dark:text-white': isOptionSelected }" @change="updateValue">
         <option value="" disabled selected>{{ unselectLabel }}</option>

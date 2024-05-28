@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { useSidebarStore } from '@/stores/sidebar'
 import DarkModeSwitcher from './DarkModeSwitcher.vue'
+import { useRouter } from 'vue-router'
 
 const { isSidebarOpen, toggleSidebar } = useSidebarStore()
+const router = useRouter()
+
+function logout() {
+  sessionStorage.clear()
+  router.push('/')
+}
 </script>
 
 <template>
@@ -67,9 +74,9 @@ const { isSidebarOpen, toggleSidebar } = useSidebarStore()
           </span>
           <span class="text-right">
 
-            <router-link :to="{ path: '/' }">
-              <span class="block text-sm font-medium text-black dark:text-white">Sair</span>
-            </router-link>
+            <a @click="logout">
+              <span class="block text-sm font-medium text-black dark:text-white cursor-pointer">Sair</span>
+            </a>
 
           </span>
         </div>
