@@ -24,8 +24,8 @@ export interface ApplicationFields {
     
     product: any,
     plan: any,
-    planPrice: number,
-    additionalPrice: number,
+    planPrice: number | null,
+    additionalPrice: number | null,
 
     status: boolean,
 
