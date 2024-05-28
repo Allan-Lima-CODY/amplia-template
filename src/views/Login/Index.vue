@@ -60,7 +60,7 @@ export default {
             const currentTime = new Date().getTime();
             if (currentTime > loggedInUser.expiryTime) {
                 localStorage.removeItem('loggedInUser');
-                this.$router.push('/login');
+                this.$router.push('/');
             } else {
                 // Token is valid, refresh the expiry time
                 const newExpiryTime = currentTime + (30 * 60 * 1000);
@@ -100,7 +100,7 @@ export default {
             const user = users.find(user => user.email === this.loginData.email && user.password === this.loginData.password);
             if (user) {
                 const token = GenericFunctions.generateToken();
-                const expiryTime = new Date().getTime() + (30 * 60 * 1000)
+                const expiryTime = new Date().getTime() + (30 * 60 * 1000); // 30 minutos a partir de agora
 
                 localStorage.setItem('loggedInUser', JSON.stringify({ id: user.id, email: user.email, token, expiryTime }));
                 this.$router.push('/home');
@@ -127,7 +127,8 @@ input::-ms-clear {
             <div>
                 <div class="relative">
                     <LabelFields label="E-mail" for-html="email"></LabelFields>
-                    <InputForms id="email" type="text" placeholder="Digite seu email" v-model="loginData.email" @keyup.enter="login" />
+                    <InputForms id="email" type="text" placeholder="Digite seu email" v-model="loginData.email"
+                        @keyup.enter="login" />
                     <LabelInformation v-if="!emailValid" label="Email inválido!" color="text-red" />
                 </div>
             </div>
@@ -135,7 +136,8 @@ input::-ms-clear {
             <div>
                 <div class="relative">
                     <LabelFields label="Senha" for-html="password"></LabelFields>
-                    <InputForms id="password" :type="inputType" placeholder="Digite sua senha" v-model="loginData.password" @keyup.enter="login">
+                    <InputForms id="password" :type="inputType" placeholder="Digite sua senha"
+                        v-model="loginData.password" @keyup.enter="login">
                         <button @click.prevent="togglePasswordVisibility" class="absolute right-3 mt-4 cursor-pointer">
                             <svg v-if="eyeIconVisible" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

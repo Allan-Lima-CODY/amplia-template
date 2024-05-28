@@ -71,7 +71,16 @@ export const UserService =
     },
 
     isAuthenticated(): boolean {
-        const user = sessionStorage.getItem('loggedInUser')
-        return !!user
+        const user = localStorage.getItem('loggedInUser');
+        if (user) {
+            const userObj = JSON.parse(user);
+            const currentTime = new Date().getTime();
+            if (currentTime > userObj.expiryTime) {
+                localStorage.removeItem('loggedInUser');
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 }
