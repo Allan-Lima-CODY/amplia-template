@@ -14,6 +14,21 @@ import router from './router'
 
 const app = createApp(App)
 
+window.addEventListener('storage', (event) => {
+    if (event.key === 'loginEvent') {
+        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
+        if (loggedInUser) {
+            router.push('/home');
+        } else {
+            router.push('/');
+        }
+    }
+
+    if (event.key === 'logoutEvent') {
+        router.push('/');
+    }
+});
+
 app.use(createPinia())
 app.use(router)
 app.use(VueApexCharts),

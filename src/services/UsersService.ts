@@ -21,6 +21,12 @@ export const UserService =
         return Promise.resolve(this.getAllUsersData())
     },
 
+    getAllUsersWithoutPassword(): Promise<Omit<User, 'password'>[]> {
+        return this.getAllUsers().then(users => 
+            users.map(({ password, ...userWithoutPassword }) => userWithoutPassword)
+        );
+    },
+    
     defaultFields(): UsersFields {
         return {
             name: '',

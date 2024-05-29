@@ -62,7 +62,6 @@ export default {
                 localStorage.removeItem('loggedInUser');
                 this.$router.push('/');
             } else {
-                // Token is valid, refresh the expiry time
                 const newExpiryTime = currentTime + (30 * 60 * 1000);
                 loggedInUser.expiryTime = newExpiryTime;
                 localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
@@ -96,13 +95,16 @@ export default {
         },
 
         async login() {
-            const users = await UserService.getAllUsers();
-            const user = users.find(user => user.email === this.loginData.email && user.password === this.loginData.password);
-            if (user) {
-                const token = GenericFunctions.generateToken();
-                const expiryTime = new Date().getTime() + (30 * 60 * 1000); // 30 minutos a partir de agora
+            const user = await UserService.getAllUsers().then(users => users.find(user => user.email === this.loginData.email && user.password === this.loginData.password));
 
-                localStorage.setItem('loggedInUser', JSON.stringify({ id: user.id, email: user.email, token, expiryTime }));
+            if (user) {
+                const { password, ...userWithoutPassword } = user;
+                const token = GenericFunctions.generateToken();
+                const expiryTime = new Date().getTime() + (30 * 60 * 1000);
+
+                localStorage.setItem('loggedInUser', JSON.stringify({ ...userWithoutPassword, token, expiryTime }));
+
+                localStorage.setItem('loginEvent', JSON.stringify({ time: new Date().getTime() }));
                 this.$router.push('/home');
             } else {
                 this.modalInfo = ModalService.getLoginModal('loginError');

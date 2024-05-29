@@ -7,8 +7,9 @@ const { isSidebarOpen, toggleSidebar } = useSidebarStore()
 const router = useRouter()
 
 function logout() {
-  localStorage.removeItem('loggedInUser')
-  router.push('/')
+    localStorage.removeItem('loggedInUser');
+    localStorage.setItem('logoutEvent', JSON.stringify({ time: new Date().getTime() }));
+    router.push('/');
 }
 </script>
 
