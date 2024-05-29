@@ -89,12 +89,8 @@ export default defineComponent({
     },
     watch: {
         totalPrice(newValue) {
-            this.application.totalPrice = newValue.toFixed(2);
-        },
-        'application.planPrice': 'updateTotalPrice',
-        'application.additionalPrice': 'updateTotalPrice',
-        'application.pricePerLicense': 'updateTotalPrice',
-        'application.contractedLicenses': 'updateTotalPrice',
+            this.application.totalPrice = parseFloat(newValue.toFixed(2));
+        }
     },
     methods:
     {
@@ -240,7 +236,7 @@ export default defineComponent({
                         </div>
                         <div>
                             <LabelFields label="Valor de Cobrança" for-html="totalPrice" />
-                            <InputPrice :readonly="true" id="totalPrice" type="text" placeholder="Confira o valor a ser cobrado"
+                            <InputPrice :readonly="true" id="totalPrice" placeholder="Confira o valor a ser cobrado"
                                 v-model="application.totalPrice" />
                         </div>
                         <div class="flex gap-1">
