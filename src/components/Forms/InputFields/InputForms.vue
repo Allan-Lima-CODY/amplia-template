@@ -1,10 +1,5 @@
 <script lang="ts">
 export default {
-    data() {
-        return {
-            
-        };
-    },
     props: {
         id: {
             type: String,
