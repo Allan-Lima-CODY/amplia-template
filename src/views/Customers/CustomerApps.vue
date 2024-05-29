@@ -133,7 +133,6 @@ export default defineComponent(
             },
             handleDelete(id : number) {
                 const app = useFormDataStore().arrayData.find(d => d.id === id) as Application;
-                console.log(app?.status)
                 if(app?.status !== "Ativo"){
                     this.modalInfo = ModalService.getAppsModal('warning');
                     this.toDelete = id;
