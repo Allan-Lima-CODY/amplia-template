@@ -132,8 +132,14 @@ export default defineComponent(
                 this.$router.push(`/customers/register/apps/register/${encodeURIComponent(GenericFunctions.encryptIdentifier(event.data.id))}`)
             },
             handleDelete(id : number) {
-                this.modalInfo = ModalService.getAppsModal('warning');
-                this.toDelete = id;
+                const app = useFormDataStore().arrayData.find(d => d.id === id) as Application;
+                if(app?.status !== "Ativo"){
+                    this.modalInfo = ModalService.getAppsModal('warning');
+                    this.toDelete = id;
+                }
+                else{
+                    this.modalInfo = ModalService.getAppsModal('activeError');
+                }
                 this.toggleModal();
             },
             handleOk(){

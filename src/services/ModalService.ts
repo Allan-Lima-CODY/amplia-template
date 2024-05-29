@@ -224,6 +224,14 @@ export const ModalService =
                     okTitle: 'Ok',
                     noTitle: undefined
                 };
+                case 'activeError':
+                return{
+                    title: 'Erro',
+                    message: 'Não é possível excluir uma aplicação ativa!',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
                 case 'warning':
                 return{
                     title: 'Alerta',

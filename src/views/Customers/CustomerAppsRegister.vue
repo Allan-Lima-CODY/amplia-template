@@ -53,6 +53,7 @@ export default defineComponent({
         const applicationFields: ApplicationFields = reactive(ApplicationService.defaultFields());
         const modalInfo: ModalInfo = reactive(ModalService.getAppsModal());
         return{
+            editing: false,
             modalActive: false,
             modalInfo:{
                 ...toRefs(modalInfo)
@@ -88,12 +89,8 @@ export default defineComponent({
     },
     watch: {
         totalPrice(newValue) {
-            this.application.totalPrice = newValue.toFixed(2);
-        },
-        'application.planPrice': 'updateTotalPrice',
-        'application.additionalPrice': 'updateTotalPrice',
-        'application.pricePerLicense': 'updateTotalPrice',
-        'application.contractedLicenses': 'updateTotalPrice',
+            this.application.totalPrice = parseFloat(newValue.toFixed(2));
+        }
     },
     methods:
     {
@@ -171,6 +168,7 @@ export default defineComponent({
         const formDataStore = useFormDataStore();
         
         if (customerId && typeof customerId === 'string' && customerId.trim() !== '') {
+            this.editing = true;
             this.buttonLabel = 'Salvar';
             const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(customerId));
             try
@@ -212,7 +210,7 @@ export default defineComponent({
                     <div class="flex flex-col w-full gap-5.5 p-6.5">
                         <div>
                             <LabelFields label="Produto" for-html="product" />
-                            <SelectGroup :options="products" v-model="application.product" @change="updateOptions()"
+                            <SelectGroup :readonly="editing" :options="products" v-model="application.product" @change="updateOptions()"
                                 unselect-label="Selecione o produto" @blur="v$.application.product.$touch()" />
                             <LabelInformation v-if="v$.application.product.$error" label="Campo obrigatório!" color="text-red" />
                         </div>
@@ -238,7 +236,7 @@ export default defineComponent({
                         </div>
                         <div>
                             <LabelFields label="Valor de Cobrança" for-html="totalPrice" />
-                            <InputPrice :readonly="true" id="totalPrice" type="text" placeholder="Confira o valor a ser cobrado"
+                            <InputPrice :readonly="true" id="totalPrice" placeholder="Confira o valor a ser cobrado"
                                 v-model="application.totalPrice" />
                         </div>
                         <div class="flex gap-1">
@@ -270,17 +268,19 @@ export default defineComponent({
                         <div class="flex gap-5">
                             <div class="w-full">
                                 <LabelFields label="Data de vigência" for-html="effectiveDate"></LabelFields>
-                                <Calendar id="effectiveDate" type="text" placeholder="dd/mm/yyyy" dateFormat="dd/mm/yy" :manual-input="false"
+                                <Calendar :readonly="editing" id="effectiveDate" type="text" placeholder="dd/mm/yyyy" dateFormat="dd/mm/yy" :manual-input="false"
                                     v-model="application.effectiveDate" class="w-full"
-                                    @blur="v$.application.effectiveDate.$touch()" input-class="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+                                    @blur="v$.application.effectiveDate.$touch()" :input-class="`rounded-lg border-[1.5px] border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary
+                                    ${editing ? 'text-slate-400' : 'text-black dark:text-white'}` " />
                                 <LabelInformation v-if="v$.application.effectiveDate.$error" label="Campo obrigatório!" color="text-red" />
                             </div>
 
                             <div class="w-full">
                                 <LabelFields label="Data da próxima cobrança" for-html="nextBillingDate"></LabelFields>
-                                <Calendar id="nextBillingDate" type="text" placeholder="dd/mm/yyyy"
+                                <Calendar :readonly="editing" id="nextBillingDate" type="text" placeholder="dd/mm/yyyy"
                                     @blur="v$.application.nextBillingDate.$touch()" v-model="application.nextBillingDate" dateFormat="dd/mm/yy" class="w-full"
-                                    input-class="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+                                    :input-class="`rounded-lg border-[1.5px] border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary
+                                    ${editing ? 'text-slate-400' : 'text-black dark:text-white'}` " />
                                 <LabelInformation v-if="v$.application.nextBillingDate.$error" label="Campo obrigatório!" color="text-red" />
                             </div>
                         </div>
