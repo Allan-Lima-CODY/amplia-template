@@ -49,6 +49,8 @@ export default defineComponent({
             emailValid: ref(true),
             cnpjValid: ref(true),
 
+            editing: false,
+
             modalActive: ref(false),
             modalInfo: {
                 ...toRefs(modalInfo)
@@ -130,7 +132,7 @@ export default defineComponent({
     async mounted(){
         const customerId: any = this.$route.params.id;
         if (customerId && typeof customerId === 'string' && customerId.trim() !== '') {
-
+            this.editing = true;
             const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(customerId));
             try
             {
@@ -170,7 +172,7 @@ export default defineComponent({
                     <div>
                         <LabelFields label="Nome da empresa" for-html="name" />
                         <InputForms id="name" type="text" placeholder="Digite o nome da empresa"
-                            v-model="formData.name" @blur="v$.formData.name.$touch()" />
+                            v-model="formData.name" @blur="v$.formData.name.$touch()" :readonly="editing"/>
                         <LabelInformation v-if="v$.formData.name.$error" label="Campo obrigatório!" color="text-red" />
                     </div>
                     <div class="flex gap-5">
