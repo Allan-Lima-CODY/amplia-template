@@ -11,6 +11,8 @@ import PrimeVue from 'primevue/config';
 
 import App from './App.vue'
 import router from './router'
+import { FilterMatchMode, FilterService } from 'primevue/api'
+
 
 const app = createApp(App)
 
@@ -28,7 +30,6 @@ window.addEventListener('storage', (event) => {
         router.push('/');
     }
 });
-
 app.use(createPinia())
 app.use(router)
 app.use(VueApexCharts),
@@ -54,6 +55,15 @@ app.use(PrimeVue, {
         firstDayOfWeek: 0,
         monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
         monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
-    }
+    },
 });
+FilterService.register(FilterMatchMode.DATE_AFTER, (value, filter) => {
+    if (!filter) return true;
+    if (!value) return false;
+
+    const filterDate = new Date(filter);
+    filterDate.setHours(23, 59, 59, 999);
+    return new Date(value) > filterDate;
+  });
+  
 app.mount('#app')
