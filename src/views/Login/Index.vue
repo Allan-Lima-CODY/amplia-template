@@ -107,8 +107,7 @@ export default {
                 localStorage.setItem('loginEvent', JSON.stringify({ time: new Date().getTime() }));
                 this.$router.push('/home');
             } else {
-                this.modalInfo = ModalService.getLoginModal('loginError');
-                this.toggleModal();
+                this.toggleModal('loginError');
             }
         }
     }
@@ -130,7 +129,7 @@ input::-ms-clear {
                 <div class="relative">
                     <LabelFields label="E-mail" for-html="email"></LabelFields>
                     <InputForms id="email" type="text" placeholder="Digite seu email" v-model="loginData.email"
-                        @keyup.enter="login" />
+                       />
                     <LabelInformation v-if="!emailValid" label="Email inválido!" color="text-red" />
                 </div>
             </div>
@@ -139,7 +138,7 @@ input::-ms-clear {
                 <div class="relative">
                     <LabelFields label="Senha" for-html="password"></LabelFields>
                     <InputForms id="password" :type="inputType" placeholder="Digite sua senha"
-                        v-model="loginData.password" @keyup.enter="login">
+                        v-model="loginData.password">
                         <button type="button" @click.prevent="togglePasswordVisibility" class="absolute right-3 mt-4 cursor-pointer">
                             <svg v-if="eyeIconVisible" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
