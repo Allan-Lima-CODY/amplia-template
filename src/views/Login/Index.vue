@@ -60,6 +60,7 @@ export default {
             const currentTime = new Date().getTime();
             if (currentTime > loggedInUser.expiryTime) {
                 localStorage.removeItem('loggedInUser');
+                localStorage.removeItem('dataUser');
                 this.$router.push('/');
             } else {
                 const newExpiryTime = currentTime + (30 * 60 * 1000);
@@ -83,8 +84,7 @@ export default {
         async forgotPassword() {
             this.emailValid = GenericFunctions.validateEmail(this.loginData.email);
             if (this.emailValid) {
-                const users = await UserService.getAllUsers();
-                const user = users.find(user => user.email === this.loginData.email);
+                const user = await UserService.getAllUsers().then(users => users.find(user => user.email === this.loginData.email));
                 if (user) {
                     this.$router.push('/passwordreset');
                 } else {
@@ -98,11 +98,13 @@ export default {
             const user = await UserService.getAllUsers().then(users => users.find(user => user.email === this.loginData.email && user.password === this.loginData.password));
 
             if (user) {
-                const { password, ...userWithoutPassword } = user;
+                const { password, status, email, temporaryPassword, createdAt, ...permissions } = user;
                 const token = GenericFunctions.generateToken();
                 const expiryTime = new Date().getTime() + (30 * 60 * 1000);
 
-                localStorage.setItem('loggedInUser', JSON.stringify({ ...userWithoutPassword, token, expiryTime }));
+                const encryptedPermissions = GenericFunctions.encryptObject(permissions);
+                localStorage.setItem('dataUser', JSON.stringify({ encryptedPermissions }));
+                localStorage.setItem('loggedInUser', JSON.stringify({ token, expiryTime }));
 
                 localStorage.setItem('loginEvent', JSON.stringify({ time: new Date().getTime() }));
                 this.$router.push('/home');

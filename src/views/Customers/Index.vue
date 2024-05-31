@@ -10,6 +10,7 @@ import { GenericFunctions } from '@/services/GenericFunctions'
 import type { Option } from '@/models/Option'
 import type { Customer } from '@/models/Customer'
 import { CustomersService } from '@/services/CustomersService'
+import { UserService } from '@/services/UsersService';
 
 import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
 import DataTable from 'primevue/datatable';
@@ -111,7 +112,7 @@ export default defineComponent({
     <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
 
     <div class="flex justify-end mt-6">
-      <ButtonDefault label="Cadastrar Cliente" class="flex bg-primary text-white rounded-lg" route="/customers/register/generalInfo">
+      <ButtonDefault v-if="UserService.getUserPermissions().includeClients" label="Cadastrar Cliente" class="flex bg-primary text-white rounded-lg" route="/customers/register/generalInfo">
         <div class="mr-2">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-4 h-4">
@@ -174,7 +175,7 @@ export default defineComponent({
             </template>
           </Column>
 
-          <Column header="Editar" :rowEditor="true" style="width: 1%;"></Column>
+          <Column v-if="UserService.getUserPermissions().editClients" header="Editar" :rowEditor="true" style="width: 1%;"></Column>
 
           <template #expansion="slotProps">
             <DataTable :value="slotProps.data.applications">
@@ -188,7 +189,7 @@ export default defineComponent({
                   {{ GenericFunctions.formatDate(slotProps.data.nextBillingDate) }}
                 </template>
               </Column>
-              <Column field="planPrice" header="Valor de Cobrança" header-class="text-yellow-400">
+              <Column v-if="UserService.getUserPermissions().confidentialInformation" field="planPrice" header="Valor de Cobrança" header-class="text-yellow-400">
                 <template #body="slotProps">
                   {{ slotProps.data.planPrice }}
                 </template>
@@ -198,7 +199,7 @@ export default defineComponent({
                   {{ slotProps.data.contractedLicenses }}
                 </template>
               </Column>
-              <Column field="pricePerLicense" header="Valor por Licença" header-class="text-yellow-400">
+              <Column v-if="UserService.getUserPermissions().confidentialInformation" field="pricePerLicense" header="Valor por Licença" header-class="text-yellow-400">
                 <template #body="slotProps">
                   {{ slotProps.data.pricePerLicense }}
                 </template>

@@ -31,6 +31,7 @@ import { ApplicationService } from '@/services/ApplicationService';
 import { GenericFunctions } from '@/services/GenericFunctions';
 import type { ModalInfo } from '@/models/ModalInfo';
 import { ModalService } from '@/services/ModalService';
+import { UserService } from '@/services/UsersService';
 
 export default defineComponent({
     components: {
@@ -139,7 +140,10 @@ export default defineComponent({
             if(product === null || product === undefined)
                 prd = this.application.product;
             this.plans = this.allPlans.filter(p => p.product === prd).map(({ id, name }) => ({ key: id, value: name })) as Option[]
-        }
+        },
+        getUserPermissions() {
+            return UserService.getUserPermissions()
+        },
     },
     setup() {
         const v$ = useVuelidate()
@@ -222,19 +226,19 @@ export default defineComponent({
                             <LabelInformation v-if="v$.application.plan.$error" label="Campo obrigatório!" color="text-red" />
                         </div>
 
-                        <div>
+                        <div v-if="getUserPermissions().confidentialInformation">
                             <LabelFields label="Valor do plano" for-html="planPrice" />
                             <InputPrice id="planPrice" type="text" placeholder="Insira o valor do plano"
                                 v-model="application.planPrice" @blur="v$.application.planPrice.$touch()" />
                             <LabelInformation v-if="v$.application.product.$error" label="Campo obrigatório!" color="text-red" />
                         </div>
-                        <div>
+                        <div v-if="getUserPermissions().confidentialInformation">
                             <LabelFields label="Valor adicional" for-html="additionalPrice" />
                             <InputPrice id="additionalPrice" type="text" placeholder="Insira o valor adicional"
                                 v-model="application.additionalPrice" @blur="v$.application.additionalPrice.$touch()" />
                             <LabelInformation v-if="v$.application.additionalPrice.$error" label="Campo obrigatório!" color="text-red" />
                         </div>
-                        <div>
+                        <div v-if="getUserPermissions().confidentialInformation">
                             <LabelFields label="Valor de Cobrança" for-html="totalPrice" />
                             <InputPrice :readonly="true" id="totalPrice" placeholder="Confira o valor a ser cobrado"
                                 v-model="application.totalPrice" />
@@ -257,7 +261,7 @@ export default defineComponent({
                                 <LabelInformation v-if="v$.application.contractedLicenses.$error" label="Campo obrigatório!" color="text-red" />
                             </div>
 
-                            <div class="w-full">
+                            <div v-if="getUserPermissions().confidentialInformation" class="w-full">
                                 <LabelFields label="Valor por licença" for-html="perLicensePrice" />
                                 <InputPrice id="perLicensePrice" type="text" placeholder="Digite o valor por licença"
                                 @blur="v$.application.pricePerLicense.$touch()" v-model="application.pricePerLicense" />

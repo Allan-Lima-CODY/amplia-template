@@ -27,7 +27,7 @@ import { MenuItemsService } from '@/services/MenuItemsService';
 import { UserService } from '@/services/UsersService';
 
 export default defineComponent({
-    data(){
+    data() {
         return{
             loading: ref(true),
             logs: ref([] as Log[]),
@@ -44,7 +44,6 @@ export default defineComponent({
                 action: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
                 page: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
                 info: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-
             },
         }
     },

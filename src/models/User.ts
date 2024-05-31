@@ -24,9 +24,9 @@ export interface User {
     editLicenses: boolean, 
     deleteLicenses: boolean, 
 
-    includeFunctionalities: boolean, 
-    editFunctionalities: boolean, 
-    deleteFunctionalities: boolean, 
+    includeFeatures: boolean, 
+    editFeatures: boolean, 
+    deleteFeatures: boolean, 
 
     includePlans: boolean, 
     editPlans: boolean, 
@@ -64,9 +64,9 @@ export interface UsersFields {
     editLicenses: boolean,
     deleteLicenses: boolean,
 
-    includeFunctionalities: boolean,
-    editFunctionalities: boolean,
-    deleteFunctionalities: boolean,
+    includeFeatures: boolean,
+    editFeatures: boolean,
+    deleteFeatures: boolean,
 
     includePlans: boolean,
     editPlans: boolean,
