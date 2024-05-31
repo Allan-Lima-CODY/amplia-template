@@ -319,7 +319,7 @@ export default defineComponent(
                 </template>
             </Column>
 
-            <Column v-if="getUserPermissions().editpplication" header="Editar" :rowEditor="true" style="width: 1%;"></Column>
+            <Column v-if="getUserPermissions().editApplication" header="Editar" :rowEditor="true" style="width: 1%;"></Column>
 
             <Column v-if="getUserPermissions().deleteApplication" header="Excluir" style="width: 5%; min-width: 8rem; text-align: left">
                 <template #body="{ data }">
