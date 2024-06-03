@@ -30,6 +30,20 @@ export const GenericFunctions = {
         });
     },
 
+    encryptObject(data: {}): string {
+        const object = JSON.stringify(data);
+        const encryptedData = CryptoJS.AES.encrypt(object, key).toString();
+
+        return encryptedData;
+    },
+
+    decryptObject(data: string): any {
+        const decryptedBytes = CryptoJS.AES.decrypt(data, key);
+        const decryptedData = decryptedBytes.toString(CryptoJS.enc.Utf8);
+        
+        return JSON.parse(decryptedData);
+    },
+
     encryptIdentifier(id: number): string {
         const idString = id.toString();
         const encryptedId = CryptoJS.AES.encrypt(idString, key).toString();
@@ -39,7 +53,7 @@ export const GenericFunctions = {
 
     decryptIdentifier(id: string): number {
         const decryptedId = CryptoJS.AES.decrypt(id, key).toString(CryptoJS.enc.Utf8);
-
+        
         return parseInt(decryptedId);
     },
 

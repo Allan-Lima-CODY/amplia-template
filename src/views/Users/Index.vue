@@ -100,7 +100,7 @@ export default defineComponent({
 
     <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
 
-    <div class="flex justify-end mt-6">
+    <div v-if="UserService.getUserPermissions().includeUsers" class="flex justify-end mt-6">
       <ButtonDefault label="Cadastrar Usuário" class="flex bg-primary text-white rounded-lg" route="/users/register">
         <div class="mr-2">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -167,7 +167,7 @@ export default defineComponent({
           </template>
         </Column>
 
-        <Column header="Editar" :rowEditor="true" style="width: 5%; min-width: 8rem"></Column>
+        <Column v-if="UserService.getUserPermissions().editUsers" header="Editar" :rowEditor="true" style="width: 5%; min-width: 8rem"></Column>
       </DataTable>
     </DataTableMain>
   </DefaultLayout>

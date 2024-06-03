@@ -2,12 +2,14 @@
 import { useSidebarStore } from '@/stores/sidebar'
 import DarkModeSwitcher from './DarkModeSwitcher.vue'
 import { useRouter } from 'vue-router'
+import { UserService } from '@/services/UsersService';
 
 const { isSidebarOpen, toggleSidebar } = useSidebarStore()
 const router = useRouter()
 
 function logout() {
     localStorage.removeItem('loggedInUser');
+    localStorage.removeItem('dataUser');
     localStorage.setItem('logoutEvent', JSON.stringify({ time: new Date().getTime() }));
     router.push('/');
 }
@@ -61,7 +63,7 @@ function logout() {
             </svg>
           </span>
           <span class="lg:text-right sm:text-left">
-            <span class="block text-sm font-medium text-black dark:text-white">Teste</span>
+            <span class="block text-sm font-medium text-black dark:text-white">{{ UserService.getUserPermissions().name }}</span>
           </span>
         </div>
 

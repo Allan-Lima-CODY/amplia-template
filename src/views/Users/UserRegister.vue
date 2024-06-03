@@ -151,9 +151,9 @@ export default defineComponent({
             this.users.includeLicenses = isChecked;
             this.users.editLicenses = isChecked;
             this.users.deleteLicenses = isChecked;
-            this.users.includeFunctionalities = isChecked;
-            this.users.editFunctionalities = isChecked;
-            this.users.deleteFunctionalities = isChecked;
+            this.users.includeFeatures = isChecked;
+            this.users.editFeatures = isChecked;
+            this.users.deleteFeatures = isChecked;
             this.users.includePlans = isChecked;
             this.users.editPlans = isChecked;
             this.users.deletePlans = isChecked;
@@ -177,9 +177,9 @@ export default defineComponent({
                     this.users.includeLicenses &&
                     this.users.editLicenses &&
                     this.users.deleteLicenses &&
-                    this.users.includeFunctionalities &&
-                    this.users.editFunctionalities &&
-                    this.users.deleteFunctionalities &&
+                    this.users.includeFeatures &&
+                    this.users.editFeatures &&
+                    this.users.deleteFeatures &&
                     this.users.includePlans &&
                     this.users.editPlans &&
                     this.users.deletePlans &&
@@ -313,12 +313,12 @@ export default defineComponent({
                         <CheckboxOne :readonly="false" v-model="users.deleteLicenses" id="deleteLicenses" label=""
                             class="ml-4" />
 
-                        <LabelFields label="Funcionalidades" for-html="functionalities"></LabelFields>
-                        <CheckboxOne :readonly="false" v-model="users.includeFunctionalities"
-                            id="includeFunctionalities" label="" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="users.editFunctionalities" id="editFunctionalities"
+                        <LabelFields label="Funcionalidades" for-html="Features"></LabelFields>
+                        <CheckboxOne :readonly="false" v-model="users.includeFeatures"
+                            id="includeFeatures" label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.editFeatures" id="editFeatures"
                             label="" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="users.deleteFunctionalities" id="deleteFunctionalities"
+                        <CheckboxOne :readonly="false" v-model="users.deleteFeatures" id="deleteFeatures"
                             label="" class="ml-4" />
 
                         <LabelFields label="Planos" for-html="plans"></LabelFields>
