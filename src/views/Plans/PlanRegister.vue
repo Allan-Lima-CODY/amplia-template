@@ -28,6 +28,7 @@ import { ModalService } from '@/services/ModalService';
 import type { Feature } from '@/models/Feature';
 import { FeatureService } from '@/services/FeaturesService';
 import LabelInformation from '@/components/Forms/Labels/LabelInformation.vue';
+import InputPrice from '@/components/Forms/InputFields/InputPrice.vue';
 
 export default defineComponent({
     components: {
@@ -39,7 +40,7 @@ export default defineComponent({
         ScreenForms,
         ModalBase,
         SelectGroup,
-        InputNumber,
+        InputPrice
     },
     data() {
         const plansField: PlansFields = reactive(PlansService.defaultFields());
@@ -227,9 +228,7 @@ export default defineComponent({
 
                         <div>
                             <LabelFields label="Preço Sugerido" for-html="price"></LabelFields>
-                            <InputNumber v-model="plans.price" inputId="minmaxfraction" :minFractionDigits="2"
-                                :maxFractionDigits="2" placeholder="Digite um valor" class="w-full"
-                                inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+                            <InputPrice v-model="plans.price" placeholder="Digite um valor" class="w-full" />
                         </div>
 
                         <div>
