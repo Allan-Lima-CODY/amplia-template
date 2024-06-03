@@ -24,8 +24,8 @@ export const ApplicationService =
 
             product: '',
             plan: '',
-            planPrice: null,
-            additionalPrice: null,
+            planPrice: undefined,
+            additionalPrice: undefined,
 
             status: true,
 

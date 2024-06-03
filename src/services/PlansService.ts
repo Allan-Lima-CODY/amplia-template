@@ -48,7 +48,7 @@ export const PlansService =
         return {
             name: '',
 
-            price: null,
+            price: undefined,
             product: ''
         }
     }

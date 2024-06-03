@@ -8,7 +8,7 @@ export interface Plans {
 
 export interface PlansFields {
     name: string,
-    price: number | null,
+    price: number | undefined,
     product: any
 }
 
