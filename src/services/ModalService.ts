@@ -1,63 +1,62 @@
 import type { ModalInfo } from '@/models/ModalInfo';
-export const ModalService = 
+export const ModalService =
 {
-    getFeatureModal(modalType?: string) : ModalInfo
-    {
-        switch(modalType){
+    getFeatureModal(modalType?: string): ModalInfo {
+        switch (modalType) {
             case 'registered':
                 return {
-                title: 'Sucesso!',
-                message : 'Funcionalidade registrada com sucesso!',
-                borderColor : '#34D399',
-                okTitle : 'Ok',
-                noTitle : undefined
+                    title: 'Sucesso!',
+                    message: 'Funcionalidade registrada com sucesso!',
+                    borderColor: '#34D399',
+                    okTitle: 'Ok',
+                    noTitle: undefined
                 };
             case 'warning':
-            return {  
-                title : 'Alerta',
-                message : 'Deseja apagar essa funcionalidade?',
-                borderColor : '#FFC800',
-                okTitle : 'Sim',
-                noTitle : 'Não',
-            }
+                return {
+                    title: 'Alerta',
+                    message: 'Deseja apagar essa funcionalidade?',
+                    borderColor: '#FFC800',
+                    okTitle: 'Sim',
+                    noTitle: 'Não',
+                }
             case 'linkedPlanError':
-            return {
-                title : 'Erro',
-                message : 'É necessário desvincular essa funcionalidade de um plano antes de apagá-la!',
-                borderColor : '#F87171',
-                okTitle : 'Ok',
-                noTitle : undefined,
-            }
+                return {
+                    title: 'Erro',
+                    message: 'É necessário desvincular essa funcionalidade de um plano antes de apagá-la!',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined,
+                }
             case 'emptyNameError':
-            return {
-                title : 'Erro',
-                message : 'Preencha o nome da funcionalidade!',
-                borderColor : '#F87171',
-                okTitle : 'Ok',
-                noTitle : undefined,
-            }  
+                return {
+                    title: 'Erro',
+                    message: 'Preencha o nome da funcionalidade!',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined,
+                }
             case 'success':
                 return {
-                    title:'Sucesso!',
-                    message : 'Funcionalidade apagada com sucesso!',
-                    borderColor : '#34D399',
-                    okTitle : 'Ok',
-                    noTitle : undefined
+                    title: 'Sucesso!',
+                    message: 'Funcionalidade apagada com sucesso!',
+                    borderColor: '#34D399',
+                    okTitle: 'Ok',
+                    noTitle: undefined
                 }
             default:
-              return {
-                title: '',
-                message : '',
-                borderColor : '#F87171',
-                okTitle : '',
-                noTitle : undefined
-              }
-          }
+                return {
+                    title: '',
+                    message: '',
+                    borderColor: '#F87171',
+                    okTitle: '',
+                    noTitle: undefined
+                }
+        }
     },
-    getRegisterModal(modalType?: string) : ModalInfo{
-        switch(modalType){
+    getRegisterModal(modalType?: string): ModalInfo {
+        switch (modalType) {
             case 'success':
-                return{
+                return {
                     title: 'Sucesso!',
                     message: 'Cadastro realizado com sucesso!',
                     borderColor: '#34D399',
@@ -65,7 +64,7 @@ export const ModalService =
                     noTitle: undefined
                 };
             case 'updated':
-                return{
+                return {
                     title: 'Sucesso!',
                     message: 'Cadastro atualizado com sucesso!',
                     borderColor: '#34D399',
@@ -73,7 +72,7 @@ export const ModalService =
                     noTitle: undefined
                 };
             case 'error':
-                return{
+                return {
                     title: 'Erro',
                     message: 'É necessário que os campos estejam preenchidos!',
                     borderColor: '#F87171',
@@ -81,7 +80,7 @@ export const ModalService =
                     noTitle: undefined
                 };
             default:
-                return{
+                return {
                     title: '',
                     message: '',
                     borderColor: '#F87171',
@@ -90,54 +89,54 @@ export const ModalService =
                 }
         }
     },
-    getPlansModal(modalType?: string) : ModalInfo{
-        switch(modalType){
+    getPlansModal(modalType?: string): ModalInfo {
+        switch (modalType) {
             case 'registered':
                 return {
-                title: 'Sucesso!',
-                message : 'Plano cadastrado com sucesso!',
-                borderColor : '#34D399',
-                okTitle : 'Ok',
-                noTitle : undefined
+                    title: 'Sucesso!',
+                    message: 'Plano cadastrado com sucesso!',
+                    borderColor: '#34D399',
+                    okTitle: 'Ok',
+                    noTitle: undefined
                 };
             case 'warning':
-            return {  
-                title : 'Alerta',
-                message : 'Deseja apagar esse plano?',
-                borderColor : '#FFC800',
-                okTitle : 'Sim',
-                noTitle : 'Não',
-            }
+                return {
+                    title: 'Alerta',
+                    message: 'Deseja apagar esse plano?',
+                    borderColor: '#FFC800',
+                    okTitle: 'Sim',
+                    noTitle: 'Não',
+                }
             case 'success':
                 return {
-                    title:'Sucesso!',
-                    message : 'Plano apagado com sucesso!',
-                    borderColor : '#34D399',
-                    okTitle : 'Ok',
-                    noTitle : undefined
+                    title: 'Sucesso!',
+                    message: 'Plano apagado com sucesso!',
+                    borderColor: '#34D399',
+                    okTitle: 'Ok',
+                    noTitle: undefined
                 }
             default:
-              return {
-                title: '',
-                message : '',
-                borderColor : '#F87171',
-                okTitle : '',
-                noTitle : undefined
-              }
+                return {
+                    title: '',
+                    message: '',
+                    borderColor: '#F87171',
+                    okTitle: '',
+                    noTitle: undefined
+                }
         }
     },
-    getLoginModal(modalType?: string) : ModalInfo{
-        switch(modalType){
+    getLoginModal(modalType?: string): ModalInfo {
+        switch (modalType) {
             case 'loginError':
-                return{
+                return {
                     title: 'Erro',
                     message: 'Email ou senha invalidos!',
                     borderColor: '#F87171',
                     okTitle: 'Ok',
                     noTitle: undefined
                 };
-                case 'EmailNotFound':
-                return{
+            case 'EmailNotFound':
+                return {
                     title: 'Erro',
                     message: 'Email não encontrado!',
                     borderColor: '#F87171',
@@ -145,7 +144,7 @@ export const ModalService =
                     noTitle: undefined
                 };
             default:
-                return{
+                return {
                     title: '',
                     message: '',
                     borderColor: '#F87171',
@@ -154,10 +153,10 @@ export const ModalService =
                 }
         }
     },
-    getPassResetModal(modalType?: string) : ModalInfo{
-        switch(modalType){
+    getPassResetModal(modalType?: string): ModalInfo {
+        switch (modalType) {
             case 'success':
-                return{
+                return {
                     title: 'Sucesso!',
                     message: 'Senha alterada com sucesso!',
                     borderColor: '#34D399',
@@ -165,15 +164,15 @@ export const ModalService =
                     noTitle: undefined
                 };
             case 'mismatchPass':
-                return{
+                return {
                     title: 'Erro',
                     message: 'As senhas não correspondem!',
                     borderColor: '#F87171',
                     okTitle: 'Ok',
                     noTitle: undefined
                 };
-                case 'emptyfieldsError':
-                return{
+            case 'emptyfieldsError':
+                return {
                     title: 'Erro',
                     message: 'É necessário preencher os campos!',
                     borderColor: '#F87171',
@@ -181,7 +180,7 @@ export const ModalService =
                     noTitle: undefined
                 };
             default:
-                return{
+                return {
                     title: '',
                     message: '',
                     borderColor: '#F87171',
@@ -190,50 +189,50 @@ export const ModalService =
                 }
         }
     },
-    getAppsModal(modalType?: string) : ModalInfo{
-        switch(modalType){
+    getAppsModal(modalType?: string): ModalInfo {
+        switch (modalType) {
             case 'success':
-                return{
+                return {
                     title: 'Sucesso!',
                     message: 'Aplicação excluída com sucesso!',
                     borderColor: '#34D399',
                     okTitle: 'Ok',
                     noTitle: undefined
                 };
-                case 'registered':
-                return{
+            case 'registered':
+                return {
                     title: 'Sucesso!',
                     message: 'Aplicação registrada com sucesso!',
                     borderColor: '#34D399',
                     okTitle: 'Ok',
                     noTitle: undefined
                 };
-                case 'updated':
-                return{
+            case 'updated':
+                return {
                     title: 'Sucesso!',
                     message: 'Aplicação atualizada com sucesso!',
                     borderColor: '#34D399',
                     okTitle: 'Ok',
                     noTitle: undefined
                 };
-                case 'fieldsError':
-                return{
+            case 'fieldsError':
+                return {
                     title: 'Erro',
                     message: 'É necessário preencher todos os campos obrigatórios!',
                     borderColor: '#F87171',
                     okTitle: 'Ok',
                     noTitle: undefined
                 };
-                case 'activeError':
-                return{
+            case 'activeError':
+                return {
                     title: 'Erro',
                     message: 'Não é possível excluir uma aplicação ativa!',
                     borderColor: '#F87171',
                     okTitle: 'Ok',
                     noTitle: undefined
                 };
-                case 'warning':
-                return{
+            case 'warning':
+                return {
                     title: 'Alerta',
                     message: 'Deseja excluir essa aplicação?',
                     borderColor: '#FFC800',
@@ -241,7 +240,27 @@ export const ModalService =
                     noTitle: 'Não'
                 };
             default:
-                return{
+                return {
+                    title: '',
+                    message: '',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                }
+        }
+    },
+    getCepModal(modalType?: string): ModalInfo {
+        switch (modalType) {
+            case 'error':
+                return {
+                    title: 'Erro',
+                    message: 'CEP não encontrado!',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
+            default:
+                return {
                     title: '',
                     message: '',
                     borderColor: '#F87171',

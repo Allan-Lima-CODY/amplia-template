@@ -2,6 +2,7 @@
 import { defineComponent, reactive, ref, toRefs } from 'vue';
 import { required, email } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
+import axios from 'axios';
 
 import type { Customer, CustomersFields } from '@/models/Customer';
 import type { Option } from '@/models/Option';
@@ -19,6 +20,7 @@ import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import SelectGroup from '@/components/Forms/SelectGroup.vue';
 import ModalBase from '@/components/Alerts/ModalBase.vue';
+import ButtonDefault from '@/components/Buttons/ButtonDefault.vue';
 
 import useFormDataService from '@/services/FormDataService';
 import { GenericFunctions } from '@/services/GenericFunctions';
@@ -36,14 +38,15 @@ export default defineComponent({
         InputForms,
         LabelInformation,
         ButtonPresentation,
-        CheckboxOne, 
+        CheckboxOne,
         InputMask,
         InputNumber,
         ModalBase,
-        SelectGroup
+        SelectGroup,
+        ButtonDefault
     },
     data() {
-        const modalInfo : ModalInfo = reactive(ModalService.getRegisterModal());
+        const modalInfo: ModalInfo = reactive(ModalService.getRegisterModal());
         return {
             formData: useFormDataStore().formData as CustomersFields,
             emailValid: ref(true),
@@ -61,10 +64,10 @@ export default defineComponent({
     },
     methods: {
         handleSubmit() {
-            try{
+            try {
                 const customerId: any = this.$route.params.id;
                 this.v$.$touch()
-                if (!this.v$.$invalid){
+                if (!this.v$.$invalid) {
                     useFormDataService().handleSubmit();
                     if (customerId && typeof customerId === 'string' && customerId.trim() !== '')
                         this.modalInfo = ModalService.getRegisterModal('updated');
@@ -72,12 +75,12 @@ export default defineComponent({
                         this.modalInfo = ModalService.getRegisterModal('success');
                     this.toggleModal();
                 }
-                else{
+                else {
                     this.modalInfo = ModalService.getRegisterModal('error');
                     this.toggleModal();
                 }
             }
-            catch{
+            catch {
                 console.error("Ocorreu um erro ao salvar os dados!")
             }
         },
@@ -87,17 +90,43 @@ export default defineComponent({
         toggleModal() {
             this.modalActive = !this.modalActive;
         },
-        handleOkClickModal(){
+        handleOkClickModal() {
             this.toggleModal()
-            if(this.modalInfo.title === 'Sucesso!')
-            this.$router.push("/customers");
+            if (this.modalInfo.title === 'Sucesso!')
+                this.$router.push("/customers");
+        },
+        async searchAddressByCep() {
+            const cep = this.formData.address.cep;
+            if (cep) {
+                try {
+                    const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+                    const data = response.data;
+                    if (!data.erro) {
+                        const stateOption = this.states.find(option => option.value === data.uf);
+                        console.log(data.uf)
+                        if (stateOption) {
+                            this.formData.address.state = stateOption.value;
+                        }
+                        this.formData.address.city = data.localidade;
+                        this.formData.address.district = data.bairro;
+                        this.formData.address.address = data.logradouro;
+                        this.formData.address.additionalInfo = data.complemento;
+                    } else {
+                        this.modalInfo = ModalService.getCepModal('error');
+                        this.toggleModal();
+                    }
+                } catch (error) {
+                    this.modalInfo = ModalService.getCepModal('error');
+                    this.toggleModal();
+                }
+            }
         }
     },
     setup() {
         const v$ = useVuelidate()
         return { v$ }
     },
-    validations(){
+    validations() {
         return {
             formData: {
                 name: { required },
@@ -129,23 +158,22 @@ export default defineComponent({
             this.states = data.map(({ id, name }) => ({ key: id, value: name })) as Option[]
         });
     },
-    async mounted(){
+    async mounted() {
         const customerId: any = this.$route.params.id;
         if (customerId && typeof customerId === 'string' && customerId.trim() !== '') {
             this.editing = true;
             const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(customerId));
-            try
-            {
-                if(this.formData.address.number === null){
+            try {
+                if (this.formData.address.number === null) {
                     const customer = (await CustomersService.getAllCustomers()).find(c => c.id === decryptedId);
                     this.formData = CustomersService.toFields(customer as Customer);
                 }
             }
-            catch{
+            catch {
                 console.error("Ocorreu um erro ao buscar o cliente")
             }
         }
-        else{
+        else {
             useFormDataStore().resetFormData()
         }
     },
@@ -171,26 +199,32 @@ export default defineComponent({
                 <div class="flex flex-col w-full gap-5.5 p-6.5">
                     <div>
                         <LabelFields label="Nome da empresa" for-html="name" />
-                        <InputForms id="name" type="text" placeholder="Digite o nome da empresa"
-                            v-model="formData.name" @blur="v$.formData.name.$touch()" :readonly="editing"/>
+                        <InputForms id="name" type="text" placeholder="Digite o nome da empresa" v-model="formData.name"
+                            @blur="v$.formData.name.$touch()" :readonly="editing" />
                         <LabelInformation v-if="v$.formData.name.$error" label="Campo obrigatório!" color="text-red" />
                     </div>
                     <div class="flex gap-5">
                         <div class="w-full">
                             <LabelFields label="CNPJ" for-html="cnpj"></LabelFields>
-                            <InputMask id="cnpj" v-model="formData.cnpj" mask="99.999.999/9999-99" placeholder="00.000.000/0000-00"
+                            <InputMask id="cnpj" v-model="formData.cnpj" mask="99.999.999/9999-99"
+                                placeholder="00.000.000/0000-00"
                                 class="w-full rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
-                            <LabelInformation v-if="v$.formData.cnpj.$error" label="Campo obrigatório!" color="text-red" />
+                            <LabelInformation v-if="v$.formData.cnpj.$error" label="Campo obrigatório!"
+                                color="text-red" />
                         </div>
                         <div class="w-full">
                             <LabelFields label="Inscrição Estadual" for-html="stateRegistration" />
-                            <InputNumber v-model="formData.stateRegistration" inputId="stateRegistration" :useGrouping="false"
-                                placeholder="Digite o número da incrição estadual" class="w-full" inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" @blur="v$.formData.stateRegistration.$touch()" />
-                            <LabelInformation v-if="v$.formData.stateRegistration.$error" label="Campo obrigatório!" color="text-red" />
+                            <InputNumber v-model="formData.stateRegistration" inputId="stateRegistration"
+                                :useGrouping="false" placeholder="Digite o número da incrição estadual" class="w-full"
+                                inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                @blur="v$.formData.stateRegistration.$touch()" />
+                            <LabelInformation v-if="v$.formData.stateRegistration.$error" label="Campo obrigatório!"
+                                color="text-red" />
                         </div>
                     </div>
                     <div class="flex gap-2">
-                        <CheckboxOne :readonly="false" v-model="formData.status" id="customerStatus" label="Ativo" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="formData.status" id="customerStatus" label="Ativo"
+                            class="ml-4" />
                     </div>
                 </div>
             </DefaultCard>
@@ -199,29 +233,35 @@ export default defineComponent({
                     <div class="flex gap-5">
                         <div class="w-full">
                             <LabelFields label="Pessoa de contato" for-html="contactPersonName" />
-                            <InputForms id="contactPersonName" type="text" placeholder="Digite o nome da pessoa de contato"
-                                v-model="formData.contact" @blur="v$.formData.contact.$touch()" />
-                            <LabelInformation v-if="v$.formData.contact.$error" label="Campo obrigatório!" color="text-red" />
+                            <InputForms id="contactPersonName" type="text"
+                                placeholder="Digite o nome da pessoa de contato" v-model="formData.contact"
+                                @blur="v$.formData.contact.$touch()" />
+                            <LabelInformation v-if="v$.formData.contact.$error" label="Campo obrigatório!"
+                                color="text-red" />
                         </div>
                         <div class="w-full">
                             <LabelFields label="Telefone" for-html="telephone" />
-                            <InputMask id="phone" v-model="formData.telefone" mask="(99) 99999-9999" placeholder="(00) 00000-0000"
-                                class="w-full rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" 
+                            <InputMask id="phone" v-model="formData.telefone" mask="(99) 99999-9999"
+                                placeholder="(00) 00000-0000"
+                                class="w-full rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                 @blur="v$.formData.telefone.$touch()" />
-                            <LabelInformation v-if="v$.formData.telefone.$error" label="Campo obrigatório!" color="text-red" />
+                            <LabelInformation v-if="v$.formData.telefone.$error" label="Campo obrigatório!"
+                                color="text-red" />
                         </div>
                     </div>
                     <div>
                         <LabelFields label="E-mail" for-html="email"></LabelFields>
                         <InputForms id="email" type="text" placeholder="Digite seu email" v-model="formData.email"
                             @blur="v$.formData.email.$touch()" />
-                        <LabelInformation v-if="v$.formData.email.$error" label="Email inválido ou campo obrigatório!" color="text-red" />
+                        <LabelInformation v-if="v$.formData.email.$error" label="Email inválido ou campo obrigatório!"
+                            color="text-red" />
                     </div>
                     <div>
                         <LabelFields label="E-mail de cobrança" for-html="billingEmail"></LabelFields>
                         <InputForms id="billingEmail" type="text" placeholder="Digite um email para cobrança"
                             v-model="formData.bilingEmail" @blur="v$.formData.bilingEmail.$touch()" />
-                        <LabelInformation v-if="v$.formData.bilingEmail.$error" label="Email inválido ou campo obrigatório!" color="text-red" />
+                        <LabelInformation v-if="v$.formData.bilingEmail.$error"
+                            label="Email inválido ou campo obrigatório!" color="text-red" />
                     </div>
                 </div>
             </DefaultCard>
@@ -232,45 +272,73 @@ export default defineComponent({
                     <div class="flex gap-5">
                         <div class="w-full">
                             <LabelFields label="CEP" for-html="cep" />
-                            <InputMask id="cep" v-model="formData.address.cep" mask="99999-999" placeholder="00000-000"
-                                class="w-full rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" 
-                                @blur="v$.formData.address.cep.$touch()" />
-                            <LabelInformation v-if="v$.formData.address.cep.$error" label="Campo obrigatório!" color="text-red" />
+                            <div class="flex gap-5">
+                                <InputMask id="cep" v-model="formData.address.cep" mask="99999-999"
+                                    placeholder="00000-000"
+                                    class="w-full rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                    @blur="v$.formData.address.cep.$touch()" />
+                                <ButtonDefault label="" class="flex bg-primary text-white rounded-lg" @click="searchAddressByCep">
+                                    <div class="pt-0.5">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                        </svg>
+
+                                    </div>
+                                </ButtonDefault>
+                                <LabelInformation v-if="v$.formData.address.cep.$error" label="Campo obrigatório!"
+                                    color="text-red" />
+                            </div>
                         </div>
                         <div class="w-full">
                             <LabelFields label="Estado" for-html="plan"></LabelFields>
-                            <SelectGroup :options="states" v-model="formData.address.state" unselect-label="Selecione o estado" />
-                            <LabelInformation v-if="v$.formData.address.state.$error" label="Campo obrigatório!" color="text-red" />
+                            <SelectGroup :options="states" v-model="formData.address.state"
+                                unselect-label="Selecione o estado" />
+                            <LabelInformation v-if="v$.formData.address.state.$error" label="Campo obrigatório!"
+                                color="text-red" />
                         </div>
                     </div>
                     <div class="flex gap-5">
                         <div class="w-full">
                             <LabelFields label="Cidade" for-html="city"></LabelFields>
-                            <InputForms id="city" type="text" placeholder="Insira o nome da cidade" v-model="formData.address.city" @blur="v$.formData.address.city.$touch()" />
-                            <LabelInformation v-if="v$.formData.address.city.$error" label="Campo obrigatório!" color="text-red" />
+                            <InputForms id="city" type="text" placeholder="Insira o nome da cidade"
+                                v-model="formData.address.city" @blur="v$.formData.address.city.$touch()" />
+                            <LabelInformation v-if="v$.formData.address.city.$error" label="Campo obrigatório!"
+                                color="text-red" />
                         </div>
                         <div class="w-full">
                             <LabelFields label="Bairro" for-html="district"></LabelFields>
-                            <InputForms id="district" type="text" placeholder="Insira o nome do Bairro" v-model="formData.address.district" @blur="v$.formData.address.district.$touch()" />
-                            <LabelInformation v-if="v$.formData.address.district.$error" label="Campo obrigatório!" color="text-red" />
+                            <InputForms id="district" type="text" placeholder="Insira o nome do Bairro"
+                                v-model="formData.address.district" @blur="v$.formData.address.district.$touch()" />
+                            <LabelInformation v-if="v$.formData.address.district.$error" label="Campo obrigatório!"
+                                color="text-red" />
                         </div>
                     </div>
                     <div>
                         <LabelFields label="Endereço" for-html="street"></LabelFields>
-                        <InputForms id="street" type="text" placeholder="Insira o nome da rua" v-model="formData.address.address" @blur="v$.formData.address.address.$touch()" />
-                        <LabelInformation v-if="v$.formData.address.address.$error" label="Campo obrigatório!" color="text-red" />
+                        <InputForms id="street" type="text" placeholder="Insira o nome da rua"
+                            v-model="formData.address.address" @blur="v$.formData.address.address.$touch()" />
+                        <LabelInformation v-if="v$.formData.address.address.$error" label="Campo obrigatório!"
+                            color="text-red" />
                     </div>
                     <div class="flex gap-5">
                         <div class="w-full">
                             <LabelFields label="Complemento" for-html="addInfo"></LabelFields>
-                            <InputForms id="addInfo" type="text" placeholder="Insira o complemento" v-model="formData.address.additionalInfo" @blur="v$.formData.address.additionalInfo.$touch()" />
-                            <LabelInformation v-if="v$.formData.address.additionalInfo.$error" label="Campo obrigatório!" color="text-red" />
+                            <InputForms id="addInfo" type="text" placeholder="Insira o complemento"
+                                v-model="formData.address.additionalInfo"
+                                @blur="v$.formData.address.additionalInfo.$touch()" />
+                            <LabelInformation v-if="v$.formData.address.additionalInfo.$error"
+                                label="Campo obrigatório!" color="text-red" />
                         </div>
                         <div class="w-full">
                             <LabelFields label="Número" for-html="number"></LabelFields>
-                            <InputNumber v-model="formData.address.number" inputId="number" :useGrouping="false" placeholder="Digite o número do endereço"
-                                class="w-full" inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" @blur="v$.formData.address.number.$touch()" />
-                            <LabelInformation v-if="v$.formData.address.number.$error" label="Campo obrigatório!" color="text-red" />
+                            <InputNumber v-model="formData.address.number" inputId="number" :useGrouping="false"
+                                placeholder="Digite o número do endereço" class="w-full"
+                                inputClass="rounded-lg border-[1.5px] text-black border-stroke bg-transparent p-3.5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                @blur="v$.formData.address.number.$touch()" />
+                            <LabelInformation v-if="v$.formData.address.number.$error" label="Campo obrigatório!"
+                                color="text-red" />
                         </div>
                     </div>
                 </div>
@@ -281,5 +349,5 @@ export default defineComponent({
         </div>
     </ScreenForms>
     <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title"
-            :border-color="modalInfo.borderColor" @ok-click="handleOkClickModal" />
+        :border-color="modalInfo.borderColor" @ok-click="handleOkClickModal" />
 </template>

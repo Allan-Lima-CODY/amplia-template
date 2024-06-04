@@ -21,6 +21,7 @@ export default {
 
 <template>
   <button
+  type="button"
     :to="{ path: route }"
     class="p-4 text-center font-medium text-sm transition hover:bg-opacity-90"
     :class="customClasses"
