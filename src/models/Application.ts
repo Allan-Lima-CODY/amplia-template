@@ -29,8 +29,8 @@ export interface ApplicationFields {
 
     status: boolean,
 
-    contractedLicenses: number,
-    pricePerLicense: number
+    contractedLicenses: number | undefined,
+    pricePerLicense: number | undefined,
 
     effectiveDate: Date | null,
     nextBillingDate: Date | null,

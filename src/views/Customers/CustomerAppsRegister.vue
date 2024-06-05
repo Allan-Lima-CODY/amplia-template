@@ -84,7 +84,6 @@ export default defineComponent({
             const additionalPrice = this.application.additionalPrice || 0;
             const pricePerLicense = this.application.pricePerLicense || 0;
             const contractedLicenses = this.application.contractedLicenses || 0;
-
             return planPrice + additionalPrice + (pricePerLicense * contractedLicenses);
         }
     },
@@ -230,7 +229,7 @@ export default defineComponent({
                             <LabelFields label="Valor do plano" for-html="planPrice" />
                             <InputPrice id="planPrice" type="text" placeholder="Insira o valor do plano"
                                 v-model="application.planPrice" @blur="v$.application.planPrice.$touch()" />
-                            <LabelInformation v-if="v$.application.product.$error" label="Campo obrigatório!" color="text-red" />
+                            <LabelInformation v-if="v$.application.planPrice.$error" label="Campo obrigatório!" color="text-red" />
                         </div>
                         <div v-if="getUserPermissions().confidentialInformation">
                             <LabelFields label="Valor adicional" for-html="additionalPrice" />

@@ -29,8 +29,8 @@ export const ApplicationService =
 
             status: true,
 
-            contractedLicenses: 0,
-            pricePerLicense: 0,
+            contractedLicenses: undefined,
+            pricePerLicense: undefined,
         
             effectiveDate: null,
             nextBillingDate: null,
