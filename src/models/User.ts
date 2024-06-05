@@ -8,33 +8,31 @@ export interface User {
 
     temporaryPassword: boolean, 
 
-    includeClients: boolean, 
-    editClients: boolean, 
-    deleteClients: boolean, 
+    viewCustomer: boolean,
+    includeCustomer: boolean, 
+    editCustomer: boolean, 
+    deleteCustomer: boolean, 
 
     includeApplication: boolean, 
     editApplication: boolean, 
     deleteApplication: boolean, 
 
-    includeUsers: boolean, 
-    editUsers: boolean, 
-    deleteUsers: boolean, 
+    viewUser: boolean,
+    includeUser: boolean, 
+    editUser: boolean, 
+    deleteUser: boolean, 
 
-    includeLicenses: boolean, 
-    editLicenses: boolean, 
-    deleteLicenses: boolean, 
+    viewFeature: boolean,
+    includeFeature: boolean, 
+    editFeature: boolean, 
+    deleteFeature: boolean, 
 
-    includeFeatures: boolean, 
-    editFeatures: boolean, 
-    deleteFeatures: boolean, 
+    viewPlan: boolean,
+    includePlan: boolean, 
+    editPlan: boolean, 
+    deletePlan: boolean, 
 
-    includePlans: boolean, 
-    editPlans: boolean, 
-    deletePlans: boolean, 
-
-    includeLogs: boolean, 
-    editLogs: boolean, 
-    deleteLogs: boolean, 
+    viewLog: boolean,
 
     confidentialInformation: boolean
 }
@@ -48,33 +46,31 @@ export interface UsersFields {
 
     temporaryPassword: boolean,
 
-    includeClients: boolean,
-    editClients: boolean,
-    deleteClients: boolean,
+    viewCustomer: boolean,
+    includeCustomer: boolean, 
+    editCustomer: boolean, 
+    deleteCustomer: boolean, 
 
     includeApplication: boolean, 
     editApplication: boolean, 
     deleteApplication: boolean, 
 
-    includeUsers: boolean,
-    editUsers: boolean,
-    deleteUsers: boolean,
+    viewUser: boolean,
+    includeUser: boolean, 
+    editUser: boolean, 
+    deleteUser: boolean, 
 
-    includeLicenses: boolean,
-    editLicenses: boolean,
-    deleteLicenses: boolean,
+    viewFeature: boolean,
+    includeFeature: boolean, 
+    editFeature: boolean, 
+    deleteFeature: boolean, 
 
-    includeFeatures: boolean,
-    editFeatures: boolean,
-    deleteFeatures: boolean,
+    viewPlan: boolean,
+    includePlan: boolean, 
+    editPlan: boolean, 
+    deletePlan: boolean, 
 
-    includePlans: boolean,
-    editPlans: boolean,
-    deletePlans: boolean,
-
-    includeLogs: boolean,
-    editLogs: boolean,
-    deleteLogs: boolean,
+    viewLog: boolean,
 
     confidentialInformation: boolean
 }

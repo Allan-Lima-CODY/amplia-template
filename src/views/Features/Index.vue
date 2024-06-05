@@ -143,7 +143,7 @@ export default defineComponent({
     <TitlePageDefault :pageTitle="pageTitle"/>
 
     <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
-    <FeaturesRegister v-if="UserService.getUserPermissions().includeFeatures" @register="saveFeat" :products="products" />
+    <FeaturesRegister v-if="UserService.getUserPermissions().includeFeature" @register="saveFeat" :products="products" />
     <DataTableMain>
       <DataTable v-model:editingRows="editingRows" v-model:filters="filters" :value="features" stripedRows paginator
         :rowsPerPageOptions="[5, 10, 20, 50]"
@@ -204,8 +204,8 @@ export default defineComponent({
               placeholder="dd/mm/yyyy" mask="99/99/9999" inputClass="p-2" />
           </template>
         </Column>
-        <Column v-if="UserService.getUserPermissions().editFeatures" header="Editar" :rowEditor="true" style="width: 5%; min-width: 8rem;" />
-        <Column v-if="UserService.getUserPermissions().deleteFeatures" header="Excluir" style="width: 5%; min-width: 8rem; text-align: left" >
+        <Column v-if="UserService.getUserPermissions().editFeature" header="Editar" :rowEditor="true" style="width: 5%; min-width: 8rem;" />
+        <Column v-if="UserService.getUserPermissions().deleteFeature" header="Excluir" style="width: 5%; min-width: 8rem; text-align: left" >
           <template #body="{ data }">
             <button v-on:click="handleDelete(data.id)">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

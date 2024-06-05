@@ -139,53 +139,61 @@ export default defineComponent({
 
         toggleAllPermissions() {
             const isChecked = this.checkAll;
-            this.users.includeClients = isChecked;
-            this.users.editClients = isChecked;
-            this.users.deleteClients = isChecked;
+            this.users.viewCustomer = isChecked;
+            this.users.includeCustomer = isChecked;
+            this.users.editCustomer = isChecked;
+            this.users.deleteCustomer = isChecked;
+
             this.users.includeApplication = isChecked;
             this.users.editApplication = isChecked;
             this.users.deleteApplication = isChecked;
-            this.users.includeUsers = isChecked;
-            this.users.editUsers = isChecked;
-            this.users.deleteUsers = isChecked;
-            this.users.includeLicenses = isChecked;
-            this.users.editLicenses = isChecked;
-            this.users.deleteLicenses = isChecked;
-            this.users.includeFeatures = isChecked;
-            this.users.editFeatures = isChecked;
-            this.users.deleteFeatures = isChecked;
-            this.users.includePlans = isChecked;
-            this.users.editPlans = isChecked;
-            this.users.deletePlans = isChecked;
-            this.users.includeLogs = isChecked;
-            this.users.editLogs = isChecked;
-            this.users.deleteLogs = isChecked;
+
+            this.users.viewUser = isChecked;
+            this.users.includeUser = isChecked;
+            this.users.editUser = isChecked;
+            this.users.deleteUser = isChecked;
+
+            this.users.viewFeature = isChecked;
+            this.users.includeFeature = isChecked;
+            this.users.editFeature = isChecked;
+            this.users.deleteFeature = isChecked;
+
+            this.users.viewPlan = isChecked;
+            this.users.includePlan = isChecked;
+            this.users.editPlan = isChecked;
+            this.users.deletePlan = isChecked;
+
+            this.users.viewLog = isChecked;
         }
     },
     watch: {
         users: {
             handler() {
-                this.checkAll = this.users.includeClients &&
-                    this.users.editClients &&
-                    this.users.deleteClients &&
+                this.checkAll = this.users.viewCustomer &&
+                    this.users.includeCustomer &&
+                    this.users.editCustomer &&
+                    this.users.deleteCustomer &&
+
                     this.users.includeApplication &&
                     this.users.editApplication &&
                     this.users.deleteApplication &&
-                    this.users.includeUsers &&
-                    this.users.editUsers &&
-                    this.users.deleteUsers &&
-                    this.users.includeLicenses &&
-                    this.users.editLicenses &&
-                    this.users.deleteLicenses &&
-                    this.users.includeFeatures &&
-                    this.users.editFeatures &&
-                    this.users.deleteFeatures &&
-                    this.users.includePlans &&
-                    this.users.editPlans &&
-                    this.users.deletePlans &&
-                    this.users.includeLogs &&
-                    this.users.editLogs &&
-                    this.users.deleteLogs
+
+                    this.users.viewUser &&
+                    this.users.includeUser &&
+                    this.users.editUser &&
+                    this.users.deleteUser &&
+
+                    this.users.viewFeature &&
+                    this.users.includeFeature &&
+                    this.users.editFeature &&
+                    this.users.deleteFeature &&
+
+                    this.users.viewPlan &&
+                    this.users.includePlan &&
+                    this.users.editPlan &&
+                    this.users.deletePlan &&
+
+                    this.users.viewLog
             },
             deep: true
         }
@@ -237,8 +245,8 @@ export default defineComponent({
                         <div>
                             <LabelFields label="Senha" for-html="password"></LabelFields>
                             <div class="relative">
-                                <InputForms id="password" :type="inputType" placeholder="Digite uma senha" :readonly="editing"
-                                    v-model="users.password">
+                                <InputForms id="password" :type="inputType" placeholder="Digite uma senha"
+                                    :readonly="editing" v-model="users.password">
                                     <button @click.prevent="togglePasswordVisibility"
                                         class="absolute right-3 mt-4 cursor-pointer">
                                         <svg v-if="eyeIconVisible" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -275,22 +283,28 @@ export default defineComponent({
 
             <div class="flex flex-col gap-9">
                 <DefaultCard cardTitle="Permissões de Usuário">
-                    <CheckboxOne :readonly="false" v-model="checkAll" id="select-all" label="Selecionar Todas" class="mt-4 ml-4" @change="toggleAllPermissions" />
-                    <div class="gap-5 p-6 grid grid-cols-4 ">
+                    <CheckboxOne :readonly="false" v-model="checkAll" id="select-all" label="Selecionar Todas"
+                        class="mt-4 ml-4" @change="toggleAllPermissions" />
+                    <div class="gap-5 p-6 grid grid-cols-5 ">
                         <label />
+                        <LabelFields label="Visualização" for-html="view" />
                         <LabelFields label="Inclusão" for-html="include" />
                         <LabelFields label="Edição" for-html="edit" />
                         <LabelFields label="Exclusão" for-html="delete" />
 
-                        <LabelFields label="Clientes" for-html="clients" />
-                        <CheckboxOne :readonly="false" v-model="users.includeClients" id="includeClients" label=""
+                        <LabelFields label="Clientes" for-html="customer" />
+                        <CheckboxOne :readonly="false" v-model="users.viewCustomer" id="viewCustomer" label=""
                             class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="users.editClients" id="editClients" label=""
+                        <CheckboxOne :readonly="false" v-model="users.includeCustomer" id="includeCustomer" label=""
                             class="ml-4" />
-                        <CheckboxOne :readonly="true" v-model="users.deleteClients" id="deleteClients" label=""
+                        <CheckboxOne :readonly="false" v-model="users.editCustomer" id="editCustomer" label=""
+                            class="ml-4" />
+                        <CheckboxOne :readonly="true" v-model="users.deleteCustomer" id="deleteCustomer" label=""
                             class="ml-4" />
 
                         <LabelFields label="Aplicações" for-html="applications" />
+                        <CheckboxOne :readonly="true" v-model="users.includeApplication" id="viewApplication" label=""
+                            class="ml-4" />
                         <CheckboxOne :readonly="false" v-model="users.includeApplication" id="includeApplication"
                             label="" class="ml-4" />
                         <CheckboxOne :readonly="false" v-model="users.editApplication" id="editApplication" label=""
@@ -299,40 +313,37 @@ export default defineComponent({
                             class="ml-4" />
 
                         <LabelFields label="Usuários" for-html="users"></LabelFields>
-                        <CheckboxOne :readonly="false" v-model="users.includeUsers" id="includeUsers" label=""
+                        <CheckboxOne :readonly="false" v-model="users.viewUser" id="viewUser" label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.includeUser" id="includeUsers" label=""
                             class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="users.editUsers" id="editUsers" label="" class="ml-4" />
-                        <CheckboxOne :readonly="true" v-model="users.deleteUsers" id="deleteUsers" label=""
-                            class="ml-4" />
-
-                        <LabelFields label="Licenças" for-html="licenses"></LabelFields>
-                        <CheckboxOne :readonly="false" v-model="users.includeLicenses" id="includeLicenses" label=""
-                            class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="users.editLicenses" id="editLicenses" label=""
-                            class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="users.deleteLicenses" id="deleteLicenses" label=""
+                        <CheckboxOne :readonly="false" v-model="users.editUser" id="editUsers" label="" class="ml-4" />
+                        <CheckboxOne :readonly="true" v-model="users.deleteUser" id="deleteUsers" label=""
                             class="ml-4" />
 
                         <LabelFields label="Funcionalidades" for-html="Features"></LabelFields>
-                        <CheckboxOne :readonly="false" v-model="users.includeFeatures"
-                            id="includeFeatures" label="" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="users.editFeatures" id="editFeatures"
-                            label="" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="users.deleteFeatures" id="deleteFeatures"
-                            label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.viewFeature" id="viewFeature" label=""
+                            class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.includeFeature" id="includeFeatures" label=""
+                            class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.editFeature" id="editFeatures" label=""
+                            class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.deleteFeature" id="deleteFeatures" label=""
+                            class="ml-4" />
 
                         <LabelFields label="Planos" for-html="plans"></LabelFields>
-                        <CheckboxOne :readonly="false" v-model="users.includePlans" id="includePlans" label=""
+                        <CheckboxOne :readonly="false" v-model="users.viewPlan" id="viewPlan" label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.includePlan" id="includePlans" label=""
                             class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="users.editPlans" id="editPlans" label="" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="users.deletePlans" id="deletePlans" label=""
+                        <CheckboxOne :readonly="false" v-model="users.editPlan" id="editPlans" label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.deletePlan" id="deletePlans" label=""
                             class="ml-4" />
 
                         <LabelFields label="Logs" for-html="logs"></LabelFields>
-                        <CheckboxOne :readonly="false" v-model="users.includeLogs" id="includeLogs" label=""
+                        <CheckboxOne :readonly="false" v-model="users.viewLog" id="viewPlan" label="" class="ml-4" />
+                        <CheckboxOne :readonly="true" v-model="users.viewLog" id="disableIncludePlan" label=""
                             class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="users.editLogs" id="editLogs" label="" class="ml-4" />
-                        <CheckboxOne :readonly="true" v-model="users.deleteLogs" id="deleteLogs" label=""
+                        <CheckboxOne :readonly="true" v-model="users.viewLog" id="disableEditPlan" label="" class="ml-4" />
+                        <CheckboxOne :readonly="true" v-model="users.viewLog" id="disableDeletePlan" label=""
                             class="ml-4" />
                     </div>
 
