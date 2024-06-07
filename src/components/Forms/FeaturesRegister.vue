@@ -3,7 +3,7 @@
 import type { Option } from '@/models/Option';
 import { defineComponent, ref } from 'vue';
 import DefaultCard from '@/components/Forms/DefaultCard.vue';
-import ButtonApresentation from '@/components/Buttons/ButtonPresentation.vue';
+import ButtonApresentation from '@/components/Buttons/LoginResetButton.vue';
 import DropDownMenu from '@/components/Forms/DropDownMenu.vue';
 import InputForms from '@/components/Forms/InputFields/InputForms.vue';
 import LabelFields from '@/components/Forms/Labels/LabelFields.vue';

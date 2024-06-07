@@ -10,7 +10,6 @@ import CustomerApps from '@/views/Customers/CustomerApps.vue'
 import Users from '@/views/Users/Index.vue'
 import Features from '@/views/Features/Index.vue'
 import Plans from '@/views/Plans/Index.vue'
-import Forms from '@/views/Forms/Index.vue'
 import PasswordReset from '@/views/PasswordReset/Index.vue'
 import UserRegister from '@/views/Users/UserRegister.vue'
 import PlanRegister from '@/views/Plans/PlanRegister.vue'
@@ -133,15 +132,6 @@ const routes = [
       title: 'Logs de Alteração',
       requiresAuth: true,
     }
-  },
-  {
-    path: '/forms',
-    name: 'forms',
-    component: Forms,
-    meta: {
-      title: 'Formulários',
-      requiresAuth: true,
-    },
   }
 ]
 

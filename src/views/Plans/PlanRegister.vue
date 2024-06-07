@@ -14,10 +14,10 @@ import type { PlansFields } from '@/models/Plans'
 import { PlansService } from '@/services/PlansService'
 
 import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
-import CheckboxOne from '@/components/Forms/Checkboxes/CheckboxOne.vue'
+import CheckboxOne from '@/components/Forms/Checkboxes/CheckboxDefault.vue'
 import LabelFields from '@/components/Forms/Labels/LabelFields.vue'
 import InputForms from '@/components/Forms/InputFields/InputForms.vue'
-import ButtonPresentation from '@/components/Buttons/ButtonPresentation.vue';
+import ButtonPresentation from '@/components/Buttons/LoginResetButton.vue';
 import ScreenForms from '@/components/Forms/ScreenForms.vue'
 import ModalBase from '@/components/Alerts/ModalBase.vue'
 import SelectGroup from '@/components/Forms/SelectGroup.vue'

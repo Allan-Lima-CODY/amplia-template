@@ -6,7 +6,7 @@ import type { ModalInfo } from '@/models/ModalInfo'
 import { ModalService } from '@/services/ModalService'
 
 import ModalBase from '@/components/Alerts/ModalBase.vue'
-import ButtonApresentation from '@/components/Buttons/ButtonPresentation.vue';
+import ButtonApresentation from '@/components/Buttons/LoginResetButton.vue';
 import ApresentationLayout from '@/layouts/PresentationLayout.vue';
 import LabelFields from '@/components/Forms/Labels/LabelFields.vue'
 import InputForms from '@/components/Forms/InputFields/InputForms.vue'

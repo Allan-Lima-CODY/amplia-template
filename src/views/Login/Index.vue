@@ -8,7 +8,7 @@ import { UserService } from '@/services/UsersService'
 import type { ModalInfo } from '@/models/ModalInfo'
 
 import PresentationLayout from '@/layouts/PresentationLayout.vue';
-import ButtonApresentation from '@/components/Buttons/ButtonPresentation.vue';
+import ButtonApresentation from '@/components/Buttons/LoginResetButton.vue';
 import LabelInformation from '@/components/Forms/Labels/LabelInformation.vue'
 import ModalBase from '@/components/Alerts/ModalBase.vue'
 import LabelFields from '@/components/Forms/Labels/LabelFields.vue'
