@@ -1,6 +1,50 @@
 import type { ModalInfo } from '@/models/ModalInfo';
 export const ModalService =
 {
+    getUserModal(modalType?: string): ModalInfo {
+        switch (modalType) {
+            case 'registered':
+                return {
+                    title: 'Sucesso!',
+                    message: 'Usuário cadastrado com sucesso!',
+                    borderColor: '#34D399',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                }
+            case 'updated':
+                return {
+                    title: 'Sucesso!',
+                    message: 'Usuário atualizado com sucesso!',
+                    borderColor: '#34D399',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                }
+            case 'fluentValidationError':
+                return {
+                    title: 'Erro',
+                    message: 'Verifique as pêndencias nos campos e corrija os erros!',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined,
+                }
+            case 'emptyOrInvalidFieldsError':
+                return {
+                    title: 'Erro',
+                    message: 'É necessário que os campos estejam preenchidos e sejam válidos!',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined,
+                }
+            default:
+                return {
+                    title: '',
+                    message: '',
+                    borderColor: '#F87171',
+                    okTitle: '',
+                    noTitle: undefined
+                }
+        }
+    },
     getFeatureModal(modalType?: string): ModalInfo {
         switch (modalType) {
             case 'registered':
@@ -74,7 +118,7 @@ export const ModalService =
             case 'error':
                 return {
                     title: 'Erro',
-                    message: 'É necessário que os campos estejam preenchidos!',
+                    message: 'Um erro inesperado ocorreu e não foi possível gravar!',
                     borderColor: '#F87171',
                     okTitle: 'Ok',
                     noTitle: undefined

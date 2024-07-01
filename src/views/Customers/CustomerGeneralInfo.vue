@@ -49,8 +49,6 @@ export default defineComponent({
         const modalInfo: ModalInfo = reactive(ModalService.getRegisterModal());
         return {
             formData: useFormDataStore().formData as CustomersFields,
-            emailValid: ref(true),
-            cnpjValid: ref(true),
 
             editing: false,
 

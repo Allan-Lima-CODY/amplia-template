@@ -13,12 +13,15 @@ export const GenericFunctions = {
     },
 
     formatDate(value: any) {
+        if (!(value instanceof Date)) {
+          value = new Date(value);
+        }
         return value.toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
         });
-    },
+      },
 
     formatDateTime(value: any){
         return value.toLocaleDateString('pt-BR', {
@@ -55,6 +58,10 @@ export const GenericFunctions = {
         const decryptedId = CryptoJS.AES.decrypt(id, key).toString(CryptoJS.enc.Utf8);
         
         return parseInt(decryptedId);
+    },
+
+    decryptIdentifierString(id: string): string {
+        return CryptoJS.AES.decrypt(id, key).toString(CryptoJS.enc.Utf8);
     },
 
     formatMoney(amount: any) {

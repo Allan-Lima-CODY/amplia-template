@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import DefaultCard from '@/components/Forms/DefaultCard.vue'
-import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
+import DefaultLayout from '@/layouts/DefaultLayout.vue';
 </script>
 
 <script lang="ts">
+import DefaultCard from '@/components/Forms/DefaultCard.vue'
+import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 import { ref, defineComponent, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router';
+import { required, email } from '@vuelidate/validators';
+import useVuelidate from '@vuelidate/core';
 
 import { GenericFunctions } from '@/services/GenericFunctions'
 import type { UsersFields } from '@/models/User'
@@ -20,10 +22,10 @@ import InputForms from '@/components/Forms/InputFields/InputForms.vue'
 import ButtonPresentation from '@/components/Buttons/LoginResetButton.vue'
 import ScreenForms from '@/components/Forms/ScreenForms.vue'
 import ModalBase from '@/components/Alerts/ModalBase.vue'
-import VisibilityButton from '@/components/Buttons/VisibilityButton.vue';
+import VisibilityButton from '@/components/Buttons/VisibilityButton.vue'
 
-import type { ModalInfo } from '@/models/ModalInfo';
-import { ModalService } from '@/services/ModalService';
+import type { ModalInfo } from '@/models/ModalInfo'
+import { ModalService } from '@/services/ModalService'
 
 export default defineComponent({
     components: {
@@ -46,10 +48,10 @@ export default defineComponent({
 
             router: useRouter(),
 
+            readonlyView: ref(false),
+
             inputType: ref('password'),
             eyeIconVisible: ref(true),
-
-            emailValid: ref(true),
 
             modalActive: ref(false),
             modalInfo: ref({
@@ -59,35 +61,50 @@ export default defineComponent({
             users: ref({
                 ...toRefs(usersField)
             }),
-
             defaultFields: ref(UserService.defaultFields()),
-
             selectedUser: ref(null as any),
+            userId: ref(''),
+            initialUser: ref({} as UsersFields),
 
             editing: ref(false),
 
-            checkAll: ref(false)
+            checkAll: ref(false),
+
+            v$: ref(useVuelidate()),
+            validationErrors: ref({} as any)
         }
     },
     async mounted() {
         const userId: any = this.$route.params.id;
         if (userId && typeof userId === 'string' && userId.trim() !== '') {
+            this.editing = true;
+
             this.pageTitle = 'Atualizar Dados';
 
-            const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(userId));
+            const decryptedId = GenericFunctions.decryptIdentifierString(decodeURIComponent(userId));
 
-            const users = await UserService.getAllUsers();
+            this.userId = decryptedId
 
-            this.selectedUser = users.filter((u) => u.id === decryptedId)[0];
-            if (this.selectedUser.status === 'Ativo') {
-                this.selectedUser.status = true
-            } else {
-                this.selectedUser.status = false
+            try {
+                const user = await UserService.getById(decryptedId);
+
+                user.status === true ? 'Ativo' : 'False';
+
+                this.selectedUser = user;
+                this.initialUser = { ...user };
+                this.fillFields();
+            } catch (error) {
+                console.error('Failed to fetch user by id', error);
             }
-
-            this.fillFields();
-
-            this.editing = true;
+        }
+    },
+    validations() {
+        return {
+            users: {
+                name: { required },
+                email: { required, email },
+                password: !this.editing ? { required } : {}
+            }
         }
     },
     methods: {
@@ -111,21 +128,42 @@ export default defineComponent({
             this.modalActive = !this.modalActive;
         },
 
-        saveUsers() {
-            this.emailValid = GenericFunctions.validateEmail(this.users.email);
+        async saveUsers() {
+            this.v$.$touch();
+            if (!this.v$.$invalid) {
+                try {
+                    if (this.editing) {
+                        await UserService.updateUser(this.users, this.initialUser, this.userId);
 
-            if (this.emailValid) {
-                if ((this.users.name !== '' && this.users.name !== null) &&
-                    (this.users.password !== '' && this.users.password !== null)) {
-                    this.modalInfo = ModalService.getRegisterModal('success');
-                    this.toggleModal();
-                } else {
-                    this.modalInfo = ModalService.getRegisterModal('error');
+                        this.modalInfo = ModalService.getUserModal('updated');
+                        this.toggleModal();
+                    } else {
+                        await UserService.createUser(this.users);
+
+                        this.modalInfo = ModalService.getUserModal('registered');
+                        this.toggleModal();
+                    }
+                } catch (error: any) {
+                    if (error.response && error.response.data && error.response.data.errors) {
+                        const errors = error.response.data.errors;
+                        this.validationErrors = {};
+
+                        for (const field in errors) {
+                            if (errors.hasOwnProperty(field)) {
+                                this.validationErrors[field] = errors[field][0];
+                            }
+                        }
+                        this.modalInfo = ModalService.getUserModal('fluentValidationError');
+                    } else {
+                        this.modalInfo = ModalService.getRegisterModal('error');
+                    }
                     this.toggleModal();
                 }
+            } else {
+                this.modalInfo = ModalService.getUserModal('emptyOrInvalidFieldsError');
+                this.toggleModal();
             }
         },
-
         fillFields() {
             this.users = this.selectedUser
         },
@@ -152,7 +190,6 @@ export default defineComponent({
             this.users.viewUser = isChecked;
             this.users.includeUser = isChecked;
             this.users.editUser = isChecked;
-            this.users.deleteUser = isChecked;
 
             this.users.viewFeature = isChecked;
             this.users.includeFeature = isChecked;
@@ -182,7 +219,6 @@ export default defineComponent({
                     this.users.viewUser &&
                     this.users.includeUser &&
                     this.users.editUser &&
-                    this.users.deleteUser &&
 
                     this.users.viewFeature &&
                     this.users.includeFeature &&
@@ -234,28 +270,43 @@ export default defineComponent({
 
                         <div>
                             <LabelFields label="Nome" for-html="name" />
-                            <InputForms id="name" type="text" placeholder="Digite seu nome" v-model="users.name" />
+                            <InputForms id="name" type="text" placeholder="Digite seu nome" v-model="users.name"
+                                @blur="v$.users.name.$touch()" />
+                            <LabelInformation v-if="validationErrors.Name" :label="validationErrors.Name"
+                                color="text-red" />
+                            <LabelInformation v-if="!v$.users.name.$pending && v$.users.name.$error"
+                                label="Campo obrigatório!" color="text-red" />
                         </div>
 
                         <div>
                             <LabelFields label="E-mail" for-html="email"></LabelFields>
-                            <InputForms id="email" type="text" placeholder="Digite seu email" v-model="users.email" />
-                            <LabelInformation v-if="!emailValid" label="Email inválido!" color="text-red" />
+                            <InputForms id="email" type="text" placeholder="Digite seu email" v-model="users.email"
+                                @blur="v$.users.email.$touch()" />
+                            <LabelInformation v-if="validationErrors.Email" :label="validationErrors.Email"
+                                color="text-red" />
+                            <LabelInformation v-if="!v$.users.email.$pending && v$.users.email.$error"
+                                label="Email inválido ou campo obrigatório!" color="text-red" />
                         </div>
 
-                        <div>
+                        <div v-if="!editing">
                             <LabelFields label="Senha" for-html="password"></LabelFields>
                             <div class="relative">
                                 <InputForms id="password" :type="inputType" placeholder="Digite uma senha"
-                                    :readonly="editing" v-model="users.password">
-                                    <VisibilityButton :eyeIconVisible="eyeIconVisible" @toggle-visibility="togglePasswordVisibility" />
+                                    :readonly="editing" v-model="users.password" @blur="v$.users.password.$touch()">
+                                    <VisibilityButton :eyeIconVisible="eyeIconVisible"
+                                        @toggle-visibility="togglePasswordVisibility" />
                                 </InputForms>
+                                <LabelInformation v-if="validationErrors.Password" :label="validationErrors.Password"
+                                    color="text-red" />
+                                <LabelInformation
+                                    v-if="!v$.users.password.$pending && v$.users.password.$error && !validationErrors.Password"
+                                    label="Campo obrigatório!" color="text-red" />
                             </div>
+                        </div>
 
-                            <div v-if="!editing" class="ml-2 mt-2">
-                                <CheckboxOne :readonly="false" v-model="users.temporaryPassword" id="temporaryPassword"
-                                    label="Redefinir senha no próximo acesso" />
-                            </div>
+                        <div v-if="!editing" class="ml-2 mt-2">
+                            <CheckboxOne :readonly="false" v-model="users.temporaryPassword" id="temporaryPassword"
+                                label="Redefinir senha no próximo acesso" />
                         </div>
 
                         <div class="ml-2">
@@ -287,7 +338,7 @@ export default defineComponent({
                             class="ml-4" />
 
                         <LabelFields label="Aplicações" for-html="applications" />
-                        <CheckboxOne :readonly="true" v-model="users.includeApplication" id="viewApplication" label=""
+                        <CheckboxOne :readonly="true" v-model="readonlyView" id="disableViewApplication" label=""
                             class="ml-4" />
                         <CheckboxOne :readonly="false" v-model="users.includeApplication" id="includeApplication"
                             label="" class="ml-4" />
@@ -301,7 +352,7 @@ export default defineComponent({
                         <CheckboxOne :readonly="false" v-model="users.includeUser" id="includeUsers" label=""
                             class="ml-4" />
                         <CheckboxOne :readonly="false" v-model="users.editUser" id="editUsers" label="" class="ml-4" />
-                        <CheckboxOne :readonly="true" v-model="users.deleteUser" id="deleteUsers" label=""
+                        <CheckboxOne :readonly="true" v-model="readonlyView" id="disableDeleteUsers" label=""
                             class="ml-4" />
 
                         <LabelFields label="Funcionalidades" for-html="Features"></LabelFields>
@@ -323,11 +374,12 @@ export default defineComponent({
                             class="ml-4" />
 
                         <LabelFields label="Logs" for-html="logs"></LabelFields>
-                        <CheckboxOne :readonly="false" v-model="users.viewLog" id="viewPlan" label="" class="ml-4" />
-                        <CheckboxOne :readonly="true" v-model="users.viewLog" id="disableIncludePlan" label=""
+                        <CheckboxOne :readonly="false" v-model="users.viewLog" id="viewLog" label="" class="ml-4" />
+                        <CheckboxOne :readonly="true" v-model="readonlyView" id="disableIncludePlan" label=""
                             class="ml-4" />
-                        <CheckboxOne :readonly="true" v-model="users.viewLog" id="disableEditPlan" label="" class="ml-4" />
-                        <CheckboxOne :readonly="true" v-model="users.viewLog" id="disableDeletePlan" label=""
+                        <CheckboxOne :readonly="true" v-model="readonlyView" id="disableEditPlan" label=""
+                            class="ml-4" />
+                        <CheckboxOne :readonly="true" v-model="readonlyView" id="disableDeletePlan" label=""
                             class="ml-4" />
                     </div>
 

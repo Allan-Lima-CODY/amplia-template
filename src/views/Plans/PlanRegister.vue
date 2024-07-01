@@ -82,7 +82,9 @@ export default defineComponent({
             features: [] as Feature[],
             selectedFeatures: reactive({} as Record<number, boolean>),
 
-            globalFeatureSelect: ref(false)
+            globalFeatureSelect: ref(false),
+            updatingFromGlobal: false,
+            updatingFromIndividual: false
         }
     },
     async mounted() {
@@ -164,10 +166,22 @@ export default defineComponent({
             }
         },
 
-        // checkAllSelected() {
-        //     const allSelected = this.features.every(feature => this.selectedFeatures[feature.id]);
-        //     this.globalFeatureSelect = allSelected;
-        // }
+        updateGlobalFeatureSelect() {
+            if (this.updatingFromGlobal) return;
+            this.updatingFromIndividual = true;
+            const allSelected = this.features.length > 0 && this.features.every(feature => this.selectedFeatures[feature.id]);
+            this.globalFeatureSelect = allSelected;
+            this.updatingFromIndividual = false;
+        },
+
+        updateIndividualFeatures(newVal: boolean) {
+            if (this.updatingFromIndividual) return;
+            this.updatingFromGlobal = true;
+            this.features.forEach(feature => {
+                this.selectedFeatures[feature.id] = newVal;
+            });
+            this.updatingFromGlobal = false;
+        }
     },
     watch: {
         'plans.product': {
@@ -183,9 +197,15 @@ export default defineComponent({
             immediate: true
         },
         globalFeatureSelect(newVal) {
-            this.features.forEach(feature => {
-                this.selectedFeatures[feature.id] = newVal;
-            });
+            if (!this.updatingFromIndividual) {
+                this.updateIndividualFeatures(newVal);
+            }
+        },
+        selectedFeatures: {
+            handler(newSelectedFeatures) {
+                this.updateGlobalFeatureSelect();
+            },
+            deep: true
         }
     }
 });

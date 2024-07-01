@@ -7,7 +7,7 @@ import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 import { ref, defineComponent } from 'vue'
 
 import { GenericFunctions } from '@/services/GenericFunctions'
-import type { User } from '@/models/User'
+import type { User, ViewUsers } from '@/models/User'
 import { UserService } from '@/services/UsersService'
 import type { Option } from '@/models/Option'
 
@@ -36,7 +36,7 @@ export default defineComponent({
     return {
       pageTitle: ref('Usuários'),
 
-      users: ref([] as User[]),
+      users: ref([] as ViewUsers[]),
       selectedUser: ref(null as any),
 
       loading: ref(true),
@@ -60,14 +60,26 @@ export default defineComponent({
       ] as Option[]),
     }
   },
-  mounted() {
-    UserService.getAllUsers().then((data: User[]) => {
-      this.users = this.getUsers(data);
-    })
+  created() {
+    // UserService.getAllUsers().then((data: User[]) => {
+    //   this.users = this.getUsers(data);
+    // })
 
-    this.loading = false;
+    // this.loading = false;
+
+    this.fetchUsers();
   },
   methods: {
+    async fetchUsers() {
+      try {
+        this.users = await UserService.getAll();
+      } catch (error) {
+        console.error('Failed to fetch users', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
     getSeverity(status: string) {
       switch (status) {
         case 'Inativo':
@@ -116,7 +128,7 @@ export default defineComponent({
         :rowsPerPageOptions="[5, 10, 20, 50]"
         paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
         currentPageReportTemplate="{first} to {last} of {totalRecords}" :rows="10" filterDisplay="row"
-        :loading="loading" :globalFilterFields="['name', 'createdAt', 'status']" editMode="row" dataKey="id"
+        :loading="loading" editMode="row" dataKey="id"
         :pt="{ table: { style: 'min-width: 50rem' } }">
         <template #empty> Nenhum usuário foi encontrado. </template>
         <template #loading> Carregando usuários... </template>
@@ -127,7 +139,7 @@ export default defineComponent({
           </template>
 
           <template #filter="{ filterModel, filterCallback }">
-            <InputText v-model="filterModel.value" type="number" @input="filterCallback()" class="font-normal p-2"
+            <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="font-normal p-2"
               placeholder="ID" />
           </template>
         </Column>
