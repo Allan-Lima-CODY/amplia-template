@@ -144,7 +144,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = `Template | ${to.meta.title} | SmartOne`
+  document.title = `Template | ${to.meta.title}`
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!UserService.isAuthenticated()) {

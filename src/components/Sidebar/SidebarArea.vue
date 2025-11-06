@@ -43,7 +43,6 @@ onClickOutside(target, () => {
 
     <div class="flex items-center justify-between gap-2 px-6 py-4 lg:py-5">
       <router-link to="/">
-        <img class="h-15 w-auto" src="@/assets/images/logo/logo.png" alt="Logo" />
       </router-link>
 
       <button class="block lg:hidden" @click="sidebarStore.isSidebarOpen = false">
